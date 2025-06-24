@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>市場情資與競品分析平台 (Google API 整合版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script>
+        // Tailwind CSS configuration for a modern, tech-themed UI
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        techbg: '#181D27',
+                        techpanel: '#22283A',
+                        techaccent: '#2EE9E4',
+                        techprimary: '#3762F0',
+                        techsecondary: '#7D5FFF'
+                    },
+                    fontFamily: {
+                        'tech': ['"Segoe UI"', 'Roboto', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styling and animations */
+        body { font-family: "Segoe UI", Roboto, Arial, sans-serif; }
+        .tab.active { border-color: #2EE9E4; background-color: #181D27; color: #2EE9E4; }
+        .panel { display: none; }
+        .panel.active { display: block; animation: fadeIn 0.5s ease; }
+        .locked { opacity: 0.5; pointer-events: none; }
+        .spinner { border: 4px solid rgba(59,130,246,.2); width: 36px; height: 36px; border-radius: 50%; border-left-color: #2EE9E4; animation: spin 1s ease infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        th, td { white-space: nowrap; padding: 8px 12px; }
+        .overflow-x-auto { overflow-x: auto; }
+        /* Custom scrollbar for a better look */
+        .overflow-x-auto::-webkit-scrollbar { height: 8px; }
+        .overflow-x-auto::-webkit-scrollbar-track { background: #181D27; }
+        .overflow-x-auto::-webkit-scrollbar-thumb { background: #3762F0; border-radius: 4px; }
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #7D5FFF; }
+    </style>
+</head>
+<body class="bg-techbg font-tech text-gray-100 min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-techpanel shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-wide text-techaccent flex items-center gap-2">
+                <svg class="w-8 h-8 text-techprimary inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l1.414-1.414M6.05 6.05L4.636 4.636" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                市場情資與競品分析平台
+            </h1>
+            <!-- Authentication UI -->
+            <div id="auth-container">
+                <button id="authorize_button" class="hidden bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">使用 Google 帳戶登入</button>
+                <div id="user-profile" class="hidden items-center gap-3">
+                    <img id="user-avatar" class="w-10 h-10 rounded-full" src="" alt="User Avatar">
+                    <span id="user-name" class="font-semibold text-gray-200"></span>
+                    <button id="signout_button" class="text-sm text-gray-400 hover:text-techaccent">登出</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Alert container for notifications -->
+    <div id="alert-container" class="fixed top-20 right-6 z-50"></div>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-6 py-8">
+        <div id="app-container" class="locked">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column: Settings and Inputs -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- API and Application Settings -->
+                    <section id="settings-section" class="bg-techpanel rounded-xl shadow-2xl border border-techprimary/20 p-6">
+                        <h2 class="text-xl font-bold mb-4 text-techaccent">1. API 與應用程式設定</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="drive-folder-name" class="block text-sm font-medium text-techaccent">Google Drive 資料夾名稱</label>
+                                <input type="text" id="drive-folder-name" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" value="Market_Analysis_Data">
+                            </div>
+                            <div class="border-b border-techprimary/30 my-4"></div>
+                            <div>
+                                <label for="google-api-key" class="block text-sm font-medium text-techaccent">Google API 金鑰</label>
+                                <input type="password" id="google-api-key" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="用於 Gemini 和 Custom Search">
+                            </div>
+                            <div>
+                                <label for="search-engine-id" class="block text-sm font-medium text-techaccent">可程式化搜尋引擎 ID (CX)</label>
+                                <input type="text" id="search-engine-id" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="請輸入您的 CX ID">
+                            </div>
+                            <button id="save-settings-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">儲存並啟用設定</button>
+                        </div>
+                    </section>
+
+                    <!-- Analysis Target Inputs -->
+                    <section id="analysis-input-section" class="bg-techpanel rounded-xl shadow-2xl border border-techprimary/20 p-6 locked">
+                        <h2 class="text-xl font-bold mb-4 text-techaccent">2. 分析目標</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="topic" class="block text-sm font-medium text-techaccent">分析主題</label>
+                                <input type="text" id="topic" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="例如：AI SaaS 解決方案">
+                            </div>
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-techaccent">國家/地區</label>
+                                <select id="country" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent">
+                                    <option value="TW">台灣</option>
+                                    <option value="CN">中國</option>
+                                    <option value="HK">香港</option>
+                                    <option value="JP">日本</option>
+                                    <option value="KR">韓國</option>
+                                    <option value="US">美國</option>
+                                    <option value="SG">新加坡</option>
+                                    <option value="DE">德國</option>
+                                    <option value="GB">英國</option>
+                                    <option value="FR">法國</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="language" class="block text-sm font-medium text-techaccent">語言</label>
+                                <select id="language" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent">
+                                    <option value="zh-TW">繁體中文</option>
+                                    <option value="zh-CN">簡體中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="ja">日文</option>
+                                    <option value="ko">韓文</option>
+                                    <option value="de">德文</option>
+                                    <option value="fr">法文</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="industry" class="block text-sm font-medium text-techaccent">產業名稱</label>
+                                <input type="text" id="industry" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：電子商務">
+                            </div>
+                            <div>
+                                <label for="sector" class="block text-sm font-medium text-techaccent">行業名稱</label>
+                                <input type="text" id="sector" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：零售">
+                            </div>
+                            <div>
+                                <label for="product" class="block text-sm font-medium text-techaccent">產品名稱</label>
+                                <input type="text" id="product" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：CRM軟體">
+                            </div>
+                            <div>
+                                <label for="company" class="block text-sm font-medium text-techaccent">公司名稱</label>
+                                <input type="text" id="company" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：Salesforce">
+                            </div>
+                            <button id="start-analysis-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg tracking-wide transition-all duration-200">開始分析 (步驟 1)</button>
+                        </div>
+                    </section>
+
+                    <!-- Competitor Selection Panel -->
+                    <section id="competitor-select-panel" class="bg-gradient-to-br from-techpanel via-techbg to-techpanel border border-techprimary/30 rounded-xl p-6 shadow-lg mb-4 hidden">
+                        <h2 class="text-xl font-bold mb-4 text-techaccent">3. 選擇競爭對手</h2>
+                        <div id="competitor-checkbox-list" class="mb-4 max-h-60 overflow-y-auto space-y-2"></div>
+                        <label class="inline-flex items-center mb-4">
+                            <input type="checkbox" id="select-all-competitors" class="mr-2 accent-techaccent scale-125">
+                            <span class="font-semibold">全選/全不選</span>
+                        </label>
+                        <button id="analyze-selected-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg tracking-wide transition-all duration-200">深入分析 (步驟 2)</button>
+                    </section>
+                </div>
+
+                <!-- Right Column: Results and History -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-techpanel rounded-xl shadow-2xl border border-techprimary/20">
+                        <div class="flex border-b border-techprimary/20">
+                            <button data-tab="results" class="tab-btn tab active flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent transition-all">分析結果</button>
+                            <button data-tab="history" class="tab-btn tab flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent transition-all">歷史紀錄</button>
+                        </div>
+                        
+                        <!-- Analysis Results Panel -->
+                        <div id="results-panel" class="panel active p-6">
+                            <div id="results-content" class="min-h-[400px]">
+                                <div id="loading-indicator" class="flex flex-col items-center justify-center h-full">
+                                    <div class="spinner hidden"></div>
+                                    <p id="loading-status" class="mt-4 text-techaccent font-medium">請先登入並完成左側設定</p>
+                                </div>
+                                <div id="results-tabs-container" class="hidden">
+                                    <div class="flex border-b border-techprimary/20 mb-4">
+                                        <button class="result-tab-btn tab active flex-1 p-3 font-semibold" data-result-tab="competitors">A. 競爭對手分析</button>
+                                        <button class="result-tab-btn tab flex-1 p-3 font-semibold" data-result-tab="keywords">B. 關鍵字建議</button>
+                                    </div>
+                                    <div id="competitors-result-panel" class="result-panel active overflow-x-auto"></div>
+                                    <div id="keywords-result-panel" class="result-panel overflow-x-auto"></div>
+                                </div>
+                            </div>
+                            <div id="results-actions" class="hidden mt-6 flex flex-col sm:flex-row gap-4">
+                                <button id="save-analysis-btn" class="flex-1 bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-4 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">儲存本次分析至 Drive</button>
+                                <button id="export-excel-btn" class="flex-1 bg-gradient-to-tr from-gray-600 to-gray-800 hover:from-techsecondary hover:to-gray-800 font-bold text-white px-4 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">匯出為 Excel</button>
+                            </div>
+                        </div>
+                        
+                        <!-- History Panel -->
+                        <div id="history-panel" class="panel p-6 min-h-[400px]">
+                            <div id="history-list" class="space-y-4">
+                                <p class="text-gray-500">沒有歷史紀錄。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script>
+// --- GLOBAL STATE AND CONFIGURATION ---
+const GOOGLE_CLIENT_ID = "733619441496-5gigdpkv42k84no3q5vvh93ths1e8u29.apps.googleusercontent.com"; // Your Google Client ID
+const GOOGLE_SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile";
+
+const state = {
+    gapiReady: false,
+    gisReady: false,
+    tokenClient: null,
+    accessToken: null,
+    userProfile: null,
+    driveFolderId: null,
+    apiKeys: {
+        google: null,
+        searchEngineId: null,
+        driveFolderName: 'Market_Analysis_Data'
+    },
+    isApiReady: false,
+    currentResults: null,
+    sortState: {
+        keywords: { key: 'volume', order: 'desc' },
+        competitors: { key: 'brandName', order: 'asc' }
+    }
+};
+
+const ui = {
+    authorizeButton: document.getElementById('authorize_button'),
+    signOutButton: document.getElementById('signout_button'),
+    userProfileDiv: document.getElementById('user-profile'),
+    userNameSpan: document.getElementById('user-name'),
+    userAvatarImg: document.getElementById('user-avatar'),
+    appContainer: document.getElementById('app-container'),
+    analysisSection: document.getElementById('analysis-input-section'),
+    saveSettingsBtn: document.getElementById('save-settings-btn'),
+    startAnalysisBtn: document.getElementById('start-analysis-btn'),
+    loadingIndicator: document.getElementById('loading-indicator'),
+    spinner: document.querySelector('.spinner'),
+    loadingStatus: document.getElementById('loading-status'),
+    resultsContainer: document.getElementById('results-tabs-container'),
+    resultsActions: document.getElementById('results-actions'),
+    historyList: document.getElementById('history-list'),
+    competitorSelectPanel: document.getElementById('competitor-select-panel'),
+    competitorCheckboxList: document.getElementById('competitor-checkbox-list'),
+    selectAllCompetitors: document.getElementById('select-all-competitors'),
+    analyzeSelectedBtn: document.getElementById('analyze-selected-btn')
+};
+
+// --- INITIALIZATION ---
+window.onload = function() {
+    // Load Google API client library
+    const gapiScript = document.createElement('script');
+    gapiScript.src = 'https://apis.google.com/js/api.js';
+    gapiScript.onload = () => gapi.load('client', () => {
+        state.gapiReady = true;
+        updateUIState();
+    });
+    document.body.appendChild(gapiScript);
+
+    // Load Google Identity Services library
+    const gisScript = document.createElement('script');
+    gisScript.src = 'https://accounts.google.com/gsi/client';
+    gisScript.async = true;
+    gisScript.defer = true;
+    gisScript.onload = () => {
+        state.tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: GOOGLE_CLIENT_ID,
+            scope: GOOGLE_SCOPES,
+            callback: gisInCallback,
+        });
+        state.gisReady = true;
+        updateUIState();
+    };
+    document.body.appendChild(gisScript);
+
+    setupEventListeners();
+};
+
+function setupEventListeners() {
+    ui.authorizeButton.onclick = () => state.tokenClient.requestAccessToken();
+    ui.signOutButton.onclick = handleSignOut;
+    ui.saveSettingsBtn.onclick = handleSaveSettings;
+    ui.startAnalysisBtn.onclick = startInitialAnalysis;
+    ui.analyzeSelectedBtn.onclick = analyzeSelectedCompetitors;
+    ui.selectAllCompetitors.onchange = (e) => {
+        document.querySelectorAll('.competitor-checkbox').forEach(cb => cb.checked = e.target.checked);
+    };
+
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', handleMainTabSwitch));
+    document.getElementById('results-tabs-container').addEventListener('click', handleResultTabSwitch);
+    ui.resultsActions.addEventListener('click', handleResultAction);
+    document.getElementById('history-list').addEventListener('click', handleHistoryAction);
+}
+
+// --- UI MANAGEMENT & NOTIFICATIONS ---
+
+function updateUIState() {
+    const loggedIn = !!state.accessToken;
+    ui.authorizeButton.classList.toggle('hidden', loggedIn);
+    ui.userProfileDiv.classList.toggle('hidden', !loggedIn);
+    ui.appContainer.classList.toggle('locked', !loggedIn);
+
+    if (loggedIn) {
+        ui.analysisSection.classList.toggle('locked', !state.isApiReady);
+        ui.loadingStatus.textContent = state.isApiReady ? '請填寫分析目標並開始分析。' : '請先儲存 API 設定。';
+    } else {
+        ui.analysisSection.classList.add('locked');
+        ui.loadingStatus.textContent = '請先登入並完成左側設定';
+    }
+}
+
+function showAlert(title, message, type = 'info') {
+    const alertContainer = document.getElementById('alert-container');
+    const colors = {
+        success: 'bg-green-600',
+        error: 'bg-red-600',
+        warning: 'bg-yellow-600 text-black',
+        info: 'bg-blue-600'
+    };
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `rounded-lg shadow-lg px-5 py-3 mb-2 font-bold ${colors[type]} transition-opacity duration-300 opacity-0`;
+    alertDiv.innerHTML = `<strong>${title}</strong> <span class="font-normal">${message}</span>`;
+    alertContainer.appendChild(alertDiv);
+    
+    // Fade in
+    setTimeout(() => alertDiv.style.opacity = '1', 10);
+    // Fade out and remove
+    setTimeout(() => {
+        alertDiv.style.opacity = '0';
+        alertDiv.addEventListener('transitionend', () => alertDiv.remove());
+    }, 4000);
+}
+
+function handleMainTabSwitch(event) {
+    const btn = event.target.closest('.tab-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
+    btn.classList.add('active');
+
+    const tabName = btn.dataset.tab;
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+    document.getElementById(`${tabName}-panel`).classList.add('active');
+}
+
+function handleResultTabSwitch(event) {
+    const btn = event.target.closest('.result-tab-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('.result-tab-btn').forEach(tab => tab.classList.remove('active'));
+    btn.classList.add('active');
+
+    const tabName = btn.dataset.resultTab;
+    document.querySelectorAll('.result-panel').forEach(panel => panel.classList.remove('active'));
+    document.getElementById(`${tabName}-result-panel`).classList.add('active');
+}
+
+function setLoadingState(isLoading, message = '') {
+    ui.loadingIndicator.classList.toggle('hidden', !isLoading);
+    ui.spinner.classList.toggle('hidden', !isLoading);
+    ui.loadingStatus.textContent = message;
+    ui.startAnalysisBtn.disabled = isLoading;
+    ui.analyzeSelectedBtn.disabled = isLoading;
+}
+
+
+// --- AUTHENTICATION & USER INFO ---
+
+async function gisInCallback(response) {
+    if (response.error) {
+        showAlert('登入失敗', response.error, 'error');
+        return;
+    }
+    state.accessToken = response.access_token;
+    gapi.client.setToken({ access_token: state.accessToken });
+
+    await updateUserInfo();
+    updateUIState();
+    
+    if (state.isApiReady) {
+        await findOrCreateDriveFolder();
+    }
+}
+
+async function updateUserInfo() {
+    try {
+        const res = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: { 'Authorization': `Bearer ${state.accessToken}` }
+        });
+        if (!res.ok) throw new Error('無法獲取用戶資訊');
+        const profile = await res.json();
+        state.userProfile = profile;
+        ui.userNameSpan.textContent = profile.name;
+        ui.userAvatarImg.src = profile.picture;
+        showAlert('登入成功', `歡迎您，${profile.name}！`, 'success');
+    } catch (error) {
+        showAlert('錯誤', '無法獲取用戶個人資料。', 'error');
+        handleSignOut();
+    }
+}
+
+function handleSignOut() {
+    state.accessToken = null;
+    state.userProfile = null;
+    state.driveFolderId = null;
+    gapi.client.setToken(null);
+    updateUIState();
+    showAlert('已登出', '您已成功登出。');
+}
+
+// --- SETTINGS & CONFIGURATION ---
+
+async function handleSaveSettings() {
+    state.apiKeys.google = document.getElementById('google-api-key').value.trim();
+    state.apiKeys.searchEngineId = document.getElementById('search-engine-id').value.trim();
+    state.apiKeys.driveFolderName = document.getElementById('drive-folder-name').value.trim() || 'Market_Analysis_Data';
+
+    if (state.apiKeys.google && state.apiKeys.searchEngineId) {
+        state.isApiReady = true;
+        showAlert('設定已儲存', 'API 已設定完成。', 'success');
+        updateUIState();
+        if (state.accessToken) {
+           await findOrCreateDriveFolder();
+        }
+    } else {
+        state.isApiReady = false;
+        showAlert('設定不完整', '請填寫 Google API 金鑰和搜尋引擎 ID。', 'warning');
+        updateUIState();
+    }
+}
+
+// --- CORE ANALYSIS WORKFLOW ---
+
+function validateInputFields() {
+    const context = getSearchContext();
+    const hasInput = context.industry || context.sector || context.product || context.company;
+    if (!hasInput) {
+        showAlert('輸入不足', '請至少填寫一個分析欄位（產業、行業、產品、公司）。', 'warning');
+    }
+    return hasInput;
+}
+
+function getSearchContext() {
+    return {
+        topic: document.getElementById('topic')?.value.trim() || '',
+        country: document.getElementById('country').value,
+        language: document.getElementById('language').value,
+        industry: document.getElementById('industry').value.trim(),
+        sector: document.getElementById('sector').value.trim(),
+        product: document.getElementById('product').value.trim(),
+        company: document.getElementById('company').value.trim(),
+    };
+}
+
+// Step 1: Get keywords and competitor names
+async function startInitialAnalysis() {
+    if (!validateInputFields()) return;
+    
+    state.currentResults = null; // Reset previous results
+    setLoadingState(true, '步驟 1/2: 正在生成關鍵字與競爭對手名單...');
+    ui.resultsContainer.classList.add('hidden');
+    ui.resultsActions.classList.add('hidden');
+    ui.competitorSelectPanel.classList.add('hidden');
+
+    try {
+        const context = getSearchContext();
+        
+        // Concurrently fetch keywords and competitor names from Gemini
+        const [keywords, competitorNames] = await Promise.all([
+            getAiKeywordSuggestions(context),
+            getAiCompetitorNames(context)
+        ]);
+
+        state.currentResults = { keywords: keywords, competitors: [] };
+        renderResults('keywords'); // Render keywords immediately
+
+        if (!competitorNames || competitorNames.length === 0) {
+            showAlert('查無資料', 'AI 未能找到相關競爭對手，請嘗試調整條件。', 'info');
+            setLoadingState(false);
+            ui.resultsContainer.classList.remove('hidden'); // Show keyword results
+            return;
+        }
+
+        showCompetitorSelectPanel(competitorNames);
+        setLoadingState(false, '請在下方勾選要深入分析的競爭對手。');
+
+    } catch (error) {
+        showAlert('分析失敗', `步驟一失敗: ${error.message}`, 'error');
+        setLoadingState(false);
+    }
+}
+
+// Step 2: Get details for selected competitors
+async function analyzeSelectedCompetitors() {
+    const selectedNames = Array.from(document.querySelectorAll('.competitor-checkbox:checked')).map(cb => cb.value);
+    if (selectedNames.length === 0) {
+        showAlert("未選擇", "請至少勾選一個競爭對手進行深入分析。", "warning");
+        return;
+    }
+
+    setLoadingState(true, `步驟 2/2: 正在分析 ${selectedNames.length} 個競爭對手...`);
+    ui.resultsContainer.classList.add('hidden');
+    ui.resultsActions.classList.add('hidden');
+
+    try {
+        const context = getSearchContext();
+        const competitorPromises = selectedNames.map(name => getFullCompetitorDetails(name, context));
+        const competitorDetails = await Promise.all(competitorPromises);
+        
+        state.currentResults.competitors = competitorDetails.filter(Boolean); // Filter out any nulls from errors
+        
+        renderResults('competitors');
+        ui.resultsContainer.classList.remove('hidden');
+        ui.resultsActions.classList.remove('hidden');
+        showAlert('分析完成', `已成功取得 ${state.currentResults.competitors.length} 家競爭對手的詳細資料。`, 'success');
+
+    } catch (error) {
+        showAlert('分析失敗', `步驟二失敗: ${error.message}`, 'error');
+    } finally {
+        setLoadingState(false);
+    }
+}
+
+// --- GOOGLE API HELPERS (GEMINI, CUSTOM SEARCH, DRIVE) ---
+
+async function callGemini(prompt) {
+    const apiKey = state.apiKeys.google;
+    if (!apiKey) throw new Error('Google API 金鑰未設定。');
+    
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+    const body = { contents: [{ parts: [{ text: prompt }] }] };
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Gemini API 錯誤: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Gemini 回傳內容為空。');
+    
+    try {
+        const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```|(\[.*\])|(\{.*\})/s);
+        if (!jsonMatch) throw new Error('回傳的內容不包含有效的 JSON 格式。');
+        return JSON.parse(jsonMatch[1] || jsonMatch[2] || jsonMatch[3]);
+    } catch (e) {
+        console.error("Gemini JSON parsing error:", e);
+        console.error("Original text from Gemini:", text);
+        throw new Error('Gemini 回傳格式解析失敗，請查看控制台日誌。');
+    }
+}
+
+async function searchGoogle(query) {
+    const apiKey = state.apiKeys.google;
+    const cx = state.apiKeys.searchEngineId;
+    if (!apiKey || !cx) throw new Error('Google API 金鑰或搜尋引擎 ID 未設定。');
+
+    const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}`;
+    
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Custom Search API 錯誤: ${response.statusText}`);
+        const data = await response.json();
+        return data.items?.[0]?.link || null;
+    } catch (error) {
+        console.error(`Google Search for "${query}" failed:`, error);
+        return null; // Return null on error to not break the flow
+    }
+}
+
+async function findOrCreateDriveFolder() {
+    if (!state.accessToken) {
+        showAlert('錯誤', '使用者未登入，無法存取 Drive。', 'error');
+        return;
+    }
+    
+    setLoadingState(true, '正在準備 Google Drive...');
+    try {
+        await gapi.client.load('drive', 'v3');
+        const folderName = state.apiKeys.driveFolderName;
+        
+        // Search for the folder
+        const response = await gapi.client.drive.files.list({
+            q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
+            fields: 'files(id, name)',
+        });
+        
+        if (response.result.files && response.result.files.length > 0) {
+            state.driveFolderId = response.result.files[0].id;
+            showAlert('Drive 已就緒', `將使用現有資料夾: ${folderName}`, 'info');
+        } else {
+            // Create the folder if it doesn't exist
+            const fileMetadata = {
+                'name': folderName,
+                'mimeType': 'application/vnd.google-apps.folder'
+            };
+            const createResponse = await gapi.client.drive.files.create({ resource: fileMetadata, fields: 'id' });
+            state.driveFolderId = createResponse.result.id;
+            showAlert('Drive 已就緒', `已成功建立資料夾: ${folderName}`, 'success');
+        }
+    } catch (error) {
+        console.error('Drive folder error:', error);
+        showAlert('Drive 錯誤', `存取資料夾失敗: ${error.message || '未知錯誤'}`, 'error');
+    } finally {
+        setLoadingState(false);
+    }
+}
+
+// --- AI-POWERED DATA FETCHING ---
+
+async function getAiKeywordSuggestions(context) {
+    const prompt = `
+        You are a market analysis expert. Based on the following criteria, generate 30 highly relevant keywords for SEO and market research.
+        Rank them by search volume relevance (high, medium, low).
+        The output MUST be a valid JSON array of objects, with no other text.
+        Format: [{"keyword": "...", "volume": "高/中/低", "type": "品牌/產品/長尾/問題"}, ...]
+
+        Criteria: ${JSON.stringify(context)}
+    `;
+    return callGemini(prompt);
+}
+
+async function getAiCompetitorNames(context) {
+    const prompt = `
+        You are a market analysis expert. Identify the top 10-15 direct and indirect competitors based on the criteria below.
+        The output MUST be a valid JSON array of strings, containing only the company or brand names.
+        Format: ["Competitor A", "Competitor B", "Competitor C"]
+
+        Criteria: ${JSON.stringify(context)}
+    `;
+    return callGemini(prompt);
+}
+
+// Combines AI analysis and Google Search for robust data
+async function getFullCompetitorDetails(name, context) {
+    // 1. Get descriptive details from Gemini
+    const detailPromise = (async () => {
+        const prompt = `
+            Provide a concise analysis for the company "${name}", which is a competitor in the market defined by: ${JSON.stringify(context)}.
+            The output MUST be a single valid JSON object.
+            Format: {"brandName": "${name}", "country": "...", "summary": "...", "companyType": "上市/私有/新創..."}
+        `;
+        try {
+            return await callGemini(prompt);
+        } catch (e) {
+            console.error(`Gemini detail fetch for ${name} failed:`, e);
+            return { brandName: name }; // Return name to avoid breaking the list
+        }
+    })();
+
+    // 2. Get official website and LinkedIn URL from Google Search
+    const websitePromise = searchGoogle(`${name} official website`);
+    const linkedinPromise = searchGoogle(`${name} LinkedIn company page`);
+
+    // 3. Combine results
+    const [details, websiteUrl, linkedinUrl] = await Promise.all([detailPromise, websitePromise, linkedinPromise]);
+
+    return {
+        ...details,
+        websiteUrl,
+        linkedinUrl,
+    };
+}
+
+// --- RESULT RENDERING ---
+
+function showCompetitorSelectPanel(competitorNames) {
+    ui.competitorCheckboxList.innerHTML = competitorNames.map(name => `
+        <label class="block p-2 rounded-md hover:bg-techprimary/20 transition-colors">
+            <input type="checkbox" class="competitor-checkbox mr-3 accent-techaccent" value="${name}" checked>
+            <span>${name}</span>
+        </label>
+    `).join('');
+    ui.competitorSelectPanel.classList.remove('hidden');
+}
+
+function renderResults(type) {
+    if (type === 'keywords') {
+        const panel = document.getElementById('keywords-result-panel');
+        const data = state.currentResults?.keywords || [];
+        if (data.length === 0) {
+            panel.innerHTML = '<p class="text-gray-500">查無關鍵字資料。</p>';
+            return;
+        }
+        panel.innerHTML = createTable(
+            ['keyword', 'volume', 'type'],
+            ['關鍵字', '搜尋量級', '類型'],
+            data,
+            'keywords'
+        );
+    } else if (type === 'competitors') {
+        const panel = document.getElementById('competitors-result-panel');
+        const data = state.currentResults?.competitors || [];
+        if (data.length === 0) {
+            panel.innerHTML = '<p class="text-gray-500">查無競爭對手資料。</p>';
+            return;
+        }
+        // Custom rendering for competitors to include links
+        const headers = ['品牌名稱', '國家', '業務摘要', '公司類型', '官方網站', 'LinkedIn'];
+        const keys = ['brandName', 'country', 'summary', 'companyType', 'websiteUrl', 'linkedinUrl'];
+        const sortIcons = keys.map(key => state.sortState.competitors.key === key ? (state.sortState.competitors.order === 'asc' ? ' ▲' : ' ▼') : '');
+        
+        let tableHTML = `<table class="w-full text-left text-sm">
+            <thead class="bg-gray-900 sticky top-0">
+                <tr class="border-b border-techprimary/30">
+                    ${headers.map((h, i) => `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('competitors', '${keys[i]}')">${h}${sortIcons[i]}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${sortData('competitors', data).map(item => `
+                    <tr class="border-b border-techprimary/20 hover:bg-techprimary/10">
+                        <td>${item.brandName || '-'}</td>
+                        <td>${item.country || '-'}</td>
+                        <td class="whitespace-normal max-w-xs truncate">${item.summary || '-'}</td>
+                        <td>${item.companyType || '-'}</td>
+                        <td>${item.websiteUrl ? `<a href="${item.websiteUrl}" target="_blank" class="text-techaccent hover:underline">${item.websiteUrl}</a>` : '-'}</td>
+                        <td>${item.linkedinUrl ? `<a href="${item.linkedinUrl}" target="_blank" class="text-techaccent hover:underline">查看頁面</a>` : '-'}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>`;
+        panel.innerHTML = tableHTML;
+    }
+}
+
+function createTable(keys, headers, data, tableType) {
+    const sortedData = sortData(tableType, data);
+    const sortIcons = keys.map(key => state.sortState[tableType].key === key ? (state.sortState[tableType].order === 'asc' ? ' ▲' : ' ▼') : '');
+    return `
+        <table class="w-full text-left text-sm">
+            <thead class="bg-gray-900 sticky top-0">
+                <tr class="border-b border-techprimary/30">
+                    ${headers.map((h, i) => `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('${tableType}', '${keys[i]}')">${h}${sortIcons[i]}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${sortedData.map(item => `
+                    <tr class="border-b border-techprimary/20 hover:bg-techprimary/10">
+                        ${keys.map(key => `<td>${item[key] || '-'}</td>`).join('')}
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+// --- DATA SORTING ---
+
+window.sortTable = function(type, key) {
+    if (state.sortState[type].key === key) {
+        state.sortState[type].order = state.sortState[type].order === 'asc' ? 'desc' : 'asc';
+    } else {
+        state.sortState[type].key = key;
+        state.sortState[type].order = 'desc'; // Default to desc for new column
+    }
+    renderResults(type);
+};
+
+function sortData(type, data) {
+    const { key, order } = state.sortState[type];
+    if (!key || !data) return data;
+
+    return [...data].sort((a, b) => {
+        let aVal = a[key] || '';
+        let bVal = b[key] || '';
+
+        if (key === 'volume') {
+            const volumeMap = { '高': 3, '中': 2, '低': 1 };
+            aVal = volumeMap[aVal] || 0;
+            bVal = volumeMap[bVal] || 0;
+        }
+
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+            return order === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+        
+        return order === 'asc' ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
+    });
+}
+
+
+// --- ACTIONS (SAVE, EXPORT, HISTORY) ---
+
+function handleResultAction(event) {
+    const targetId = event.target.closest('button')?.id;
+    if (targetId === 'save-analysis-btn') {
+        saveAnalysisToDrive();
+    } else if (targetId === 'export-excel-btn') {
+        exportToExcel();
+    }
+}
+
+function handleHistoryAction(event) {
+    showAlert('提示', '歷史紀錄功能正在開發中。', 'info');
+}
+
+function exportToExcel() {
+    if (!state.currentResults) {
+        showAlert("無法匯出", "目前沒有可匯出的分析結果。", "warning");
+        return;
+    }
+    const wb = XLSX.utils.book_new();
+
+    // Sheet 1: Competitors
+    if (state.currentResults.competitors?.length > 0) {
+        const competitorsSheetData = state.currentResults.competitors.map(c => ({
+            '品牌名稱': c.brandName, '國家': c.country, '業務摘要': c.summary,
+            '公司類型': c.companyType, '官方網站': c.websiteUrl, 'LinkedIn': c.linkedinUrl
+        }));
+        const competitorsSheet = XLSX.utils.json_to_sheet(competitorsSheetData);
+        XLSX.utils.book_append_sheet(wb, competitorsSheet, "A_競爭對手分析");
+    }
+
+    // Sheet 2: Keywords
+    if (state.currentResults.keywords?.length > 0) {
+        const keywordsSheet = XLSX.utils.json_to_sheet(state.currentResults.keywords);
+        XLSX.utils.book_append_sheet(wb, keywordsSheet, "B_關鍵字建議");
+    }
+    
+    const context = getSearchContext();
+    const fileName = `${context.topic || '市場分析'}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    showAlert('匯出成功', `已產生檔案 ${fileName}`, 'success');
+}
+
+async function saveAnalysisToDrive() {
+    if (!state.driveFolderId) {
+        showAlert('錯誤', '無法找到 Google Drive 目標資料夾。請檢查設定或重新登入。', 'error');
+        return;
+    }
+    if (!state.currentResults) {
+        showAlert('尚無結果', '請先執行分析。', 'warning');
+        return;
+    }
+
+    setLoadingState(true, '正在儲存至 Google Drive...');
+    try {
+        const fileContent = JSON.stringify(state.currentResults, null, 2);
+        const blob = new Blob([fileContent], { type: 'application/json' });
+        const context = getSearchContext();
+        const fileName = `分析報告_${context.topic || '市場'}_${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+
+        const metadata = {
+            name: fileName,
+            mimeType: 'application/json',
+            parents: [state.driveFolderId]
+        };
+
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', blob);
+
+        const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${state.accessToken}` },
+            body: form
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error?.message || '未知上傳錯誤');
+        }
+        
+        showAlert('儲存成功', `分析結果已儲存至您的 Drive 資料夾。`, 'success');
+
+    } catch (error) {
+        showAlert('存檔失敗', error.message, 'error');
+    } finally {
+        setLoadingState(false);
+    }
+}
+</script>
+</body>
+</html>
