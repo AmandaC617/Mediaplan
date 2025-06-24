@@ -27,6 +27,7 @@
         }
     </script>
     <style>
+        /* Base styling and animations */
         body { font-family: "Segoe UI", Roboto, Arial, sans-serif; }
         .tab.active { border-color: #2EE9E4; background-color: #181D27; color: #2EE9E4; }
         .panel { display: none; }
@@ -37,6 +38,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         th, td { white-space: nowrap; padding: 8px 12px; }
         .overflow-x-auto { overflow-x: auto; }
+        /* Custom scrollbar for a better look */
         .overflow-x-auto::-webkit-scrollbar { height: 8px; }
         .overflow-x-auto::-webkit-scrollbar-track { background: #181D27; }
         .overflow-x-auto::-webkit-scrollbar-thumb { background: #3762F0; border-radius: 4px; }
@@ -48,16 +50,18 @@
     <header class="bg-techpanel shadow-lg sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold tracking-wide text-techaccent flex items-center gap-2">
-                <svg class="w-8 h-8 text-techprimary inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-7.364l-1.414 1.41[...]"></path></svg>
+                <svg class="w-8 h-8 text-techprimary inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l1.414-1.414M6.05 6.05L4.636 4.636" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                 市場情資與競品分析平台
             </h1>
             <!-- Authentication UI -->
             <div id="auth-container">
-                <button id="authorize_button" class="hidden bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg">登入 Google</button>
-                <div id="user-profile" class="hidden items-center gap-3">
-                    <img id="user-avatar" class="w-10 h-10 rounded-full" src="" alt="User Avatar">
-                    <span id="user-name" class="font-semibold text-gray-200"></span>
-                    <button id="signout_button" class="text-sm text-gray-400 hover:text-techaccent">登出</button>
+                <div class="flex items-center gap-4">
+                    <div id="user-profile" class="hidden items-center gap-3">
+                        <img id="user-avatar" class="w-10 h-10 rounded-full" src="" alt="User Avatar">
+                        <span id="user-name" class="font-semibold text-gray-200"></span>
+                        <button id="signout_button" class="text-sm text-gray-400 hover:text-techaccent">登出</button>
+                    </div>
+                     <button id="authorize_button" class="hidden bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg">登入 Google</button>
                 </div>
                 <div class="text-xs text-yellow-400 mt-2">
                     ※ 需授權 Google Drive 全權限才能正確儲存及讀取分析資料
@@ -81,7 +85,7 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="drive-folder-name" class="block text-sm font-medium text-techaccent">Google Drive 資料夾名稱</label>
-                                <input type="text" id="drive-folder-name" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="Market_Analysis_Data">
+                                <input type="text" id="drive-folder-name" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" value="Market_Analysis_Data">
                             </div>
                             <div class="border-b border-techprimary/30 my-4"></div>
                             <div>
@@ -207,7 +211,6 @@
 
 <script>
 // --- GLOBAL STATE AND CONFIGURATION ---
-// 修正：改為全 Drive 權限
 const GOOGLE_CLIENT_ID = "733619441496-5gigdpkv42k84no3q5vvh93ths1e8u29.apps.googleusercontent.com";
 const GOOGLE_SCOPES = "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.profile";
 
@@ -532,15 +535,12 @@ async function callGemini(prompt) {
     const apiKey = state.apiKeys.google;
     if (!apiKey) throw new Error('Google API 金鑰未設定。');
     
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+    // CORRECTED: Use the v1beta endpoint with a current, valid model name (gemini-1.5-flash-latest).
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const body = {
-        contents: [
-            {
-                parts: [
-                    { text: prompt }
-                ]
-            }
-        ]
+        contents: [{
+            parts: [{ text: prompt }]
+        }]
     };
 
     const response = await fetch(url, {
@@ -620,8 +620,8 @@ async function findOrCreateDriveFolder() {
     } catch (error) {
         console.error('Drive folder error:', error);
         showAlert('Drive 錯誤', `存取資料夾失敗: ${error.message || '未知錯誤'}`, 'error');
-        // 權限問題提示
-        if (error.message && /insufficient/i.test(error.message)) {
+        // Check for insufficient permissions
+        if (error.result?.error?.message && /insufficient/i.test(error.result.error.message)) {
             showAlert('權限不足', 'Google Drive 權限不足，請登出並重新登入，並授權完整的 Drive 權限。', 'warning');
         }
     } finally {
