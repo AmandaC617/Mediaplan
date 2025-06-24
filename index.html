@@ -108,6 +108,14 @@
                                 <label for="topic" class="block text-sm font-medium text-techaccent">分析主題</label>
                                 <input type="text" id="topic" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 行動電源">
                             </div>
+                             <div>
+                                <label class="block text-sm font-medium text-techaccent">商業模式</label>
+                                <div class="mt-2 space-x-4 text-gray-300">
+                                    <label class="hover:text-techaccent"><input type="radio" name="business-model" value="B2C" checked class="accent-techprimary"> B2C (To Consumer)</label>
+                                    <label class="hover:text-techaccent"><input type="radio" name="business-model" value="B2B" class="accent-techprimary"> B2B (To Business)</label>
+                                    <label class="hover:text-techaccent"><input type="radio" name="business-model" value="B2B2C" class="accent-techprimary"> B2B2C</label>
+                                </div>
+                            </div>
                             <div>
                                 <label for="country" class="block text-sm font-medium text-techaccent">國家/地區</label>
                                 <select id="country" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent">
@@ -442,9 +450,9 @@ async function handleSaveSettings() {
 
 function validateInputFields() {
     const context = getSearchContext();
-    const hasInput = context.industry || context.sector || context.product || context.company;
+    const hasInput = context.topic || context.industry || context.sector || context.product || context.company;
     if (!hasInput) {
-        showAlert('輸入不足', '請至少填寫一個分析欄位（產業、行業、產品、公司）。', 'warning');
+        showAlert('輸入不足', '請至少填寫一個分析欄位（主題、產業、行業、產品、公司）。', 'warning');
     }
     return hasInput;
 }
@@ -452,6 +460,7 @@ function validateInputFields() {
 function getSearchContext() {
     return {
         topic: document.getElementById('topic')?.value.trim() || '',
+        businessModel: document.querySelector('input[name="business-model"]:checked').value,
         country: document.getElementById('country').value,
         language: document.getElementById('language').value,
         industry: document.getElementById('industry').value.trim(),
@@ -535,7 +544,6 @@ async function callGemini(prompt) {
     const apiKey = state.apiKeys.google;
     if (!apiKey) throw new Error('Google API 金鑰未設定。');
     
-    // CORRECTED: Use the v1beta endpoint with a current, valid model name (gemini-1.5-flash-latest).
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     const body = {
         contents: [{
@@ -619,7 +627,7 @@ async function findOrCreateDriveFolder() {
         }
     } catch (error) {
         console.error('Drive folder error:', error);
-        showAlert('Drive 錯誤', `存取資料夾失敗: ${error.message || '未知錯誤'}`, 'error');
+        showAlert('Drive 錯誤', `存取資料夾失敗: ${error.result?.error?.message || '未知錯誤'}`, 'error');
         // Check for insufficient permissions
         if (error.result?.error?.message && /insufficient/i.test(error.result.error.message)) {
             showAlert('權限不足', 'Google Drive 權限不足，請登出並重新登入，並授權完整的 Drive 權限。', 'warning');
@@ -633,10 +641,17 @@ async function findOrCreateDriveFolder() {
 
 async function getAiKeywordSuggestions(context) {
     const prompt = `
-        You are a market analysis expert. Based on the following criteria, generate 30 highly relevant keywords for SEO and market research.
-        Rank them by search volume relevance (high, medium, low).
+        You are a world-class SEO and market analysis expert.
+        Based on the following criteria, generate 30 highly relevant SEO keywords.
+        Crucially, tailor the keywords to the specified "businessModel":
+        - If B2B, focus on terms businesses would use (e.g., "solution", "provider", "enterprise", "for business").
+        - If B2C, focus on terms consumers would use (e.g., "review", "best", "cheap", "for home").
+
+        Also provide the estimated search volume, keyword type, and bidding competition.
         The output MUST be a valid JSON array of objects, with no other text.
-        Format: [{"keyword": "...", "volume": "高/中/低", "type": "品牌/產品/長尾/問題"}, ...]
+        Please rank the results with the highest search volume first.
+
+        Format: [{"keyword": "...", "volume": "高/中/低", "type": "品牌/產品/長尾/問題", "biddingCompetition": "高/中/低"}, ...]
 
         Criteria: ${JSON.stringify(context)}
     `;
@@ -672,8 +687,8 @@ async function getFullCompetitorDetails(name, context) {
     })();
 
     // 2. Get official website and LinkedIn URL from Google Search
-    const websitePromise = searchGoogle(`${name} official website`);
-    const linkedinPromise = searchGoogle(`${name} LinkedIn company page`);
+    const websitePromise = searchGoogle(`${name} ${context.industry || ''} official website`);
+    const linkedinPromise = searchGoogle(`site:linkedin.com/company/ ${name}`);
 
     // 3. Combine results
     const [details, websiteUrl, linkedinUrl] = await Promise.all([detailPromise, websitePromise, linkedinPromise]);
@@ -706,8 +721,8 @@ function renderResults(type) {
             return;
         }
         panel.innerHTML = createTable(
-            ['keyword', 'volume', 'type'],
-            ['關鍵字', '搜尋量級', '類型'],
+            ['keyword', 'volume', 'biddingCompetition', 'type'],
+            ['關鍵字', '搜尋量級', '出價競爭', '類型'],
             data,
             'keywords'
         );
@@ -721,12 +736,14 @@ function renderResults(type) {
         // Custom rendering for competitors to include links
         const headers = ['品牌名稱', '國家', '業務摘要', '公司類型', '官方網站', 'LinkedIn'];
         const keys = ['brandName', 'country', 'summary', 'companyType', 'websiteUrl', 'linkedinUrl'];
-        const sortIcons = keys.map(key => state.sortState.competitors.key === key ? (state.sortState.competitors.order === 'asc' ? ' ▲' : ' ▼') : '');
         
         let tableHTML = `<table class="w-full text-left text-sm">
             <thead class="bg-gray-900 sticky top-0">
                 <tr class="border-b border-techprimary/30">
-                    ${headers.map((h, i) => `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('competitors', '${keys[i]}')">${h}${sortIcons[i]}</th>`).join('')}
+                    ${headers.map((h, i) => {
+                        const sortIcon = state.sortState.competitors.key === keys[i] ? (state.sortState.competitors.order === 'asc' ? ' ▲' : ' ▼') : '';
+                        return `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('competitors', '${keys[i]}')">${h}${sortIcon}</th>`
+                    }).join('')}
                 </tr>
             </thead>
             <tbody>
@@ -734,10 +751,10 @@ function renderResults(type) {
                     <tr class="border-b border-techprimary/20 hover:bg-techprimary/10">
                         <td>${item.brandName || '-'}</td>
                         <td>${item.country || '-'}</td>
-                        <td class="whitespace-normal max-w-xs truncate">${item.summary || '-'}</td>
+                        <td class="whitespace-normal max-w-xs truncate" title="${item.summary || ''}">${item.summary || '-'}</td>
                         <td>${item.companyType || '-'}</td>
-                        <td>${item.websiteUrl ? `<a href="${item.websiteUrl}" target="_blank" class="text-techaccent hover:underline">${item.websiteUrl}</a>` : '-'}</td>
-                        <td>${item.linkedinUrl ? `<a href="${item.linkedinUrl}" target="_blank" class="text-techaccent hover:underline">查看頁面</a>` : '-'}</td>
+                        <td>${item.websiteUrl ? `<a href="${item.websiteUrl}" target="_blank" class="text-techaccent hover:underline">訪問網站</a>` : '-'}</td>
+                        <td>${item.linkedinUrl ? `<a href="${item.linkedinUrl}" target="_blank" class="text-techaccent hover:underline">查看檔案</a>` : '-'}</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -748,12 +765,14 @@ function renderResults(type) {
 
 function createTable(keys, headers, data, tableType) {
     const sortedData = sortData(tableType, data);
-    const sortIcons = keys.map(key => state.sortState[tableType].key === key ? (state.sortState[tableType].order === 'asc' ? ' ▲' : ' ▼') : '');
     return `
         <table class="w-full text-left text-sm">
             <thead class="bg-gray-900 sticky top-0">
                 <tr class="border-b border-techprimary/30">
-                    ${headers.map((h, i) => `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('${tableType}', '${keys[i]}')">${h}${sortIcons[i]}</th>`).join('')}
+                    ${headers.map((h, i) => {
+                         const sortIcon = state.sortState[tableType].key === keys[i] ? (state.sortState[tableType].order === 'asc' ? ' ▲' : ' ▼') : '';
+                        return `<th class="py-3 px-3 cursor-pointer" onclick="sortTable('${tableType}', '${keys[i]}')">${h}${sortIcon}</th>`
+                    }).join('')}
                 </tr>
             </thead>
             <tbody>
@@ -774,7 +793,8 @@ window.sortTable = function(type, key) {
         state.sortState[type].order = state.sortState[type].order === 'asc' ? 'desc' : 'asc';
     } else {
         state.sortState[type].key = key;
-        state.sortState[type].order = 'desc'; // Default to desc for new column
+        // Default sort order
+        state.sortState[type].order = (key === 'volume' || key === 'biddingCompetition') ? 'desc' : 'asc';
     }
     renderResults(type);
 };
@@ -783,17 +803,15 @@ function sortData(type, data) {
     const { key, order } = state.sortState[type];
     if (!key || !data) return data;
 
+    const competitionMap = { '高': 3, '中': 2, '低': 1 };
+
     return [...data].sort((a, b) => {
         let aVal = a[key] || '';
         let bVal = b[key] || '';
 
-        if (key === 'volume') {
-            const volumeMap = { '高': 3, '中': 2, '低': 1 };
-            aVal = volumeMap[aVal] || 0;
-            bVal = volumeMap[bVal] || 0;
-        }
-
-        if (typeof aVal === 'number' && typeof bVal === 'number') {
+        if (key === 'volume' || key === 'biddingCompetition') {
+            aVal = competitionMap[aVal] || 0;
+            bVal = competitionMap[bVal] || 0;
             return order === 'asc' ? aVal - bVal : bVal - aVal;
         }
         
@@ -835,7 +853,13 @@ function exportToExcel() {
 
     // Sheet 2: Keywords
     if (state.currentResults.keywords?.length > 0) {
-        const keywordsSheet = XLSX.utils.json_to_sheet(state.currentResults.keywords);
+        const keywordsSheetData = state.currentResults.keywords.map(k => ({
+            '關鍵字': k.keyword,
+            '搜尋量級': k.volume,
+            '出價競爭': k.biddingCompetition,
+            '類型': k.type
+        }));
+        const keywordsSheet = XLSX.utils.json_to_sheet(keywordsSheetData);
         XLSX.utils.book_append_sheet(wb, keywordsSheet, "B_關鍵字建議");
     }
     
@@ -894,3 +918,4 @@ async function saveAnalysisToDrive() {
 </script>
 </body>
 </html>
+
