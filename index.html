@@ -27,7 +27,6 @@
         }
     </script>
     <style>
-        /* Base styling and animations */
         body { font-family: "Segoe UI", Roboto, Arial, sans-serif; }
         .tab.active { border-color: #2EE9E4; background-color: #181D27; color: #2EE9E4; }
         .panel { display: none; }
@@ -38,7 +37,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         th, td { white-space: nowrap; padding: 8px 12px; }
         .overflow-x-auto { overflow-x: auto; }
-        /* Custom scrollbar for a better look */
         .overflow-x-auto::-webkit-scrollbar { height: 8px; }
         .overflow-x-auto::-webkit-scrollbar-track { background: #181D27; }
         .overflow-x-auto::-webkit-scrollbar-thumb { background: #3762F0; border-radius: 4px; }
@@ -50,16 +48,19 @@
     <header class="bg-techpanel shadow-lg sticky top-0 z-40">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold tracking-wide text-techaccent flex items-center gap-2">
-                <svg class="w-8 h-8 text-techprimary inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414m12.728 0l1.414-1.414M6.05 6.05L4.636 4.636" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="w-8 h-8 text-techprimary inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-7.364l-1.414 1.41[...]"></path></svg>
                 市場情資與競品分析平台
             </h1>
             <!-- Authentication UI -->
             <div id="auth-container">
-                <button id="authorize_button" class="hidden bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">使用 Google 帳戶登入</button>
+                <button id="authorize_button" class="hidden bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg">登入 Google</button>
                 <div id="user-profile" class="hidden items-center gap-3">
                     <img id="user-avatar" class="w-10 h-10 rounded-full" src="" alt="User Avatar">
                     <span id="user-name" class="font-semibold text-gray-200"></span>
                     <button id="signout_button" class="text-sm text-gray-400 hover:text-techaccent">登出</button>
+                </div>
+                <div class="text-xs text-yellow-400 mt-2">
+                    ※ 需授權 Google Drive 全權限才能正確儲存及讀取分析資料
                 </div>
             </div>
         </div>
@@ -80,18 +81,18 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="drive-folder-name" class="block text-sm font-medium text-techaccent">Google Drive 資料夾名稱</label>
-                                <input type="text" id="drive-folder-name" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" value="Market_Analysis_Data">
+                                <input type="text" id="drive-folder-name" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="Market_Analysis_Data">
                             </div>
                             <div class="border-b border-techprimary/30 my-4"></div>
                             <div>
                                 <label for="google-api-key" class="block text-sm font-medium text-techaccent">Google API 金鑰</label>
-                                <input type="password" id="google-api-key" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="用於 Gemini 和 Custom Search">
+                                <input type="password" id="google-api-key" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="填寫 Gemini/Custom Search API Key">
                             </div>
                             <div>
                                 <label for="search-engine-id" class="block text-sm font-medium text-techaccent">可程式化搜尋引擎 ID (CX)</label>
-                                <input type="text" id="search-engine-id" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="請輸入您的 CX ID">
+                                <input type="text" id="search-engine-id" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="填寫 Custom Search Engine ID">
                             </div>
-                            <button id="save-settings-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">儲存並啟用設定</button>
+                            <button id="save-settings-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-2 rounded-lg shadow-lg mt-4">儲存設定</button>
                         </div>
                     </section>
 
@@ -101,7 +102,7 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="topic" class="block text-sm font-medium text-techaccent">分析主題</label>
-                                <input type="text" id="topic" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="例如：AI SaaS 解決方案">
+                                <input type="text" id="topic" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 行動電源">
                             </div>
                             <div>
                                 <label for="country" class="block text-sm font-medium text-techaccent">國家/地區</label>
@@ -132,21 +133,21 @@
                             </div>
                             <div>
                                 <label for="industry" class="block text-sm font-medium text-techaccent">產業名稱</label>
-                                <input type="text" id="industry" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：電子商務">
+                                <input type="text" id="industry" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 消費性電子">
                             </div>
                             <div>
                                 <label for="sector" class="block text-sm font-medium text-techaccent">行業名稱</label>
-                                <input type="text" id="sector" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：零售">
+                                <input type="text" id="sector" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 通訊設備">
                             </div>
                             <div>
                                 <label for="product" class="block text-sm font-medium text-techaccent">產品名稱</label>
-                                <input type="text" id="product" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：CRM軟體">
+                                <input type="text" id="product" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 行動電源">
                             </div>
                             <div>
                                 <label for="company" class="block text-sm font-medium text-techaccent">公司名稱</label>
-                                <input type="text" id="company" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent placeholder:text-techprimary/50 transition" placeholder="如：Salesforce">
+                                <input type="text" id="company" class="mt-1 w-full px-4 py-2 rounded-lg bg-techbg border border-techprimary/20 focus:outline-none focus:ring-2 focus:ring-techprimary text-techaccent" placeholder="如: 小米">
                             </div>
-                            <button id="start-analysis-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg tracking-wide transition-all duration-200">開始分析 (步驟 1)</button>
+                            <button id="start-analysis-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg mt-4">開始分析</button>
                         </div>
                     </section>
 
@@ -158,7 +159,7 @@
                             <input type="checkbox" id="select-all-competitors" class="mr-2 accent-techaccent scale-125">
                             <span class="font-semibold">全選/全不選</span>
                         </label>
-                        <button id="analyze-selected-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg tracking-wide transition-all duration-200">深入分析 (步驟 2)</button>
+                        <button id="analyze-selected-btn" class="w-full bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-5 py-3 rounded-lg shadow-lg">深入分析勾選對手</button>
                     </section>
                 </div>
 
@@ -166,8 +167,8 @@
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-techpanel rounded-xl shadow-2xl border border-techprimary/20">
                         <div class="flex border-b border-techprimary/20">
-                            <button data-tab="results" class="tab-btn tab active flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent transition-all">分析結果</button>
-                            <button data-tab="history" class="tab-btn tab flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent transition-all">歷史紀錄</button>
+                            <button data-tab="results" class="tab-btn tab active flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent">分析結果</button>
+                            <button data-tab="history" class="tab-btn tab flex-1 p-4 font-semibold bg-techpanel text-gray-200 border-b-2 border-transparent hover:border-techaccent hover:text-techaccent">歷史紀錄</button>
                         </div>
                         
                         <!-- Analysis Results Panel -->
@@ -187,8 +188,8 @@
                                 </div>
                             </div>
                             <div id="results-actions" class="hidden mt-6 flex flex-col sm:flex-row gap-4">
-                                <button id="save-analysis-btn" class="flex-1 bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-4 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">儲存本次分析至 Drive</button>
-                                <button id="export-excel-btn" class="flex-1 bg-gradient-to-tr from-gray-600 to-gray-800 hover:from-techsecondary hover:to-gray-800 font-bold text-white px-4 py-2 rounded-lg shadow-lg tracking-wide transition-all duration-200">匯出為 Excel</button>
+                                <button id="save-analysis-btn" class="flex-1 bg-gradient-to-tr from-techprimary to-techaccent hover:from-techsecondary hover:to-techaccent font-bold text-white px-4 py-2 rounded-lg shadow-lg">儲存至 Google Drive</button>
+                                <button id="export-excel-btn" class="flex-1 bg-gradient-to-tr from-gray-600 to-gray-800 hover:from-techsecondary hover:to-gray-800 font-bold text-white px-4 py-2 rounded-lg shadow-lg">匯出 Excel</button>
                             </div>
                         </div>
                         
@@ -206,8 +207,9 @@
 
 <script>
 // --- GLOBAL STATE AND CONFIGURATION ---
-const GOOGLE_CLIENT_ID = "733619441496-5gigdpkv42k84no3q5vvh93ths1e8u29.apps.googleusercontent.com"; // Your Google Client ID
-const GOOGLE_SCOPES = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile";
+// 修正：改為全 Drive 權限
+const GOOGLE_CLIENT_ID = "733619441496-5gigdpkv42k84no3q5vvh93ths1e8u29.apps.googleusercontent.com";
+const GOOGLE_SCOPES = "https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.profile";
 
 const state = {
     gapiReady: false,
@@ -367,7 +369,6 @@ function setLoadingState(isLoading, message = '') {
     ui.startAnalysisBtn.disabled = isLoading;
     ui.analyzeSelectedBtn.disabled = isLoading;
 }
-
 
 // --- AUTHENTICATION & USER INFO ---
 
@@ -575,7 +576,7 @@ async function searchGoogle(query) {
         return data.items?.[0]?.link || null;
     } catch (error) {
         console.error(`Google Search for "${query}" failed:`, error);
-        return null; // Return null on error to not break the flow
+        return null;
     }
 }
 
@@ -612,6 +613,10 @@ async function findOrCreateDriveFolder() {
     } catch (error) {
         console.error('Drive folder error:', error);
         showAlert('Drive 錯誤', `存取資料夾失敗: ${error.message || '未知錯誤'}`, 'error');
+        // 權限問題提示
+        if (error.message && /insufficient/i.test(error.message)) {
+            showAlert('權限不足', 'Google Drive 權限不足，請登出並重新登入，並授權完整的 Drive 權限。', 'warning');
+        }
     } finally {
         setLoadingState(false);
     }
@@ -655,7 +660,7 @@ async function getFullCompetitorDetails(name, context) {
             return await callGemini(prompt);
         } catch (e) {
             console.error(`Gemini detail fetch for ${name} failed:`, e);
-            return { brandName: name }; // Return name to avoid breaking the list
+            return { brandName: name };
         }
     })();
 
@@ -788,7 +793,6 @@ function sortData(type, data) {
         return order === 'asc' ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
     });
 }
-
 
 // --- ACTIONS (SAVE, EXPORT, HISTORY) ---
 
