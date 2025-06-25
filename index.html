@@ -111,8 +111,10 @@
                 <p class="mt-2 text-gray-600">v2.5 安全金鑰版 (MVP)</p>
             </div>
 
+            <!-- Module 1: 使用者與配置介面 ('駕駛艙') -->
             <div class="space-y-6">
-                 <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                 <!-- API 金鑰輸入 -->
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <label for="apiKeyInput" class="block text-sm font-medium text-yellow-800 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 8a6 6 0 11-12 0 6 6 0 0112 0zM7 8a1 1 0 11-2 0 1 1 0 012 0zm5 0a1 1 0 11-2 0 1 1 0 012 0zm5 0a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"></path></svg>
                         Google Gemini API 金鑰 <span class="text-red-500 ml-1">*</span>
@@ -172,10 +174,13 @@
                 </button>
             </div>
 
+            <!-- 動態狀態更新區域 -->
             <div id="statusContainer" class="mt-4 space-y-2"></div>
 
+            <!-- Module 4: 輸出與交付模組 ('渲染層') -->
             <div id="proposalOutput" class="mt-8 border-t-2 border-gray-200 pt-6">
-                </div>
+                <!-- AI 生成的內容將會顯示在這裡 -->
+            </div>
         </div>
         <footer class="text-center mt-4 text-sm text-gray-500">
             <p>本原型由 Google Gemini 驅動，所有分析皆為即時生成。</p>
@@ -415,7 +420,7 @@
                 const forumData = await analyzeForumSentiment(analysisContext, userApiKey);
                 markStatusDone(status1);
 
-                const status2 = updateStatus(`分析 **${analysis.target}** 的 SEO 與內容策略...`);
+                const status2 = updateStatus(`分析 **${analysisContext.target}** 的 SEO 與內容策略...`);
                 const seoData = await analyzeSeoStrategy(analysisContext, userApiKey);
                 markStatusDone(status2);
                 
@@ -445,6 +450,5 @@
     </script>
 </body>
 </html>
-
 
 
