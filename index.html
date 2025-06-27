@@ -135,19 +135,96 @@
                             <input type="text" id="competitorBrand" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：光陽, 長榮航空">
                         </div>
                          <div>
-                            <label for="industry" class="block text-sm font-medium text-gray-700">目標市場 / 產業 <span class="text-red-500">*</span></label>
-                            <select id="industry" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option>消費性電子產品</option>
-                                <option>時尚服飾與配件</option>
-                                <option>美妝保養</option>
-                                <option>旅遊與航空服務</option>
-                                <option>餐飲業</option>
-                                <option>B2B 軟體服務</option>
-                                <option>金融與保險服務</option>
-                                <option>其他</option>
+                            <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">產業類別 <span class="text-red-500">*</span></label>
+                            <select id="industry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">請選擇產業類別</option>
+                                <optgroup label="科技產業">
+                                    <option value="軟體開發">軟體開發</option>
+                                    <option value="電子商務">電子商務</option>
+                                    <option value="人工智慧">人工智慧</option>
+                                    <option value="物聯網">物聯網</option>
+                                    <option value="區塊鏈">區塊鏈</option>
+                                    <option value="雲端服務">雲端服務</option>
+                                    <option value="數位行銷">數位行銷</option>
+                                    <option value="遊戲產業">遊戲產業</option>
+                                    <option value="硬體製造">硬體製造</option>
+                                    <option value="網路服務">網路服務</option>
+                                </optgroup>
+                                <optgroup label="消費品產業">
+                                    <option value="美妝保養">美妝保養</option>
+                                    <option value="服飾時尚">服飾時尚</option>
+                                    <option value="食品飲料">食品飲料</option>
+                                    <option value="家居用品">家居用品</option>
+                                    <option value="運動用品">運動用品</option>
+                                    <option value="母嬰用品">母嬰用品</option>
+                                    <option value="寵物用品">寵物用品</option>
+                                    <option value="個人護理">個人護理</option>
+                                </optgroup>
+                                <optgroup label="金融服務">
+                                    <option value="銀行業">銀行業</option>
+                                    <option value="保險業">保險業</option>
+                                    <option value="投資理財">投資理財</option>
+                                    <option value="支付服務">支付服務</option>
+                                    <option value="FinTech">FinTech</option>
+                                    <option value="房地產">房地產</option>
+                                </optgroup>
+                                <optgroup label="教育與培訓">
+                                    <option value="線上教育">線上教育</option>
+                                    <option value="語言學習">語言學習</option>
+                                    <option value="職業培訓">職業培訓</option>
+                                    <option value="兒童教育">兒童教育</option>
+                                    <option value="高等教育">高等教育</option>
+                                    <option value="技能培訓">技能培訓</option>
+                                </optgroup>
+                                <optgroup label="健康醫療">
+                                    <option value="醫療服務">醫療服務</option>
+                                    <option value="健康管理">健康管理</option>
+                                    <option value="健身運動">健身運動</option>
+                                    <option value="營養保健">營養保健</option>
+                                    <option value="心理健康">心理健康</option>
+                                    <option value="醫美整形">醫美整形</option>
+                                </optgroup>
+                                <optgroup label="交通運輸">
+                                    <option value="共享交通">共享交通</option>
+                                    <option value="物流配送">物流配送</option>
+                                    <option value="旅遊服務">旅遊服務</option>
+                                    <option value="航空運輸">航空運輸</option>
+                                    <option value="汽車產業">汽車產業</option>
+                                    <option value="大眾運輸">大眾運輸</option>
+                                </optgroup>
+                                <optgroup label="娛樂媒體">
+                                    <option value="影視製作">影視製作</option>
+                                    <option value="音樂產業">音樂產業</option>
+                                    <option value="出版業">出版業</option>
+                                    <option value="直播平台">直播平台</option>
+                                    <option value="短影片">短影片</option>
+                                    <option value="Podcast">Podcast</option>
+                                </optgroup>
+                                <optgroup label="其他產業">
+                                    <option value="政府機關">政府機關</option>
+                                    <option value="非營利組織">非營利組織</option>
+                                    <option value="製造業">製造業</option>
+                                    <option value="能源產業">能源產業</option>
+                                    <option value="環保產業">環保產業</option>
+                                    <option value="農業科技">農業科技</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div>
+                            <label for="industryStatus" class="block text-sm font-medium text-gray-700 mb-2">產業狀態 <span class="text-red-500">*</span></label>
+                            <select id="industryStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">請選擇產業狀態</option>
+                                <option value="新創期">新創期 - 市場剛起步，競爭較少</option>
+                                <option value="成長期">成長期 - 市場快速擴張，競爭加劇</option>
+                                <option value="成熟期">成熟期 - 市場穩定，競爭激烈</option>
+                                <option value="衰退期">衰退期 - 市場萎縮，需要轉型</option>
+                                <option value="轉型期">轉型期 - 產業結構調整，新機會出現</option>
+                                <option value="復甦期">復甦期 - 市場重新活絡</option>
+                                <option value="創新期">創新期 - 技術突破帶來新機會</option>
+                                <option value="整合期">整合期 - 產業併購整合階段</option>
+                            </select>
+                        </div>
+                         <div>
                             <label for="businessModel" class="block text-sm font-medium text-gray-700">商業模式 <span class="text-red-500">*</span></label>
                              <select id="businessModel" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="B2C">B2C (企業對消費者)</option>
@@ -178,19 +255,96 @@
                             </select>
                         </div>
                         <div>
-                            <label for="adFormat" class="block text-sm font-medium text-gray-700">廣告形式 <span class="text-red-500">*</span></label>
-                            <select id="adFormat" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="">請選擇廣告形式</option>
-                                <option value="數位廣告">數位廣告</option>
-                                <option value="社群媒體廣告">社群媒體廣告</option>
-                                <option value="搜尋引擎廣告">搜尋引擎廣告</option>
-                                <option value="影音廣告">影音廣告</option>
-                                <option value="展示廣告">展示廣告</option>
-                                <option value="原生廣告">原生廣告</option>
-                                <option value="影響者行銷">影響者行銷</option>
-                                <option value="內容行銷">內容行銷</option>
-                                <option value="整合行銷">整合行銷</option>
-                            </select>
+                            <label for="adFormat" class="block text-sm font-medium text-gray-700 mb-2">廣告形式</label>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="aiRecommendMedia" class="mr-2">
+                                    <label for="aiRecommendMedia" class="text-sm text-gray-700">請 AI 建議最適合的媒體組合</label>
+                                </div>
+                                <div id="mediaSelection" class="space-y-2">
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="數位廣告" class="mr-2">
+                                            <span class="text-sm">數位廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="社群媒體廣告" class="mr-2">
+                                            <span class="text-sm">社群媒體廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="搜尋引擎廣告" class="mr-2">
+                                            <span class="text-sm">搜尋引擎廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="影音廣告" class="mr-2">
+                                            <span class="text-sm">影音廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="展示廣告" class="mr-2">
+                                            <span class="text-sm">展示廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="原生廣告" class="mr-2">
+                                            <span class="text-sm">原生廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="影響者行銷" class="mr-2">
+                                            <span class="text-sm">影響者行銷</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="內容行銷" class="mr-2">
+                                            <span class="text-sm">內容行銷</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="整合行銷" class="mr-2">
+                                            <span class="text-sm">整合行銷</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="戶外廣告" class="mr-2">
+                                            <span class="text-sm">戶外廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="電視廣告" class="mr-2">
+                                            <span class="text-sm">電視廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="廣播廣告" class="mr-2">
+                                            <span class="text-sm">廣播廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="雜誌廣告" class="mr-2">
+                                            <span class="text-sm">雜誌廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="報紙廣告" class="mr-2">
+                                            <span class="text-sm">報紙廣告</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                                            <input type="checkbox" name="media" value="活動行銷" class="mr-2">
+                                            <span class="text-sm">活動行銷</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="competitors" class="block text-sm font-medium text-gray-700 mb-2">主要競爭對手</label>
+                    <textarea id="competitors" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請列出主要競爭對手的品牌名稱與產品名稱，例如：&#10;Apple iPhone 15&#10;Samsung Galaxy S24&#10;Google Pixel 8"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="marketingPeriod" class="block text-sm font-medium text-gray-700 mb-2">行銷活動期間</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="startDate" class="block text-xs text-gray-600 mb-1">開始日期</label>
+                            <input type="date" id="startDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="endDate" class="block text-xs text-gray-600 mb-1">結束日期</label>
+                            <input type="date" id="endDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
                 </div>
@@ -316,6 +470,7 @@
         const targetBrandInput = document.getElementById('targetBrand');
         const competitorBrandInput = document.getElementById('competitorBrand');
         const industryInput = document.getElementById('industry');
+        const industryStatusInput = document.getElementById('industryStatus');
         const businessModelInput = document.getElementById('businessModel');
         const salesChannelsInput = document.getElementById('salesChannels');
         const targetAudienceInput = document.getElementById('targetAudience');
@@ -323,7 +478,11 @@
         const statusContainer = document.getElementById('statusContainer');
         const proposalOutput = document.getElementById('proposalOutput');
         const adObjectiveInput = document.getElementById('adObjective');
-        const adFormatInput = document.getElementById('adFormat');
+        const aiRecommendMediaInput = document.getElementById('aiRecommendMedia');
+        const mediaSelectionDiv = document.getElementById('mediaSelection');
+        const competitorsInput = document.getElementById('competitors');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
         const targetMarketsInput = document.getElementById('targetMarkets');
         const targetLanguagesInput = document.getElementById('targetLanguages');
         const outputFormatInputs = document.querySelectorAll('input[name="outputFormat"]');
@@ -688,8 +847,132 @@
             return await callGeminiAPI(prompt, apiKey, true);
         }
 
+        async function analyzeCompetitorInsights(context, apiKey) {
+            const prompt = `
+                你是一位資深的競爭分析專家，專門分析競爭對手的品牌定位、產品策略與市場表現。請針對以下情境進行深度競爭對手分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry} (${context.industryStatus})
+                - **商業模式:** ${context.businessModel}
+                - **目標人群:** ${context.targetAudience}
+                - **競爭對手:** ${context.competitors}
+
+                **分析重點：**
+                - 詳細分析每個競爭對手的品牌定位與產品特色
+                - 競爭對手的媒體策略與廣告表現
+                - 競爭對手的目標人群與市場佔有率
+                - 競爭對手的優勢與劣勢分析
+                - 市場機會與威脅評估
+                - 差異化策略建議
+
+                **請參考台灣市場的實際數據：**
+                - 各競爭對手的市場表現數據
+                - 媒體投資規模與策略
+                - 消費者對各品牌的認知與評價
+                - 成功與失敗的競爭案例
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "competitor_analysis", "market_positioning", "media_strategies", "opportunities", "threats", "differentiation_strategy"。
+
+                - **competitor_analysis:** 各競爭對手的詳細分析（品牌、產品、定位、優勢劣勢）
+                - **market_positioning:** 市場定位圖分析（價格vs品質、功能vs設計等維度）
+                - **media_strategies:** 競爭對手的媒體策略分析
+                - **opportunities:** 市場機會點識別
+                - **threats:** 潛在威脅分析
+                - **differentiation_strategy:** 差異化策略建議
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
+        async function analyzeMarketingCalendar(context, apiKey) {
+            const prompt = `
+                你是一位資深的行銷策略顧問，專門規劃行銷時程與熱點事件整合。請針對以下情境進行行銷行事曆分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry} (${context.industryStatus})
+                - **目標人群:** ${context.targetAudience}
+                - **行銷期間:** ${context.startDate} 至 ${context.endDate}
+                - **目標市場:** ${context.targetMarkets}
+
+                **分析重點：**
+                - 分析行銷期間內的熱點事件與節慶
+                - 識別適合的活動合作機會（演唱會、展覽、運動賽事等）
+                - 評估各事件的提前洽談時程
+                - 建議最佳的行銷時機點
+                - 分析競爭對手的行銷時程
+                - 提供時程風險管理建議
+
+                **請參考台灣市場的實際情況：**
+                - 各月份的節慶與活動
+                - 大型活動的提前洽談時程
+                - 各產業的行銷旺季
+                - 成功與失敗的時程規劃案例
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "calendar_analysis", "hot_events", "partnership_opportunities", "timing_recommendations", "risk_management", "competitive_timing"。
+
+                - **calendar_analysis:** 行銷期間的整體時程分析
+                - **hot_events:** 熱點事件清單與影響評估
+                - **partnership_opportunities:** 合作機會與洽談時程
+                - **timing_recommendations:** 最佳時機點建議
+                - **risk_management:** 時程風險管理
+                - **competitive_timing:** 競爭對手時程分析
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
+        async function analyzeCreativeStrategy(context, apiKey) {
+            const prompt = `
+                你是一位資深的創意策略總監，專門規劃創新且有影響力的創意策略。請針對以下情境進行創意策略分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry} (${context.industryStatus})
+                - **商業模式:** ${context.businessModel}
+                - **目標人群:** ${context.targetAudience}
+                - **廣告目標:** ${context.adObjective}
+                - **廣告形式:** ${context.aiRecommendMedia ? 'AI建議' : context.selectedMedia.join(', ')}
+                - **競爭對手:** ${context.competitors}
+
+                **創意策略要求：**
+                - 從品牌故事角度：如何講述動人的品牌故事
+                - 從情感連結角度：如何建立深層的情感共鳴
+                - 從創意表現角度：如何創造令人印象深刻的視覺與文案
+                - 從互動體驗角度：如何設計參與感強的互動體驗
+                - 從文化洞察角度：如何融入在地文化元素
+                - 從趨勢創新角度：如何運用最新創意趨勢
+                - 從差異化角度：如何與競爭對手區隔
+
+                **請參考創意產業的最新趨勢：**
+                - 全球創意獎項的得獎案例
+                - 病毒式傳播的創意表現
+                - 各媒體渠道的創意特色
+                - 成功與失敗的創意案例
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "creative_concept", "visual_strategy", "copy_strategy", "interaction_design", "cultural_elements", "trend_innovation", "execution_plan"。
+
+                - **creative_concept:** 核心創意概念與故事線
+                - **visual_strategy:** 視覺策略與設計方向
+                - **copy_strategy:** 文案策略與溝通訊息
+                - **interaction_design:** 互動體驗設計
+                - **cultural_elements:** 文化元素融入
+                - **trend_innovation:** 趨勢創新應用
+                - **execution_plan:** 執行計畫與時程
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
         // --- Module 3: 提案生成引擎 ('合成引擎') ---
-        async function synthesizeFinalReport(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, apiKey) {
+        async function synthesizeFinalReport(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, competitorAnalysis, marketingCalendar, creativeStrategy, apiKey) {
              const prompt = `
                 你是一位首席媒體策略總監，具備策略思考的高度與學習能力。你的任務是將下屬分析師提交的所有 JSON 資料，整合成一份給客戶看的、專業且有說服力的「市場機會與初步策略建議」報告。報告需以 HTML 格式呈現。
 
@@ -698,9 +981,11 @@
                 - **核心目標人群:** ${context.targetAudience}
                 - **總預算 (TWD):** ${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}
                 - **廣告目標與目的:** ${context.adObjective}
-                - **廣告形式:** ${context.adFormat}
+                - **廣告形式:** ${context.aiRecommendMedia ? 'AI建議' : context.selectedMedia.join(', ')}
                 - **目標市場:** ${context.targetMarkets}
                 - **目標語言:** ${context.targetLanguages}
+                - **行銷期間:** ${context.startDate} 至 ${context.endDate}
+                - **產業狀態:** ${context.industryStatus}
 
                 **分析師提交的資料:**
                 1.  **品牌輿情分析:** ${JSON.stringify(forumAnalysis, null, 2)}
@@ -710,6 +995,9 @@
                 5.  **預算可行性分析:** ${JSON.stringify(budgetFeasibility, null, 2)}
                 6.  **多市場策略分析:** ${JSON.stringify(multiMarketStrategy, null, 2)}
                 7.  **在地化策略分析:** ${JSON.stringify(localizationStrategy, null, 2)}
+                8.  **競爭對手分析:** ${JSON.stringify(competitorAnalysis, null, 2)}
+                9.  **行銷行事曆分析:** ${JSON.stringify(marketingCalendar, null, 2)}
+                10. **創意策略分析:** ${JSON.stringify(creativeStrategy, null, 2)}
 
                 **策略思考框架：**
                 - 從品牌策略角度：如何建立長期品牌資產、市場定位
@@ -717,7 +1005,8 @@
                 - 從學習角度：從成功案例中學習、避免失敗陷阱
                 - 從創新角度：新興機會、未來趨勢、顛覆性思維
                 - 從可行性角度：預算與目標的匹配度，提供務實建議
-                - **從國際化角度：跨市場品牌一致性與在地化平衡**
+                - 從國際化角度：跨市場品牌一致性與在地化平衡
+                - **從創意角度：如何創造令人印象深刻的品牌體驗**
 
                 **你的任務:**
                 請根據以上所有資訊，撰寫一份包含以下章節的 HTML 報告，並在你的分析與建議中，**始終緊扣如何打動「${context.targetAudience}」這個核心目標人群**，並強調：
@@ -729,7 +1018,10 @@
                 - 從學習角度總結最佳實踐
                 - 產業輿情狀況與機會點
                 - 預算可行性與務實建議
-                - **多市場策略與在地化考量**
+                - 多市場策略與在地化考量
+                - **競爭對手深度分析與差異化策略**
+                - **行銷時程規劃與熱點事件整合**
+                - **創意策略與品牌體驗設計**
 
                 1.  **<h2>市場總體印象</h2>**
                     - 一段簡短總結，點出 ${context.target} 目前在「${context.targetAudience}」心中的形象與挑戰。
@@ -740,35 +1032,57 @@
                     -   <h3>競爭品牌輿情表現</h3>
                     -   <h3>消費者洞察</h3>
 
-                3.  **<h2>多市場策略分析</h2>**
+                3.  **<h2>競爭對手深度分析</h2>**
+                    -   <h3>競爭對手品牌分析</h3>
+                    -   <h3>市場定位比較</h3>
+                    -   <h3>媒體策略分析</h3>
+                    -   <h3>差異化機會點</h3>
+
+                4.  **<h2>多市場策略分析</h2>**
                     -   <h3>目標市場分析</h3>
                     -   <h3>跨市場預算分配</h3>
                     -   <h3>在地化策略建議</h3>
                     -   <h3>文化考量與風險管理</h3>
 
-                4.  **<h2>核心洞察與機會點</h2>**
+                5.  **<h2>核心洞察與機會點</h2>**
                     -   <h3>洞察一：目標人群的真實心聲</h3>
                     -   <h3>洞察二：搜尋戰場的內容缺口</h3>
                     -   <h3>洞察三：產業輿情機會點</h3>
-                    -   <h3>洞察四：跨市場機會點</h3>
+                    -   <h3>洞察四：競爭對手機會點</h3>
+                    -   <h3>洞察五：跨市場機會點</h3>
                     -   <h3>策略機會點：我們該從何處切入？</h3>
 
-                5.  **<h2>預算可行性評估</h2>**
+                6.  **<h2>預算可行性評估</h2>**
                     -   <h3>可行性評估</h3>
                     -   <h3>預算建議</h3>
                     -   <h3>替代策略</h3>
                     -   <h3>風險分析</h3>
 
-                6.  **<h2>初步策略建議</h2>**
+                7.  **<h2>創意策略規劃</h2>**
+                    -   <h3>核心創意概念</h3>
+                    -   <h3>視覺與文案策略</h3>
+                    -   <h3>互動體驗設計</h3>
+                    -   <h3>文化元素融入</h3>
+                    -   <h3>趨勢創新應用</h3>
+
+                8.  **<h2>行銷時程規劃</h2>**
+                    -   <h3>熱點事件分析</h3>
+                    -   <h3>合作機會識別</h3>
+                    -   <h3>最佳時機建議</h3>
+                    -   <h3>風險管理</h3>
+
+                9.  **<h2>初步策略建議</h2>**
                     -   <h3>建議一：內容策略方向</h3>
                     -   <h3>建議二：溝通訊息切角</h3>
                     -   <h3>建議三：創意與媒體建議（請根據最新市場趨勢與競品策略）</h3>
                     -   <h3>建議四：多市場執行策略</h3>
                     -   <h3>建議五：在地化與文化適應</h3>
-                    -   <h3>建議六：長期策略思考（從品牌發展、競爭優勢角度）</h3>
-                    -   <h3>建議七：預算優化策略（如何在有限預算下最大化效益）</h3>
+                    -   <h3>建議六：競爭策略與差異化</h3>
+                    -   <h3>建議七：時程規劃與執行</h3>
+                    -   <h3>建議八：長期策略思考（從品牌發展、競爭優勢角度）</h3>
+                    -   <h3>建議九：預算優化策略（如何在有限預算下最大化效益）</h3>
                 
-                7.  **<h2>預算規劃與預期效益</h2>**
+                10. **<h2>預算規劃與預期效益</h2>**
                     -   <p>基於台幣 **${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}** 的預算，我們建議初步的資源分配與效益預估如下：</p>
                     -   <h3>跨市場預算分配</h3>
                     -   (此處使用 HTML table 呈現 multiMarketStrategy.budget_allocation 的內容)
@@ -928,12 +1242,17 @@
                 target: targetBrandInput.value.trim(),
                 competitor: competitorBrandInput.value.trim(),
                 industry: industryInput.value,
+                industryStatus: industryStatusInput.value,
                 businessModel: businessModelInput.value,
                 salesChannels: salesChannelsInput.value.trim() || '未提供',
                 targetAudience: targetAudienceInput.value.trim() || '未指定',
                 budget: parseInt(advertisingBudgetInput.value, 10) || 0,
                 adObjective: adObjectiveInput.value,
-                adFormat: adFormat,
+                aiRecommendMedia: aiRecommendMediaInput.checked,
+                selectedMedia: Array.from(mediaSelectionDiv.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value),
+                competitors: competitorsInput.value,
+                startDate: startDateInput.value,
+                endDate: endDateInput.value,
                 targetMarkets: targetMarkets,
                 targetLanguages: targetLanguages
             };
@@ -961,13 +1280,25 @@
                 const budgetFeasibilityData = await analyzeBudgetFeasibility(analysisContext, userApiKey);
                 markStatusDone(status1c);
 
-                const status1d = updateStatus(`分析多市場策略與預算分配...`);
-                const multiMarketData = await analyzeMultiMarketStrategy(analysisContext, userApiKey);
+                const status1d = updateStatus(`分析競爭對手策略與市場定位...`);
+                const competitorData = await analyzeCompetitorInsights(analysisContext, userApiKey);
                 markStatusDone(status1d);
 
-                const status1e = updateStatus(`規劃在地化與多語言策略...`);
-                const localizationData = await analyzeLocalizationStrategy(analysisContext, multiMarketData, userApiKey);
+                const status1e = updateStatus(`規劃行銷時程與熱點事件...`);
+                const marketingCalendarData = await analyzeMarketingCalendar(analysisContext, userApiKey);
                 markStatusDone(status1e);
+
+                const status1f = updateStatus(`分析多市場策略與預算分配...`);
+                const multiMarketData = await analyzeMultiMarketStrategy(analysisContext, userApiKey);
+                markStatusDone(status1f);
+
+                const status1g = updateStatus(`規劃在地化與多語言策略...`);
+                const localizationData = await analyzeLocalizationStrategy(analysisContext, multiMarketData, userApiKey);
+                markStatusDone(status1g);
+
+                const status1h = updateStatus(`發展創意策略與品牌體驗...`);
+                const creativeStrategyData = await analyzeCreativeStrategy(analysisContext, userApiKey);
+                markStatusDone(status1h);
 
                 const status2 = updateStatus(`分析 **${analysisContext.target}** 的 SEO 與內容策略...`);
                 const seoData = await analyzeSeoStrategy(analysisContext, userApiKey);
@@ -980,7 +1311,7 @@
                 markStatusDone(status3);
 
                 const status4 = updateStatus(`綜合所有洞察，生成最終報告...`);
-                const finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, userApiKey);
+                const finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, competitorData, marketingCalendarData, creativeStrategyData, userApiKey);
                 markStatusDone(status4);
 
                 // 檢查輸出格式
@@ -988,7 +1319,7 @@
                 
                 if (selectedFormat === 'slides') {
                     // 生成 Google Slides 格式
-                    currentSlidesData = generateGoogleSlides(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData);
+                    currentSlidesData = generateGoogleSlides(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, competitorData, marketingCalendarData, creativeStrategyData);
                     renderSlides(currentSlidesData);
                 } else {
                     // 顯示 HTML 報告
@@ -1037,7 +1368,7 @@
 
         let currentSlidesData = null;
 
-        function generateGoogleSlides(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy) {
+        function generateGoogleSlides(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, competitorAnalysis, marketingCalendar, creativeStrategy) {
             const slides = [];
             
             // 封面頁
@@ -1373,6 +1704,28 @@
             // 目前提供下載 JSON 格式，可以手動導入到 Google Slides
             alert('Google Slides 整合功能開發中。目前請使用下載功能，然後手動導入到 Google Slides。');
         }
+
+        // 監聽 AI 建議媒體選擇
+        aiRecommendMediaInput.addEventListener('change', function() {
+            const mediaCheckboxes = mediaSelectionDiv.querySelectorAll('input[type="checkbox"]');
+            mediaCheckboxes.forEach(checkbox => {
+                checkbox.disabled = this.checked;
+                if (this.checked) {
+                    checkbox.checked = false;
+                }
+            });
+        });
+
+        // 監聽媒體選擇
+        mediaSelectionDiv.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' && e.target.checked) {
+                aiRecommendMediaInput.checked = false;
+                const mediaCheckboxes = mediaSelectionDiv.querySelectorAll('input[type="checkbox"]');
+                mediaCheckboxes.forEach(checkbox => {
+                    checkbox.disabled = false;
+                });
+            }
+        });
     </script>
 </body>
 </html>
