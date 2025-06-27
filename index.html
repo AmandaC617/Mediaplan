@@ -591,14 +591,43 @@
                             // 嘗試解析 JSON
                             const jsonMatch = text.match(/\{[\s\S]*\}/);
                             if (jsonMatch) {
-                                return JSON.parse(jsonMatch[0]);
+                                let jsonText = jsonMatch[0];
+                                
+                                // 清理常見的 JSON 格式問題
+                                jsonText = jsonText
+                                    .replace(/,\s*}/g, '}')  // 移除尾隨逗號
+                                    .replace(/,\s*]/g, ']')  // 移除陣列尾隨逗號
+                                    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // 移除控制字符
+                                    .replace(/[\u2018\u2019]/g, "'") // 標準化引號
+                                    .replace(/[\u201C\u201D]/g, '"'); // 標準化雙引號
+                                
+                                try {
+                                    return JSON.parse(jsonText);
+                                } catch (parseError) {
+                                    console.error('JSON 解析失敗，嘗試修復格式:', parseError);
+                                    console.log('原始 JSON:', jsonText);
+                                    
+                                    // 嘗試更激進的修復
+                                    jsonText = jsonText
+                                        .replace(/([^\\])"/g, '$1\\"') // 轉義未轉義的引號
+                                        .replace(/\\"/g, '"') // 重新處理引號
+                                        .replace(/,\s*([}\]])/g, '$1'); // 移除所有尾隨逗號
+                                    
+                                    return JSON.parse(jsonText);
+                                }
                             } else {
                                 throw new Error('未找到有效的 JSON 格式');
                             }
                         } catch (jsonError) {
                             console.error('JSON 解析錯誤:', jsonError);
                             console.log('原始回應:', text);
-                            throw new Error('AI 回應格式錯誤，請重試');
+                            
+                            // 如果 JSON 解析失敗，返回一個基本的錯誤結構
+                            return {
+                                error: 'JSON 解析失敗',
+                                original_response: text.substring(0, 500) + '...',
+                                message: 'AI 回應格式不正確，但已記錄原始回應'
+                            };
                         }
                     }
                     
