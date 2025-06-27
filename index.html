@@ -552,93 +552,110 @@
 
         // --- Module 2: AI 任務協調與執行核心 ('融合中樞') ---
         async function callGeminiAPI(prompt, apiKey, expectJSON = false) {
-            const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+            // 嘗試多個模型名稱，按優先順序
+            const models = [
+                'gemini-1.5-flash',
+                'gemini-1.5-pro',
+                'gemini-pro'
+            ];
             
-            const requestBody = {
-                contents: [{
-                    parts: [{
-                        text: prompt
-                    }]
-                }],
-                generationConfig: {
-                    temperature: 0.7,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 8192,
-                }
-            };
-
-            try {
-                const response = await fetch(`${url}?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestBody)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                    const text = data.candidates[0].content.parts[0].text;
+            let lastError = null;
+            
+            for (const model of models) {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
                     
-                    if (expectJSON) {
-                        try {
-                            // 嘗試解析 JSON
-                            const jsonMatch = text.match(/\{[\s\S]*\}/);
-                            if (jsonMatch) {
-                                let jsonText = jsonMatch[0];
-                                
-                                // 清理常見的 JSON 格式問題
-                                jsonText = jsonText
-                                    .replace(/,\s*}/g, '}')  // 移除尾隨逗號
-                                    .replace(/,\s*]/g, ']')  // 移除陣列尾隨逗號
-                                    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // 移除控制字符
-                                    .replace(/[\u2018\u2019]/g, "'") // 標準化引號
-                                    .replace(/[\u201C\u201D]/g, '"'); // 標準化雙引號
-                                
-                                try {
-                                    return JSON.parse(jsonText);
-                                } catch (parseError) {
-                                    console.error('JSON 解析失敗，嘗試修復格式:', parseError);
-                                    console.log('原始 JSON:', jsonText);
-                                    
-                                    // 嘗試更激進的修復
-                                    jsonText = jsonText
-                                        .replace(/([^\\])"/g, '$1\\"') // 轉義未轉義的引號
-                                        .replace(/\\"/g, '"') // 重新處理引號
-                                        .replace(/,\s*([}\]])/g, '$1'); // 移除所有尾隨逗號
-                                    
-                                    return JSON.parse(jsonText);
-                                }
-                            } else {
-                                throw new Error('未找到有效的 JSON 格式');
-                            }
-                        } catch (jsonError) {
-                            console.error('JSON 解析錯誤:', jsonError);
-                            console.log('原始回應:', text);
-                            
-                            // 如果 JSON 解析失敗，返回一個基本的錯誤結構
-                            return {
-                                error: 'JSON 解析失敗',
-                                original_response: text.substring(0, 500) + '...',
-                                message: 'AI 回應格式不正確，但已記錄原始回應'
-                            };
+                    const requestBody = {
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 8192,
                         }
+                    };
+
+                    const response = await fetch(`${url}?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache'
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status} for model ${model}`);
                     }
+
+                    const data = await response.json();
                     
-                    return text;
-                } else {
-                    throw new Error('AI 回應格式異常');
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                        const text = data.candidates[0].content.parts[0].text;
+                        
+                        if (expectJSON) {
+                            try {
+                                // 嘗試解析 JSON
+                                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                                if (jsonMatch) {
+                                    let jsonText = jsonMatch[0];
+                                    
+                                    // 清理常見的 JSON 格式問題
+                                    jsonText = jsonText
+                                        .replace(/,\s*}/g, '}')  // 移除尾隨逗號
+                                        .replace(/,\s*]/g, ']')  // 移除陣列尾隨逗號
+                                        .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // 移除控制字符
+                                        .replace(/[\u2018\u2019]/g, "'") // 標準化引號
+                                        .replace(/[\u201C\u201D]/g, '"'); // 標準化雙引號
+                                    
+                                    try {
+                                        return JSON.parse(jsonText);
+                                    } catch (parseError) {
+                                        console.error('JSON 解析失敗，嘗試修復格式:', parseError);
+                                        console.log('原始 JSON:', jsonText);
+                                        
+                                        // 嘗試更激進的修復
+                                        jsonText = jsonText
+                                            .replace(/([^\\])"/g, '$1\\"') // 轉義未轉義的引號
+                                            .replace(/\\"/g, '"') // 重新處理引號
+                                            .replace(/,\s*([}\]])/g, '$1'); // 移除所有尾隨逗號
+                                        
+                                        return JSON.parse(jsonText);
+                                    }
+                                } else {
+                                    throw new Error('未找到有效的 JSON 格式');
+                                }
+                            } catch (jsonError) {
+                                console.error('JSON 解析錯誤:', jsonError);
+                                console.log('原始回應:', text);
+                                
+                                // 如果 JSON 解析失敗，返回一個基本的錯誤結構
+                                return {
+                                    error: 'JSON 解析失敗',
+                                    original_response: text.substring(0, 500) + '...',
+                                    message: 'AI 回應格式不正確，但已記錄原始回應'
+                                };
+                            }
+                        }
+                        
+                        return text;
+                    } else {
+                        throw new Error('AI 回應格式異常');
+                    }
+                } catch (error) {
+                    console.error(`模型 ${model} 失敗:`, error);
+                    lastError = error;
+                    continue; // 嘗試下一個模型
                 }
-            } catch (error) {
-                console.error('API 調用錯誤:', error);
-                throw error;
             }
+            
+            // 如果所有模型都失敗了
+            throw new Error(`所有模型都失敗了。最後錯誤: ${lastError.message}`);
         }
         
 
