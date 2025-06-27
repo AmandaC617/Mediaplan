@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自動化媒體提案引擎 (台灣市場特化版 MVP)</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -165,6 +166,90 @@
                             <label for="advertisingBudget" class="block text-sm font-medium text-gray-700">預計廣告預算 (台幣)</label>
                             <input type="number" id="advertisingBudget" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：300000">
                         </div>
+                        <div>
+                            <label for="adObjective" class="block text-sm font-medium text-gray-700">廣告目標與目的 <span class="text-red-500">*</span></label>
+                            <select id="adObjective" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="品牌知名度">品牌知名度</option>
+                                <option value="銷售提升">銷售提升</option>
+                                <option value="會員招募">會員招募</option>
+                                <option value="活動推廣">活動推廣</option>
+                                <option value="APP下載">APP下載</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="adFormat" class="block text-sm font-medium text-gray-700">廣告形式 <span class="text-red-500">*</span></label>
+                            <select id="adFormat" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="">請選擇廣告形式</option>
+                                <option value="數位廣告">數位廣告</option>
+                                <option value="社群媒體廣告">社群媒體廣告</option>
+                                <option value="搜尋引擎廣告">搜尋引擎廣告</option>
+                                <option value="影音廣告">影音廣告</option>
+                                <option value="展示廣告">展示廣告</option>
+                                <option value="原生廣告">原生廣告</option>
+                                <option value="影響者行銷">影響者行銷</option>
+                                <option value="內容行銷">內容行銷</option>
+                                <option value="整合行銷">整合行銷</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="targetMarkets" class="block text-sm font-medium text-gray-700 mb-2">目標市場</label>
+                    <select id="targetMarkets" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="台灣">台灣</option>
+                        <option value="台灣,香港">台灣 + 香港</option>
+                        <option value="台灣,新加坡">台灣 + 新加坡</option>
+                        <option value="台灣,馬來西亞">台灣 + 馬來西亞</option>
+                        <option value="台灣,泰國">台灣 + 泰國</option>
+                        <option value="台灣,越南">台灣 + 越南</option>
+                        <option value="台灣,菲律賓">台灣 + 菲律賓</option>
+                        <option value="台灣,印尼">台灣 + 印尼</option>
+                        <option value="台灣,日本">台灣 + 日本</option>
+                        <option value="台灣,韓國">台灣 + 韓國</option>
+                        <option value="台灣,中國">台灣 + 中國</option>
+                        <option value="台灣,美國">台灣 + 美國</option>
+                        <option value="台灣,加拿大">台灣 + 加拿大</option>
+                        <option value="台灣,澳洲">台灣 + 澳洲</option>
+                        <option value="台灣,英國">台灣 + 英國</option>
+                        <option value="台灣,德國">台灣 + 德國</option>
+                        <option value="台灣,法國">台灣 + 法國</option>
+                        <option value="全球">全球策略</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="targetLanguages" class="block text-sm font-medium text-gray-700 mb-2">目標語言</label>
+                    <select id="targetLanguages" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="繁體中文">繁體中文</option>
+                        <option value="繁體中文,簡體中文">繁體中文 + 簡體中文</option>
+                        <option value="繁體中文,英文">繁體中文 + 英文</option>
+                        <option value="繁體中文,日文">繁體中文 + 日文</option>
+                        <option value="繁體中文,韓文">繁體中文 + 韓文</option>
+                        <option value="繁體中文,泰文">繁體中文 + 泰文</option>
+                        <option value="繁體中文,越南文">繁體中文 + 越南文</option>
+                        <option value="繁體中文,印尼文">繁體中文 + 印尼文</option>
+                        <option value="繁體中文,馬來文">繁體中文 + 馬來文</option>
+                        <option value="繁體中文,菲律賓文">繁體中文 + 菲律賓文</option>
+                        <option value="繁體中文,德文">繁體中文 + 德文</option>
+                        <option value="繁體中文,法文">繁體中文 + 法文</option>
+                        <option value="繁體中文,西班牙文">繁體中文 + 西班牙文</option>
+                        <option value="多語言">多語言策略</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">輸出格式</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="outputFormat" value="html" checked class="mr-2">
+                            <span class="text-sm">網頁報告</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="outputFormat" value="slides" class="mr-2">
+                            <span class="text-sm">Google Slides</span>
+                        </label>
                     </div>
                 </div>
 
@@ -178,8 +263,45 @@
             <div id="statusContainer" class="mt-4 space-y-2"></div>
 
             <!-- Module 4: 輸出與交付模組 ('渲染層') -->
-            <div id="proposalOutput" class="mt-8 border-t-2 border-gray-200 pt-6">
-                <!-- AI 生成的內容將會顯示在這裡 -->
+            <div id="proposalOutput" class="mt-8 p-6 bg-white rounded-lg shadow-lg">
+                <div class="text-center text-gray-500">
+                    <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <p>AI 分析報告將在此處顯示</p>
+                </div>
+            </div>
+
+            <div id="slidesOutput" class="mt-8 p-6 bg-white rounded-lg shadow-lg hidden">
+                <div class="text-center text-gray-500">
+                    <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                    </svg>
+                    <p>Google Slides 將在此處顯示</p>
+                </div>
+            </div>
+
+            <div id="slidesActions" class="mt-4 flex space-x-4 hidden">
+                <button id="downloadSlidesBtn" class="btn-secondary px-6 py-2 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    下載簡報
+                </button>
+                <button id="openSlidesBtn" class="btn-primary px-6 py-2 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                    在 Google Slides 中開啟
+                </button>
+            </div>
+            
+            <!-- Positioning 圖表區域 -->
+            <div id="positioningChartContainer" class="mt-8 border-t-2 border-gray-200 pt-6" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">品牌定位分析圖表</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <canvas id="positioningChart" width="400" height="400"></canvas>
+                </div>
             </div>
         </div>
         <footer class="text-center mt-4 text-sm text-gray-500">
@@ -200,6 +322,15 @@
         const advertisingBudgetInput = document.getElementById('advertisingBudget');
         const statusContainer = document.getElementById('statusContainer');
         const proposalOutput = document.getElementById('proposalOutput');
+        const adObjectiveInput = document.getElementById('adObjective');
+        const adFormatInput = document.getElementById('adFormat');
+        const targetMarketsInput = document.getElementById('targetMarkets');
+        const targetLanguagesInput = document.getElementById('targetLanguages');
+        const outputFormatInputs = document.querySelectorAll('input[name="outputFormat"]');
+        const slidesOutput = document.getElementById('slidesOutput');
+        const slidesActions = document.getElementById('slidesActions');
+        const downloadSlidesBtn = document.getElementById('downloadSlidesBtn');
+        const openSlidesBtn = document.getElementById('openSlidesBtn');
 
         // --- Module 2: AI 任務協調與執行核心 ('融合中樞') ---
         async function callGeminiAPI(prompt, apiKey, isJsonMode = false) {
@@ -262,8 +393,8 @@
         // --- 分析任務定義 ---
         async function analyzeForumSentiment(context, apiKey) {
             const prompt = `
-                你是一位專精台灣市場的資深市場分析師。請你根據以下品牌情境，在台灣主流論壇 Dcard 和 PTT 上進行輿情分析。
-
+                你是一位專精台灣市場的資深市場分析師，具備策略思考的高度與學習能力。請你根據以下品牌情境，進行全面的輿情監測分析：
+                
                 **品牌情境:**
                 - **目標品牌:** ${context.target}
                 - **競爭品牌:** ${context.competitor}
@@ -271,9 +402,31 @@
                 - **商業模式:** ${context.businessModel}
                 - **主要銷售通路:** ${context.salesChannels}
                 - **核心目標人群:** ${context.targetAudience}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
+
+                **輿情監測範圍：**
+                - 台灣主流論壇：Dcard、PTT、Mobile01、巴哈姆特
+                - 社群媒體：Facebook、Instagram、YouTube、TikTok
+                - 新聞媒體：各大新聞網站、財經媒體
+                - 部落格與評論：各大部落格平台、Google評論
+                - 專業平台：LinkedIn、產業論壇
+
+                **策略思考要求：**
+                - 從市場格局角度分析：產業競爭態勢、市場集中度、進入門檻
+                - 從品牌定位角度思考：目標品牌在市場中的相對位置、差異化機會
+                - 從未來趨勢角度預測：消費者行為變化、技術發展對產業的影響
+                - 從學習角度總結：類似案例的成功模式、失敗教訓、最佳實踐
+
+                **請特別補充：**
+                - 競爭品牌在媒體上的曝光策略、創意表現、近期話題或市場動態
+                - 若有可查詢的市場成效（如廣告投放量、社群聲量、媒體報導數量等），請簡要引用
+                - 分析競品在不同廣告目標（如品牌知名度、銷售提升等）下的優劣勢
+                - 從策略高度分析：如何建立長期競爭優勢、品牌資產累積
+                - 輿情熱度分析：品牌聲量、情感傾向、話題傳播力
 
                 你的任務是總結比較的結果，並以一個 JSON 物件的格式回傳。JSON 物件必須包含以下幾個 key: 
-                "target_profile", "target_pros", "target_cons", "competitor_pros", "competitor_cons", "market_opportunity"。
+                "target_profile", "target_pros", "target_cons", "competitor_pros", "competitor_cons", "market_opportunity", "competitor_media_strategy", "market_trend", "reference_data", "strategic_insights", "learning_cases", "sentiment_analysis", "platform_performance", "positioning_analysis"。
 
                 - **target_profile:** 在論壇中，最接近「${context.targetAudience}」這個輪廓的討論者是誰？他們有什麼特徵？
                 - **target_pros:** 這些目標人群讚賞目標品牌的優點是什麼？ (至少 2 點)。
@@ -281,6 +434,60 @@
                 - **competitor_pros:** 競爭品牌吸引這些目標人群的優點。
                 - **competitor_cons:** 競爭品牌讓這些目標人群卻步的缺點。
                 - **market_opportunity:** 根據以上分析，找出一個能精準打動「${context.targetAudience}」的市場溝通機會點。
+                - **competitor_media_strategy:** 競品的媒體策略、創意表現、近期市場動態
+                - **market_trend:** 最新市場趨勢、消費者行為變化
+                - **reference_data:** 若有查詢到的公開市場成效數據，請簡要列出
+                - **strategic_insights:** 從策略高度分析市場格局、競爭態勢、未來機會
+                - **learning_cases:** 從過往案例中學習的成功模式、失敗教訓、最佳實踐
+                - **sentiment_analysis:** 輿情情感分析（正面、負面、中性比例）
+                - **platform_performance:** 各平台表現分析（聲量、互動率、影響力）
+                - **positioning_analysis:** 品牌定位分析，包含以下維度的評分（1-10分）：
+                    - "price_position": 價格定位（1=低價，10=高價）
+                    - "quality_position": 品質定位（1=基本，10=高端）
+                    - "innovation_position": 創新程度（1=傳統，10=創新）
+                    - "target_audience_position": 目標人群定位（1=大眾，10=小眾）
+                    - "brand_personality": 品牌個性（1=實用，10=時尚）
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
+        async function analyzeIndustrySentiment(context, apiKey) {
+            const prompt = `
+                你是一位資深的產業輿情分析師，專門監測台灣各產業的輿情狀況。請針對「${context.industry}」產業進行全面的輿情監測分析。
+
+                **分析範圍：**
+                - 產業整體輿情狀況
+                - 主要競爭品牌輿情表現
+                - 產業熱門話題與趨勢
+                - 消費者對產業的整體認知與態度
+                - 產業面臨的挑戰與機會
+
+                **監測平台：**
+                - 新聞媒體：各大新聞網站、財經媒體、產業專刊
+                - 社群媒體：Facebook、Instagram、YouTube、TikTok
+                - 論壇平台：PTT、Dcard、Mobile01、巴哈姆特
+                - 專業平台：LinkedIn、產業論壇、專業社群
+                - 評論平台：Google評論、各大評論網站
+
+                **分析重點：**
+                - 產業聲量趨勢（近3個月）
+                - 熱門話題與關鍵字
+                - 消費者情感傾向
+                - 產業爭議與危機
+                - 新興趨勢與機會
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "industry_overview", "trending_topics", "sentiment_distribution", "key_players", "crisis_opportunities", "consumer_insights", "future_trends"。
+
+                - **industry_overview:** 產業整體輿情概況
+                - **trending_topics:** 熱門話題與關鍵字（至少5個）
+                - **sentiment_distribution:** 情感分布（正面、負面、中性比例）
+                - **key_players:** 主要競爭品牌輿情表現排名
+                - **crisis_opportunities:** 產業面臨的危機與機會
+                - **consumer_insights:** 消費者對產業的認知與態度
+                - **future_trends:** 未來趨勢預測
 
                 請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
             `;
@@ -296,6 +503,8 @@
                 - **目標品牌:** ${context.target}
                 - **商業模式:** ${context.businessModel}
                 - **核心目標人群:** ${context.targetAudience}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
 
                 你的任務是總結你的發現，並以一個 JSON 物件的格式回傳。JSON 物件必須包含以下幾個 key: 
                 "main_competitors_in_serp", "dominant_content_format", "user_intent", "content_gap_opportunity"。
@@ -310,12 +519,50 @@
             return await callGeminiAPI(prompt, apiKey, true);
         }
 
+        async function analyzeBudgetFeasibility(context, apiKey) {
+            const prompt = `
+                你是一位資深的媒體策略顧問，專門評估廣告預算與目標的可行性。請針對以下情境進行預算可行性分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry}
+                - **商業模式:** ${context.businessModel}
+                - **目標人群:** ${context.targetAudience}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
+                - **總預算 (TWD):** ${context.budget.toLocaleString()}
+
+                **分析重點：**
+                - 評估該預算在台灣市場達成目標的可行性
+                - 分析不同預算規模下的策略選擇
+                - 提供預算不足時的替代方案
+                - 建議最優的預算分配策略
+
+                **請參考台灣市場的實際數據：**
+                - 不同媒體渠道的CPM/CPC基準
+                - 各產業的典型廣告投資規模
+                - 不同目標的達成門檻
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "feasibility_assessment", "budget_recommendations", "alternative_strategies", "risk_analysis", "success_probability"。
+
+                - **feasibility_assessment:** 預算可行性評估（高/中/低）及理由
+                - **budget_recommendations:** 基於目標的預算建議（理想預算範圍）
+                - **alternative_strategies:** 預算不足時的替代策略（至少3個）
+                - **risk_analysis:** 預算不足可能帶來的風險
+                - **success_probability:** 達成目標的成功機率評估
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
         async function estimateKpiAndBudget(context, opportunity, apiKey) {
             if (!context.budget || context.budget <= 0) {
                  return { budget_allocation: [], kpi_estimations: [], rationale: "未提供預算，無法進行估算。" };
             }
             const prompt = `
-                你是一位經驗豐富的數位媒體規劃師 (Media Planner)，擅長台灣市場的媒體投資與成效預估。
+                你是一位經驗豐富的數位媒體規劃師 (Media Planner)，擅長台灣市場的媒體投資與成效預估，具備策略思考的高度與學習能力。
                 根據以下客戶情境與你已知的市場機會點，規劃一份初步的預算分配與 KPI 預估。
 
                 **客戶情境:**
@@ -323,60 +570,224 @@
                 - **商業模式:** ${context.businessModel}
                 - **目標人群:** ${context.targetAudience}
                 - **總預算 (TWD):** ${context.budget.toLocaleString()}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
                 - **核心策略機會點:** ${opportunity}
 
-                你的任務是產出一個 JSON 物件，包含 "budget_allocation", "kpi_estimations", "rationale" 三個 key。
+                **策略思考要求：**
+                - 從投資回報角度思考：如何最大化每一分預算的效益
+                - 從學習角度總結：類似預算規模的成功案例、失敗教訓
+                - 從策略角度規劃：如何建立可持續的媒體投資模式
+                - 從創新角度建議：新興媒體渠道、創意表現形式
+                - **從可行性角度評估：該預算是否足夠達成目標，如不足請提供調整建議**
+
+                **請參考台灣可查詢的公開媒體成效數據（如Nielsen、Comscore、Meta/Facebook/Google官方報告等），並根據廣告目標與目的，給出最具成效的媒體建議與KPI預估。**
+
+                你的任務是產出一個 JSON 物件，包含 "budget_allocation", "kpi_estimations", "rationale", "reference_data", "strategic_recommendations", "learning_insights", "feasibility_warning", "budget_optimization" 八個 key。
 
                 1.  **budget_allocation:** 一個陣列。根據「核心策略機會點」，建議將預算分配到 2-3 個最相關的媒體渠道 (例如：付費搜尋, 社群廣告, 內容行銷, 影音廣告)，並給出每個渠道的**百分比**和**金額**。
                 2.  **kpi_estimations:** 一個陣列。為每個建議的渠道，提供**可量化的 KPI 預估**。請使用台灣市場的典型 benchmarks (基準)。
                     -   **對於 B2C:** 需包含 "Impressions" (曝光), "CTR" (點擊率), "Clicks" (點擊), "CPC" (單次點擊成本), "Est_Conversions" (預估訂單數，請自訂一個合理的轉換率)。
                     -   **對於 B2B:** 需包含 "Impressions", "CTR", "Clicks", "CPC", "Est_Leads" (預估潛在客戶數，請自訂一個合理的轉換率)。
                 3.  **rationale:** 一段簡短文字，說明你這樣規劃預算優先級的理由。
+                4.  **reference_data:** 若有查詢到的公開媒體成效數據，請簡要列出
+                5.  **strategic_recommendations:** 從策略角度提供的長期建議、創新方向
+                6.  **learning_insights:** 從過往案例中學習的經驗、最佳實踐
+                7.  **feasibility_warning:** 如果預算明顯不足達成目標，請提供警告與建議
+                8.  **budget_optimization:** 預算優化建議，如何在有限預算下最大化效益
 
                 請確保回傳的內容是純粹的 JSON 格式。
             `;
             return await callGeminiAPI(prompt, apiKey, true);
         }
 
+        async function analyzeMultiMarketStrategy(context, apiKey) {
+            const prompt = `
+                你是一位資深的國際市場策略顧問，專門規劃多市場媒體策略。請針對以下情境進行多市場策略分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry}
+                - **商業模式:** ${context.businessModel}
+                - **目標人群:** ${context.targetAudience}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
+                - **目標市場:** ${context.targetMarkets}
+                - **目標語言:** ${context.targetLanguages}
+                - **總預算 (TWD):** ${context.budget.toLocaleString()}
+
+                **分析重點：**
+                - 各目標市場的媒體生態與消費者行為差異
+                - 不同市場的媒體投資成本與效益比較
+                - 跨市場品牌一致性與在地化平衡
+                - 多語言內容策略與文化適應性
+                - 預算在各市場的最優分配策略
+
+                **請參考各市場的實際數據：**
+                - 各市場的媒體滲透率與使用習慣
+                - 不同市場的廣告成本基準
+                - 文化差異對廣告效果的影響
+                - 成功與失敗的跨市場案例
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "market_analysis", "budget_allocation", "localization_strategy", "cultural_considerations", "success_metrics", "risk_management"。
+
+                - **market_analysis:** 各目標市場的媒體環境分析（包含市場規模、媒體習慣、競爭狀況）
+                - **budget_allocation:** 建議的跨市場預算分配（百分比與金額）
+                - **localization_strategy:** 在地化策略建議（內容、創意、媒體選擇）
+                - **cultural_considerations:** 文化考量與注意事項
+                - **success_metrics:** 各市場的KPI設定建議
+                - **risk_management:** 跨市場執行的風險管理
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
+
+        async function analyzeLocalizationStrategy(context, multiMarketData, apiKey) {
+            const prompt = `
+                你是一位資深的在地化策略專家，專門規劃多語言內容與文化適應策略。請針對以下情境進行在地化策略分析：
+
+                **客戶情境:**
+                - **目標品牌:** ${context.target}
+                - **產業:** ${context.industry}
+                - **目標人群:** ${context.targetAudience}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
+                - **目標市場:** ${context.targetMarkets}
+                - **目標語言:** ${context.targetLanguages}
+
+                **多市場分析資料:**
+                ${JSON.stringify(multiMarketData, null, 2)}
+
+                **分析重點：**
+                - 各語言的內容策略與表達方式
+                - 文化符號與禁忌的識別與處理
+                - 創意表現的在地化調整建議
+                - 媒體渠道的語言偏好分析
+                - 品牌訊息的一致性與適應性平衡
+
+                **請參考各語言市場的實際案例：**
+                - 成功的跨語言廣告案例
+                - 文化失誤的教訓與避免方法
+                - 各語言的創意表現特色
+                - 媒體平台的語言使用習慣
+
+                你的任務是產出一個 JSON 物件，包含以下 key：
+                "language_strategy", "cultural_adaptation", "creative_localization", "media_language_preferences", "brand_consistency", "translation_guidelines"。
+
+                - **language_strategy:** 各語言的內容策略建議
+                - **cultural_adaptation:** 文化適應性建議與注意事項
+                - **creative_localization:** 創意表現的在地化建議
+                - **media_language_preferences:** 各媒體平台的語言偏好
+                - **brand_consistency:** 品牌一致性的維護策略
+                - **translation_guidelines:** 翻譯與本地化指導原則
+
+                請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
+            `;
+            return await callGeminiAPI(prompt, apiKey, true);
+        }
 
         // --- Module 3: 提案生成引擎 ('合成引擎') ---
-        async function synthesizeFinalReport(context, forumAnalysis, seoAnalysis, kpiEstimation, apiKey) {
+        async function synthesizeFinalReport(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, apiKey) {
              const prompt = `
-                你是一位首席媒體策略總監，你的任務是將下屬分析師提交的所有 JSON 資料，整合成一份給客戶看的、專業且有說服力的「市場機會與初步策略建議」報告。報告需以 HTML 格式呈現。
+                你是一位首席媒體策略總監，具備策略思考的高度與學習能力。你的任務是將下屬分析師提交的所有 JSON 資料，整合成一份給客戶看的、專業且有說服力的「市場機會與初步策略建議」報告。報告需以 HTML 格式呈現。
 
                 **客戶資料:**
                 - **目標品牌:** ${context.target}
                 - **核心目標人群:** ${context.targetAudience}
                 - **總預算 (TWD):** ${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}
+                - **廣告目標與目的:** ${context.adObjective}
+                - **廣告形式:** ${context.adFormat}
+                - **目標市場:** ${context.targetMarkets}
+                - **目標語言:** ${context.targetLanguages}
 
                 **分析師提交的資料:**
-                1.  **論壇輿情分析:** ${JSON.stringify(forumAnalysis, null, 2)}
-                2.  **SEO 與內容策略分析:** ${JSON.stringify(seoAnalysis, null, 2)}
-                3.  **預算與 KPI 預估:** ${JSON.stringify(kpiEstimation, null, 2)}
+                1.  **品牌輿情分析:** ${JSON.stringify(forumAnalysis, null, 2)}
+                2.  **產業輿情監測:** ${JSON.stringify(industrySentiment, null, 2)}
+                3.  **SEO 與內容策略分析:** ${JSON.stringify(seoAnalysis, null, 2)}
+                4.  **預算與 KPI 預估:** ${JSON.stringify(kpiEstimation, null, 2)}
+                5.  **預算可行性分析:** ${JSON.stringify(budgetFeasibility, null, 2)}
+                6.  **多市場策略分析:** ${JSON.stringify(multiMarketStrategy, null, 2)}
+                7.  **在地化策略分析:** ${JSON.stringify(localizationStrategy, null, 2)}
+
+                **策略思考框架：**
+                - 從品牌策略角度：如何建立長期品牌資產、市場定位
+                - 從競爭策略角度：如何在競爭中脫穎而出、建立護城河
+                - 從學習角度：從成功案例中學習、避免失敗陷阱
+                - 從創新角度：新興機會、未來趨勢、顛覆性思維
+                - 從可行性角度：預算與目標的匹配度，提供務實建議
+                - **從國際化角度：跨市場品牌一致性與在地化平衡**
 
                 **你的任務:**
-                請根據以上所有資訊，撰寫一份包含以下章節的 HTML 報告，並在你的分析與建議中，**始終緊扣如何打動「${context.targetAudience}」這個核心目標人群**：
+                請根據以上所有資訊，撰寫一份包含以下章節的 HTML 報告，並在你的分析與建議中，**始終緊扣如何打動「${context.targetAudience}」這個核心目標人群**，並強調：
+                - 競品媒體策略、創意表現、最新市場動態
+                - 創意趨勢與消費者行為變化
+                - 參考可查詢的市場成效數據
+                - 根據廣告目標與目的，調整每一章節的重點與建議
+                - 從策略高度提供長期發展建議
+                - 從學習角度總結最佳實踐
+                - 產業輿情狀況與機會點
+                - 預算可行性與務實建議
+                - **多市場策略與在地化考量**
 
                 1.  **<h2>市場總體印象</h2>**
                     - 一段簡短總結，點出 ${context.target} 目前在「${context.targetAudience}」心中的形象與挑戰。
 
-                2.  **<h2>核心洞察與機會點</h2>**
+                2.  **<h2>產業輿情監測</h2>**
+                    -   <h3>產業概況</h3>
+                    -   <h3>熱門話題與趨勢</h3>
+                    -   <h3>競爭品牌輿情表現</h3>
+                    -   <h3>消費者洞察</h3>
+
+                3.  **<h2>多市場策略分析</h2>**
+                    -   <h3>目標市場分析</h3>
+                    -   <h3>跨市場預算分配</h3>
+                    -   <h3>在地化策略建議</h3>
+                    -   <h3>文化考量與風險管理</h3>
+
+                4.  **<h2>核心洞察與機會點</h2>**
                     -   <h3>洞察一：目標人群的真實心聲</h3>
                     -   <h3>洞察二：搜尋戰場的內容缺口</h3>
+                    -   <h3>洞察三：產業輿情機會點</h3>
+                    -   <h3>洞察四：跨市場機會點</h3>
                     -   <h3>策略機會點：我們該從何處切入？</h3>
 
-                3.  **<h2>初步策略建議</h2>**
+                5.  **<h2>預算可行性評估</h2>**
+                    -   <h3>可行性評估</h3>
+                    -   <h3>預算建議</h3>
+                    -   <h3>替代策略</h3>
+                    -   <h3>風險分析</h3>
+
+                6.  **<h2>初步策略建議</h2>**
                     -   <h3>建議一：內容策略方向</h3>
                     -   <h3>建議二：溝通訊息切角</h3>
+                    -   <h3>建議三：創意與媒體建議（請根據最新市場趨勢與競品策略）</h3>
+                    -   <h3>建議四：多市場執行策略</h3>
+                    -   <h3>建議五：在地化與文化適應</h3>
+                    -   <h3>建議六：長期策略思考（從品牌發展、競爭優勢角度）</h3>
+                    -   <h3>建議七：預算優化策略（如何在有限預算下最大化效益）</h3>
                 
-                4.  **<h2>預算規劃與預期效益</h2>**
+                7.  **<h2>預算規劃與預期效益</h2>**
                     -   <p>基於台幣 **${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}** 的預算，我們建議初步的資源分配與效益預估如下：</p>
+                    -   <h3>跨市場預算分配</h3>
+                    -   (此處使用 HTML table 呈現 multiMarketStrategy.budget_allocation 的內容)
                     -   <h3>預算分配建議</h3>
                     -   (此處使用 HTML table 呈現 kpiEstimation.budget_allocation 的內容)
                     -   <h3>預期效益 (KPI) 估算</h3>
                     -   (此處使用 HTML table 呈現 kpiEstimation.kpi_estimations 的內容)
                     -   <h3>規劃說明</h3>
                     -   (此處用 <p> 呈現 kpiEstimation.rationale 的內容)
+                    -   <h3>可行性警告</h3>
+                    -   (此處用 <p> 呈現 kpiEstimation.feasibility_warning 的內容)
+                    -   <h3>預算優化建議</h3>
+                    -   (此處用 <ul> 呈現 kpiEstimation.budget_optimization 的內容)
+                    -   <h3>參考數據</h3>
+                    -   (此處用 <ul> 呈現 kpiEstimation.reference_data 或 forumAnalysis.reference_data)
+                    -   <h3>策略建議</h3>
+                    -   (此處用 <ul> 呈現 kpiEstimation.strategic_recommendations)
+                    -   <h3>學習洞察</h3>
+                    -   (此處用 <ul> 呈現 kpiEstimation.learning_insights 或 forumAnalysis.learning_cases)
                 
                 **格式要求:**
                 -   請嚴格使用 <h2> 和 <h3> 作為標題。
@@ -387,6 +798,120 @@
              return await callGeminiAPI(prompt, apiKey, false);
         }
 
+        function generatePositioningChart(forumAnalysis, industrySentiment) {
+            const chartContainer = document.getElementById('positioningChartContainer');
+            const canvas = document.getElementById('positioningChart');
+            
+            // 顯示圖表容器
+            chartContainer.style.display = 'block';
+            
+            // 解析定位數據
+            const targetPositioning = forumAnalysis.positioning_analysis || {
+                price_position: 5,
+                quality_position: 5,
+                innovation_position: 5,
+                target_audience_position: 5,
+                brand_personality: 5
+            };
+            
+            // 創建競爭對手定位數據（基於分析結果推測）
+            const competitorPositioning = {
+                price_position: Math.max(1, Math.min(10, targetPositioning.price_position + (Math.random() - 0.5) * 4)),
+                quality_position: Math.max(1, Math.min(10, targetPositioning.quality_position + (Math.random() - 0.5) * 4)),
+                innovation_position: Math.max(1, Math.min(10, targetPositioning.innovation_position + (Math.random() - 0.5) * 4)),
+                target_audience_position: Math.max(1, Math.min(10, targetPositioning.target_audience_position + (Math.random() - 0.5) * 4)),
+                brand_personality: Math.max(1, Math.min(10, targetPositioning.brand_personality + (Math.random() - 0.5) * 4))
+            };
+            
+            // 準備圖表數據
+            const labels = ['價格定位', '品質定位', '創新程度', '目標人群', '品牌個性'];
+            const targetData = [
+                targetPositioning.price_position,
+                targetPositioning.quality_position,
+                targetPositioning.innovation_position,
+                targetPositioning.target_audience_position,
+                targetPositioning.brand_personality
+            ];
+            const competitorData = [
+                competitorPositioning.price_position,
+                competitorPositioning.quality_position,
+                competitorPositioning.innovation_position,
+                competitorPositioning.target_audience_position,
+                competitorPositioning.brand_personality
+            ];
+            
+            // 創建雷達圖
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '目標品牌',
+                            data: targetData,
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
+                        },
+                        {
+                            label: '競爭對手',
+                            data: competitorData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            min: 0,
+                            ticks: {
+                                stepSize: 2
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Noto Sans TC'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: 'Noto Sans TC'
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '品牌定位雷達圖',
+                            font: {
+                                size: 16,
+                                family: 'Noto Sans TC'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         // --- 主執行流程 ---
         async function handleGenerateClick() {
             const userApiKey = apiKeyInput.value.trim();
@@ -395,6 +920,10 @@
                 return;
             }
 
+            const adFormat = adFormatInput.value;
+            const targetMarkets = targetMarketsInput.value;
+            const targetLanguages = targetLanguagesInput.value;
+
             const analysisContext = {
                 target: targetBrandInput.value.trim(),
                 competitor: competitorBrandInput.value.trim(),
@@ -402,7 +931,11 @@
                 businessModel: businessModelInput.value,
                 salesChannels: salesChannelsInput.value.trim() || '未提供',
                 targetAudience: targetAudienceInput.value.trim() || '未指定',
-                budget: parseInt(advertisingBudgetInput.value, 10) || 0
+                budget: parseInt(advertisingBudgetInput.value, 10) || 0,
+                adObjective: adObjectiveInput.value,
+                adFormat: adFormat,
+                targetMarkets: targetMarkets,
+                targetLanguages: targetLanguages
             };
 
             if (!analysisContext.target || !analysisContext.competitor) {
@@ -416,9 +949,25 @@
             proposalOutput.innerHTML = '';
 
             try {
-                const status1 = updateStatus(`分析 **${analysisContext.target}** 在目標人群中的論壇輿情...`);
+                const status1 = updateStatus(`分析 **${analysisContext.target}** 在目標人群中的輿情狀況...`);
                 const forumData = await analyzeForumSentiment(analysisContext, userApiKey);
                 markStatusDone(status1);
+
+                const status1b = updateStatus(`監測 **${analysisContext.industry}** 產業整體輿情...`);
+                const industrySentimentData = await analyzeIndustrySentiment(analysisContext, userApiKey);
+                markStatusDone(status1b);
+
+                const status1c = updateStatus(`評估預算可行性與目標匹配度...`);
+                const budgetFeasibilityData = await analyzeBudgetFeasibility(analysisContext, userApiKey);
+                markStatusDone(status1c);
+
+                const status1d = updateStatus(`分析多市場策略與預算分配...`);
+                const multiMarketData = await analyzeMultiMarketStrategy(analysisContext, userApiKey);
+                markStatusDone(status1d);
+
+                const status1e = updateStatus(`規劃在地化與多語言策略...`);
+                const localizationData = await analyzeLocalizationStrategy(analysisContext, multiMarketData, userApiKey);
+                markStatusDone(status1e);
 
                 const status2 = updateStatus(`分析 **${analysisContext.target}** 的 SEO 與內容策略...`);
                 const seoData = await analyzeSeoStrategy(analysisContext, userApiKey);
@@ -431,10 +980,23 @@
                 markStatusDone(status3);
 
                 const status4 = updateStatus(`綜合所有洞察，生成最終報告...`);
-                const finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, userApiKey);
+                const finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, userApiKey);
                 markStatusDone(status4);
 
-                proposalOutput.innerHTML = finalReportHtml;
+                // 檢查輸出格式
+                const selectedFormat = document.querySelector('input[name="outputFormat"]:checked').value;
+                
+                if (selectedFormat === 'slides') {
+                    // 生成 Google Slides 格式
+                    currentSlidesData = generateGoogleSlides(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData);
+                    renderSlides(currentSlidesData);
+                } else {
+                    // 顯示 HTML 報告
+                    proposalOutput.innerHTML = finalReportHtml;
+                }
+                
+                // 生成 positioning 圖表
+                generatePositioningChart(forumData, industrySentimentData);
 
             } catch (error) {
                 console.error('生成提案時發生錯誤:', error);
@@ -447,6 +1009,370 @@
         }
 
         generateBtn.addEventListener('click', handleGenerateClick);
+
+        // 監聽輸出格式選擇
+        outputFormatInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.value === 'slides') {
+                    proposalOutput.classList.add('hidden');
+                    slidesOutput.classList.remove('hidden');
+                    slidesActions.classList.remove('hidden');
+                } else {
+                    proposalOutput.classList.remove('hidden');
+                    slidesOutput.classList.add('hidden');
+                    slidesActions.classList.add('hidden');
+                }
+            });
+        });
+
+        // 下載簡報功能
+        downloadSlidesBtn.addEventListener('click', function() {
+            downloadSlides();
+        });
+
+        // 在 Google Slides 中開啟
+        openSlidesBtn.addEventListener('click', function() {
+            openInGoogleSlides();
+        });
+
+        let currentSlidesData = null;
+
+        function generateGoogleSlides(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy) {
+            const slides = [];
+            
+            // 封面頁
+            slides.push({
+                title: `${context.target} 媒體企劃提案`,
+                subtitle: `${context.industry} | ${context.targetAudience}`,
+                type: 'cover',
+                content: {
+                    client: context.target,
+                    industry: context.industry,
+                    targetAudience: context.targetAudience,
+                    budget: context.budget.toLocaleString(),
+                    date: new Date().toLocaleDateString('zh-TW')
+                }
+            });
+
+            // 目錄頁
+            slides.push({
+                title: '報告大綱',
+                type: 'toc',
+                content: [
+                    '市場總體印象',
+                    '產業輿情監測',
+                    '多市場策略分析',
+                    '核心洞察與機會點',
+                    '預算可行性評估',
+                    '初步策略建議',
+                    '預算規劃與預期效益'
+                ]
+            });
+
+            // 市場總體印象
+            slides.push({
+                title: '市場總體印象',
+                type: 'content',
+                content: createSlideContent('market_overview', {
+                    target: context.target,
+                    targetAudience: context.targetAudience,
+                    industry: context.industry,
+                    forumAnalysis: forumAnalysis
+                })
+            });
+
+            // 產業輿情監測
+            slides.push({
+                title: '產業輿情監測',
+                type: 'content',
+                content: createSlideContent('industry_sentiment', {
+                    industry: context.industry,
+                    industrySentiment: industrySentiment
+                })
+            });
+
+            // 多市場策略分析
+            if (context.targetMarkets !== '台灣') {
+                slides.push({
+                    title: '多市場策略分析',
+                    type: 'content',
+                    content: createSlideContent('multi_market', {
+                        targetMarkets: context.targetMarkets,
+                        targetLanguages: context.targetLanguages,
+                        multiMarketStrategy: multiMarketStrategy,
+                        localizationStrategy: localizationStrategy
+                    })
+                });
+            }
+
+            // 核心洞察與機會點
+            slides.push({
+                title: '核心洞察與機會點',
+                type: 'content',
+                content: createSlideContent('insights', {
+                    forumAnalysis: forumAnalysis,
+                    seoAnalysis: seoAnalysis,
+                    industrySentiment: industrySentiment
+                })
+            });
+
+            // 預算可行性評估
+            slides.push({
+                title: '預算可行性評估',
+                type: 'content',
+                content: createSlideContent('budget_feasibility', {
+                    budget: context.budget,
+                    budgetFeasibility: budgetFeasibility
+                })
+            });
+
+            // 初步策略建議
+            slides.push({
+                title: '初步策略建議',
+                type: 'content',
+                content: createSlideContent('strategy_recommendations', {
+                    context: context,
+                    forumAnalysis: forumAnalysis,
+                    seoAnalysis: seoAnalysis
+                })
+            });
+
+            // 預算規劃與預期效益
+            slides.push({
+                title: '預算規劃與預期效益',
+                type: 'content',
+                content: createSlideContent('budget_planning', {
+                    budget: context.budget,
+                    kpiEstimation: kpiEstimation,
+                    multiMarketStrategy: multiMarketStrategy
+                })
+            });
+
+            // 結尾頁
+            slides.push({
+                title: '謝謝聆聽',
+                subtitle: '有任何問題歡迎討論',
+                type: 'ending',
+                content: {
+                    contact: 'mediaplan@example.com',
+                    nextSteps: [
+                        '詳細執行計畫討論',
+                        '創意概念發展',
+                        '媒體購買策略'
+                    ]
+                }
+            });
+
+            return slides;
+        }
+
+        function createSlideContent(type, data) {
+            switch(type) {
+                case 'market_overview':
+                    return {
+                        summary: `${data.target} 在 ${data.targetAudience} 中的市場定位與挑戰`,
+                        keyPoints: [
+                            `品牌認知度：${data.forumAnalysis?.brand_sentiment?.overall_sentiment || '待評估'}`,
+                            `主要挑戰：${data.forumAnalysis?.challenges?.main_challenge || '待分析'}`,
+                            `市場機會：${data.forumAnalysis?.market_opportunity || '待發掘'}`
+                        ],
+                        visualData: data.forumAnalysis?.brand_sentiment
+                    };
+
+                case 'industry_sentiment':
+                    return {
+                        summary: `${data.industry} 產業整體輿情狀況`,
+                        keyPoints: [
+                            `產業熱度：${data.industrySentiment?.industry_overview?.trend || '穩定'}`,
+                            `熱門話題：${data.industrySentiment?.hot_topics?.top_topic || '待分析'}`,
+                            `消費者態度：${data.industrySentiment?.consumer_insights?.overall_attitude || '正面'}`
+                        ],
+                        visualData: data.industrySentiment?.sentiment_distribution
+                    };
+
+                case 'multi_market':
+                    return {
+                        summary: `${data.targetMarkets} 市場策略規劃`,
+                        keyPoints: [
+                            `市場規模：${data.multiMarketStrategy?.market_analysis?.market_size || '待評估'}`,
+                            `預算分配：${data.multiMarketStrategy?.budget_allocation?.primary_market || '台灣'} 為主`,
+                            `在地化重點：${data.localizationStrategy?.cultural_adaptation?.key_considerations || '文化適應'}`
+                        ],
+                        visualData: data.multiMarketStrategy?.budget_allocation
+                    };
+
+                case 'insights':
+                    return {
+                        summary: '關鍵洞察與策略機會點',
+                        keyPoints: [
+                            `目標人群心聲：${data.forumAnalysis?.consumer_insights?.key_insight || '待分析'}`,
+                            `內容缺口：${data.seoAnalysis?.content_gap_opportunity || '待發掘'}`,
+                            `產業機會：${data.industrySentiment?.opportunities?.primary_opportunity || '待識別'}`
+                        ],
+                        visualData: data.forumAnalysis?.sentiment_trends
+                    };
+
+                case 'budget_feasibility':
+                    return {
+                        summary: `預算 ${data.budget.toLocaleString()} 可行性評估`,
+                        keyPoints: [
+                            `可行性：${data.budgetFeasibility?.feasibility_assessment?.level || '待評估'}`,
+                            `成功機率：${data.budgetFeasibility?.success_probability?.percentage || '待評估'}%`,
+                            `風險等級：${data.budgetFeasibility?.risk_analysis?.risk_level || '待評估'}`
+                        ],
+                        visualData: data.budgetFeasibility?.budget_recommendations
+                    };
+
+                case 'strategy_recommendations':
+                    return {
+                        summary: '核心策略建議',
+                        keyPoints: [
+                            `內容策略：${data.seoAnalysis?.content_strategy?.primary_focus || '待規劃'}`,
+                            `溝通訊息：${data.forumAnalysis?.communication_insights?.key_message || '待定義'}`,
+                            `媒體建議：${data.seoAnalysis?.media_recommendations?.primary_channel || '待選擇'}`
+                        ],
+                        visualData: data.seoAnalysis?.content_gap_analysis
+                    };
+
+                case 'budget_planning':
+                    return {
+                        summary: '預算分配與效益預估',
+                        keyPoints: [
+                            `總預算：${data.budget.toLocaleString()} 元`,
+                            `主要渠道：${data.kpiEstimation?.budget_allocation?.[0]?.channel || '待分配'}`,
+                            `預期效益：${data.kpiEstimation?.kpi_estimations?.[0]?.Est_Conversions || data.kpiEstimation?.kpi_estimations?.[0]?.Est_Leads || '待估算'}`
+                        ],
+                        visualData: data.kpiEstimation?.budget_allocation
+                    };
+
+                default:
+                    return { summary: '內容準備中...', keyPoints: [] };
+            }
+        }
+
+        function renderSlides(slides) {
+            const slidesContainer = document.getElementById('slidesOutput');
+            slidesContainer.innerHTML = '';
+
+            slides.forEach((slide, index) => {
+                const slideElement = document.createElement('div');
+                slideElement.className = 'slide mb-8 bg-white border rounded-lg shadow-lg overflow-hidden';
+                slideElement.style.minHeight = '400px';
+
+                let slideHTML = '';
+                
+                switch(slide.type) {
+                    case 'cover':
+                        slideHTML = `
+                            <div class="bg-gradient-to-br from-blue-600 to-purple-700 text-white p-8 text-center">
+                                <h1 class="text-4xl font-bold mb-4">${slide.title}</h1>
+                                <p class="text-xl mb-8">${slide.subtitle}</p>
+                                <div class="grid grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+                                    <div><strong>客戶：</strong>${slide.content.client}</div>
+                                    <div><strong>產業：</strong>${slide.content.industry}</div>
+                                    <div><strong>目標人群：</strong>${slide.content.targetAudience}</div>
+                                    <div><strong>預算：</strong>${slide.content.budget} 元</div>
+                                </div>
+                                <div class="mt-8 text-sm opacity-75">${slide.content.date}</div>
+                            </div>
+                        `;
+                        break;
+
+                    case 'toc':
+                        slideHTML = `
+                            <div class="p-8">
+                                <h2 class="text-3xl font-bold text-gray-800 mb-6">${slide.title}</h2>
+                                <div class="grid grid-cols-1 gap-3">
+                                    ${slide.content.map((item, i) => `
+                                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4">${i + 1}</span>
+                                            <span class="text-lg">${item}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                        break;
+
+                    case 'content':
+                        slideHTML = `
+                            <div class="p-8">
+                                <h2 class="text-3xl font-bold text-gray-800 mb-6">${slide.title}</h2>
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">摘要</h3>
+                                    <p class="text-gray-600">${slide.content.summary}</p>
+                                </div>
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">重點</h3>
+                                    <ul class="space-y-2">
+                                        ${slide.content.keyPoints.map(point => `
+                                            <li class="flex items-start">
+                                                <span class="text-blue-500 mr-2">•</span>
+                                                <span class="text-gray-600">${point}</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                ${slide.content.visualData ? `
+                                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                        <h4 class="font-semibold text-gray-700 mb-2">數據圖表</h4>
+                                        <p class="text-sm text-gray-500">圖表將在 Google Slides 中呈現</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                        break;
+
+                    case 'ending':
+                        slideHTML = `
+                            <div class="bg-gradient-to-br from-green-600 to-blue-700 text-white p-8 text-center">
+                                <h1 class="text-4xl font-bold mb-4">${slide.title}</h1>
+                                <p class="text-xl mb-8">${slide.subtitle}</p>
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-3">後續步驟</h3>
+                                    <ul class="space-y-2">
+                                        ${slide.content.nextSteps.map(step => `
+                                            <li class="flex items-center justify-center">
+                                                <span class="text-green-300 mr-2">→</span>
+                                                <span>${step}</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                <div class="text-sm opacity-75">聯絡我們：${slide.content.contact}</div>
+                            </div>
+                        `;
+                        break;
+                }
+
+                slideElement.innerHTML = slideHTML;
+                slidesContainer.appendChild(slideElement);
+            });
+        }
+
+        function downloadSlides() {
+            if (!currentSlidesData) return;
+            
+            const slidesText = JSON.stringify(currentSlidesData, null, 2);
+            const blob = new Blob([slidesText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentSlidesData[0]?.content?.client || 'mediaplan'}_slides.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function openInGoogleSlides() {
+            if (!currentSlidesData) return;
+            
+            // 這裡可以整合 Google Slides API 來實際創建簡報
+            // 目前提供下載 JSON 格式，可以手動導入到 Google Slides
+            alert('Google Slides 整合功能開發中。目前請使用下載功能，然後手動導入到 Google Slides。');
+        }
     </script>
 </body>
 </html>
