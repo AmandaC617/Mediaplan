@@ -815,7 +815,7 @@
                 - **目標人群:** ${context.targetAudience}
                 - **總預算 (TWD):** ${context.budget.toLocaleString()}
                 - **廣告目標與目的:** ${context.adObjective}
-                - **廣告形式:** ${context.adFormat}
+                - **廣告形式:** ${context.aiRecommendMedia ? "AI建議" : context.selectedMedia.join(", ")"}
                 - **核心策略機會點:** ${opportunity}
 
                 **策略思考要求：**
@@ -855,7 +855,7 @@
                 - **商業模式:** ${context.businessModel}
                 - **目標人群:** ${context.targetAudience}
                 - **廣告目標與目的:** ${context.adObjective}
-                - **廣告形式:** ${context.adFormat}
+                - **廣告形式:** ${context.aiRecommendMedia ? "AI建議" : context.selectedMedia.join(", ")"}
                 - **目標市場:** ${context.targetMarkets}
                 - **目標語言:** ${context.targetLanguages}
                 - **總預算 (TWD):** ${context.budget.toLocaleString()}
@@ -897,7 +897,7 @@
                 - **產業:** ${context.industry}
                 - **目標人群:** ${context.targetAudience}
                 - **廣告目標與目的:** ${context.adObjective}
-                - **廣告形式:** ${context.adFormat}
+                - **廣告形式:** ${context.aiRecommendMedia ? "AI建議" : context.selectedMedia.join(", ")"}
                 - **目標市場:** ${context.targetMarkets}
                 - **目標語言:** ${context.targetLanguages}
 
