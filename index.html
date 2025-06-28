@@ -109,7 +109,7 @@
         <div class="card p-8">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">自動化媒體提案引擎</h1>
-                <p class="mt-2 text-gray-600">v2.5 安全金鑰版 (MVP)</p>
+                <p class="mt-2 text-gray-600">v2.6 DeepResearch 版 (MVP)</p>
             </div>
 
             <!-- Module 1: 使用者與配置介面 ('駕駛艙') -->
@@ -122,6 +122,43 @@
                     </label>
                     <input type="password" id="apiKeyInput" class="mt-1 block w-full px-3 py-2 border border-yellow-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="請在此貼上您的 API 金鑰">
                     <p class="mt-2 text-xs text-yellow-700">此金鑰僅存於您目前的瀏覽器分頁，關閉後即消失，不會被儲存。</p>
+                </div>
+
+                <!-- AI 模型選擇 -->
+                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <label for="modelSelection" class="block text-sm font-medium text-green-800 flex items-center mb-2">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        AI 模型選擇
+                    </label>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input type="radio" id="modelAuto" name="modelSelection" value="auto" class="mr-2" checked>
+                            <label for="modelAuto" class="text-sm text-green-700">
+                                <span class="font-medium">自動選擇</span> - 系統會自動選擇最佳可用模型
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="modelDeepResearch" name="modelSelection" value="deepresearch" class="mr-2">
+                            <label for="modelDeepResearch" class="text-sm text-green-700">
+                                <span class="font-medium">Gemini 2.5 Pro DeepResearch</span> - 最新深度研究模型，適合複雜分析
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="modelFlash" name="modelSelection" value="flash" class="mr-2">
+                            <label for="modelFlash" class="text-sm text-green-700">
+                                <span class="font-medium">Gemini 1.5 Flash</span> - 快速回應，適合一般分析
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="modelPro" name="modelSelection" value="pro" class="mr-2">
+                            <label for="modelPro" class="text-sm text-green-700">
+                                <span class="font-medium">Gemini 1.5 Pro</span> - 平衡性能與速度
+                            </label>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-xs text-green-600">
+                        <strong>DeepResearch 特色：</strong>支援更長的上下文、更深入的推理能力、更好的多語言理解
+                    </p>
                 </div>
 
                 <!-- 系統狀態指示器 -->
@@ -138,10 +175,15 @@
                                 <div id="apiStatus" class="w-3 h-3 rounded-full bg-gray-400 mr-2"></div>
                                 <span id="apiText" class="text-sm text-blue-800">API 未測試</span>
                             </div>
+                            <!-- 當前模型 -->
+                            <div class="flex items-center">
+                                <div id="modelStatus" class="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                                <span id="modelText" class="text-sm text-blue-800">模型未選擇</span>
+                            </div>
                         </div>
                         <!-- 系統版本 -->
                         <div class="text-xs text-blue-600">
-                            系統版本: v2.5 | 最後更新: 2024-12-19
+                            系統版本: v2.6 | 最後更新: 2024-12-19
                         </div>
                     </div>
                 </div>
@@ -457,10 +499,10 @@
 
             <div id="slidesActions" class="mt-4 flex space-x-4 hidden">
                 <button id="downloadSlidesBtn" class="btn-secondary px-6 py-2 rounded-lg flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>
-                    下載簡報
+                    下載簡報 (多格式)
                 </button>
                 <button id="openSlidesBtn" class="btn-primary px-6 py-2 rounded-lg flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,9 +582,12 @@
         async function testAPI(apiKey) {
             const testPrompt = "請回覆 'API 連接成功' 來確認連接狀態。";
             try {
+                console.log('開始 API 測試...');
                 const response = await callGeminiAPI(testPrompt, apiKey, false);
-                return response.includes('API 連接成功') || response.includes('成功');
+                console.log('API 測試回應:', response);
+                return response.includes('API 連接成功') || response.includes('成功') || response.includes('連接');
             } catch (error) {
+                console.error('API 測試失敗:', error);
                 return false;
             }
         }
@@ -606,10 +651,53 @@
             }
         }
 
+        // 更新模型狀態
+        function updateModelStatus(modelName = null) {
+            const modelStatusElement = document.getElementById('modelStatus');
+            const modelTextElement = document.getElementById('modelText');
+            
+            if (modelStatusElement && modelTextElement) {
+                if (modelName) {
+                    modelStatusElement.className = 'w-3 h-3 rounded-full bg-green-500 mr-2';
+                    modelTextElement.textContent = `使用: ${modelName}`;
+                    modelTextElement.className = 'text-sm text-green-800';
+                } else {
+                    const selectedModel = document.querySelector('input[name="modelSelection"]:checked');
+                    if (selectedModel) {
+                        let modelDisplayName = '';
+                        switch(selectedModel.value) {
+                            case 'deepresearch':
+                                modelDisplayName = 'Gemini 2.5 Pro DeepResearch';
+                                break;
+                            case 'flash':
+                                modelDisplayName = 'Gemini 1.5 Flash';
+                                break;
+                            case 'pro':
+                                modelDisplayName = 'Gemini 1.5 Pro';
+                                break;
+                            case 'auto':
+                                modelDisplayName = '自動選擇';
+                                break;
+                            default:
+                                modelDisplayName = '未選擇';
+                        }
+                        modelStatusElement.className = 'w-3 h-3 rounded-full bg-purple-500 mr-2';
+                        modelTextElement.textContent = `已選擇: ${modelDisplayName}`;
+                        modelTextElement.className = 'text-sm text-purple-800';
+                    } else {
+                        modelStatusElement.className = 'w-3 h-3 rounded-full bg-gray-400 mr-2';
+                        modelTextElement.textContent = '模型未選擇';
+                        modelTextElement.className = 'text-sm text-gray-800';
+                    }
+                }
+            }
+        }
+
         // 初始化網路狀態監聽器
         function initializeNetworkMonitoring() {
             // 初始狀態
             updateNetworkStatus();
+            updateModelStatus();
             
             // 監聽網路狀態變化
             window.addEventListener('online', function() {
@@ -622,6 +710,14 @@
                 console.log('網路連接已斷開');
                 updateNetworkStatus();
                 updateAPIStatus('error', '網路連接已斷開');
+            });
+            
+            // 監聽模型選擇變化
+            document.querySelectorAll('input[name="modelSelection"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateModelStatus();
+                    console.log('模型選擇已更改:', this.value);
+                });
             });
         }
 
@@ -637,12 +733,30 @@
                 throw new Error('API 金鑰不能為空');
             }
 
-            // 嘗試多個模型名稱，按優先順序
-            const models = [
-                'gemini-1.5-flash',
-                'gemini-1.5-pro',
-                'gemini-pro'
-            ];
+            // 獲取用戶選擇的模型
+            const selectedModelElement = document.querySelector('input[name="modelSelection"]:checked');
+            if (!selectedModelElement) {
+                throw new Error('請選擇一個 AI 模型');
+            }
+            const selectedModel = selectedModelElement.value;
+            
+            // 根據用戶選擇決定模型列表
+            let models = [];
+            if (selectedModel === 'deepresearch') {
+                models = ['gemini-2.0-pro-deepresearch'];
+            } else if (selectedModel === 'flash') {
+                models = ['gemini-1.5-flash'];
+            } else if (selectedModel === 'pro') {
+                models = ['gemini-1.5-pro'];
+            } else {
+                // 自動選擇模式 - 按優先順序嘗試
+                models = [
+                    'gemini-1.5-flash',             // 快速回應，最穩定
+                    'gemini-1.5-pro',               // 平衡性能
+                    'gemini-pro',                   // 備用模型
+                    'gemini-2.0-pro-deepresearch'   // 最新深度研究模型（如果可用）
+                ];
+            }
             
             let lastError = null;
             let attemptCount = 0;
@@ -655,6 +769,25 @@
                         console.log(`嘗試模型 ${model}，第 ${attempt} 次嘗試`);
                         
                         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+                        console.log('請求 URL:', url);
+                        
+                        // 根據模型調整配置
+                        let generationConfig = {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 8192,
+                        };
+                        
+                        // DeepResearch 模型特殊配置
+                        if (model === 'gemini-2.0-pro-deepresearch') {
+                            generationConfig = {
+                                temperature: 0.6,  // 稍微降低溫度以獲得更穩定的輸出
+                                topK: 50,
+                                topP: 0.9,
+                                maxOutputTokens: 16384,  // 支援更長的輸出
+                            };
+                        }
                         
                         const requestBody = {
                             contents: [{
@@ -662,17 +795,15 @@
                                     text: prompt
                                 }]
                             }],
-                            generationConfig: {
-                                temperature: 0.7,
-                                topK: 40,
-                                topP: 0.95,
-                                maxOutputTokens: 8192,
-                            }
+                            generationConfig: generationConfig
                         };
+                        
+                        console.log('請求內容:', JSON.stringify(requestBody, null, 2));
 
-                        // 增加請求超時設定
+                        // 增加請求超時設定（DeepResearch 可能需要更長時間）
+                        const timeout = model === 'gemini-2.0-pro-deepresearch' ? 60000 : 30000; // 60秒 vs 30秒
                         const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30秒超時
+                        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
                         const response = await fetch(`${url}?key=${apiKey}`, {
                             method: 'POST',
@@ -690,16 +821,29 @@
                         if (!response.ok) {
                             let errorMessage = `HTTP ${response.status}`;
                             
+                            // 嘗試讀取錯誤響應內容
+                            let errorResponse = '';
+                            try {
+                                const errorData = await response.text();
+                                errorResponse = errorData;
+                                console.error('錯誤響應內容:', errorData);
+                            } catch (e) {
+                                console.error('無法讀取錯誤響應內容');
+                            }
+                            
                             // 根據 HTTP 狀態碼提供更具體的錯誤訊息
                             switch (response.status) {
                                 case 400:
-                                    errorMessage = '請求格式錯誤，可能是 API 金鑰無效或請求內容有問題';
+                                    errorMessage = `請求格式錯誤，可能是 API 金鑰無效或請求內容有問題。錯誤詳情: ${errorResponse.substring(0, 200)}`;
                                     break;
                                 case 401:
                                     errorMessage = 'API 金鑰無效或已過期，請檢查您的 API 金鑰';
                                     break;
                                 case 403:
                                     errorMessage = 'API 金鑰權限不足，請確認金鑰是否正確';
+                                    break;
+                                case 404:
+                                    errorMessage = `模型 ${model} 不可用，可能是模型名稱錯誤或您的 API 金鑰沒有權限`;
                                     break;
                                 case 429:
                                     errorMessage = 'API 請求頻率過高，請稍後再試';
@@ -768,6 +912,8 @@
                             }
                             
                             console.log(`成功使用模型 ${model} 完成請求`);
+                            // 更新模型狀態顯示
+                            updateModelStatus(model);
                             return text;
                         } else {
                             throw new Error('AI 回應格式異常');
@@ -788,6 +934,12 @@
                         // 如果是 API 金鑰錯誤，直接跳出
                         if (error.message.includes('API 金鑰') || error.message.includes('401') || error.message.includes('403')) {
                             throw error;
+                        }
+                        
+                        // 如果是模型不可用錯誤，嘗試下一個模型
+                        if (error.message.includes('404') || error.message.includes('模型') || error.message.includes('不可用')) {
+                            console.log(`模型 ${model} 不可用，嘗試下一個模型`);
+                            break;
                         }
                         
                         // 其他錯誤，嘗試下一個模型
@@ -1228,7 +1380,44 @@
 
         // --- Module 3: 提案生成引擎 ('合成引擎') ---
         async function synthesizeFinalReport(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, competitorAnalysis, marketingCalendar, creativeStrategy, apiKey) {
-             const prompt = `
+            try {
+                // 數據驗證和預設值處理
+                const validatedData = {
+                    forumAnalysis: forumAnalysis || {},
+                    seoAnalysis: seoAnalysis || {},
+                    kpiEstimation: kpiEstimation || {},
+                    industrySentiment: industrySentiment || {},
+                    budgetFeasibility: budgetFeasibility || {},
+                    multiMarketStrategy: multiMarketStrategy || {},
+                    localizationStrategy: localizationStrategy || {},
+                    competitorAnalysis: competitorAnalysis || {},
+                    marketingCalendar: marketingCalendar || {},
+                    creativeStrategy: creativeStrategy || {}
+                };
+
+                // 檢查關鍵數據是否存在
+                const missingData = [];
+                if (!validatedData.forumAnalysis || Object.keys(validatedData.forumAnalysis).length === 0) {
+                    missingData.push('品牌輿情分析');
+                }
+                if (!validatedData.seoAnalysis || Object.keys(validatedData.seoAnalysis).length === 0) {
+                    missingData.push('SEO 與內容策略分析');
+                }
+                if (!validatedData.kpiEstimation || Object.keys(validatedData.kpiEstimation).length === 0) {
+                    missingData.push('預算與 KPI 預估');
+                }
+
+                // 如果缺少太多關鍵數據，提供警告
+                let dataWarning = '';
+                if (missingData.length > 0) {
+                    dataWarning = `
+**數據缺失警告：**
+系統檢測到以下分析數據缺失：${missingData.join('、')}。
+請根據可用的數據進行分析，對於缺失的部分，請提供基於產業經驗的一般性建議。
+`;
+                }
+
+                const prompt = `
                 你是一位首席媒體策略總監，具備策略思考的高度與學習能力。你的任務是將下屬分析師提交的所有 JSON 資料，整合成一份給客戶看的、專業且有說服力的「市場機會與初步策略建議」報告。報告需以 HTML 格式呈現。
 
                 **客戶資料:**
@@ -1242,17 +1431,25 @@
                 - **行銷期間:** ${context.startDate} 至 ${context.endDate}
                 - **產業狀態:** ${context.industryStatus}
 
+                ${dataWarning}
+
                 **分析師提交的資料:**
-                1.  **品牌輿情分析:** ${JSON.stringify(forumAnalysis, null, 2)}
-                2.  **產業輿情監測:** ${JSON.stringify(industrySentiment, null, 2)}
-                3.  **SEO 與內容策略分析:** ${JSON.stringify(seoAnalysis, null, 2)}
-                4.  **預算與 KPI 預估:** ${JSON.stringify(kpiEstimation, null, 2)}
-                5.  **預算可行性分析:** ${JSON.stringify(budgetFeasibility, null, 2)}
-                6.  **多市場策略分析:** ${JSON.stringify(multiMarketStrategy, null, 2)}
-                7.  **在地化策略分析:** ${JSON.stringify(localizationStrategy, null, 2)}
-                8.  **競爭對手分析:** ${JSON.stringify(competitorAnalysis, null, 2)}
-                9.  **行銷行事曆分析:** ${JSON.stringify(marketingCalendar, null, 2)}
-                10. **創意策略分析:** ${JSON.stringify(creativeStrategy, null, 2)}
+                1.  **品牌輿情分析:** ${JSON.stringify(validatedData.forumAnalysis, null, 2)}
+                2.  **產業輿情監測:** ${JSON.stringify(validatedData.industrySentiment, null, 2)}
+                3.  **SEO 與內容策略分析:** ${JSON.stringify(validatedData.seoAnalysis, null, 2)}
+                4.  **預算與 KPI 預估:** ${JSON.stringify(validatedData.kpiEstimation, null, 2)}
+                5.  **預算可行性分析:** ${JSON.stringify(validatedData.budgetFeasibility, null, 2)}
+                6.  **多市場策略分析:** ${JSON.stringify(validatedData.multiMarketStrategy, null, 2)}
+                7.  **在地化策略分析:** ${JSON.stringify(validatedData.localizationStrategy, null, 2)}
+                8.  **競爭對手分析:** ${JSON.stringify(validatedData.competitorAnalysis, null, 2)}
+                9.  **行銷行事曆分析:** ${JSON.stringify(validatedData.marketingCalendar, null, 2)}
+                10. **創意策略分析:** ${JSON.stringify(validatedData.creativeStrategy, null, 2)}
+
+                **重要處理原則：**
+                - 如果某個數據欄位為空或 null，請不要顯示「因資料缺失，此處無法呈現」的訊息
+                - 對於缺失的數據，請基於產業經驗和常識提供合理的推測或一般性建議
+                - 確保報告的完整性和專業性，不要因為數據缺失而影響報告的結構
+                - 如果 kpiEstimation.rationale 或 kpiEstimation.feasibility_warning 等欄位缺失，請提供基於預算和目標的合理分析
 
                 **策略思考框架：**
                 - 從品牌策略角度：如何建立長期品牌資產、市場定位
@@ -1340,31 +1537,59 @@
                 10. **<h2>預算規劃與預期效益</h2>**
                     -   <p>基於台幣 **${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}** 的預算，我們建議初步的資源分配與效益預估如下：</p>
                     -   <h3>跨市場預算分配</h3>
-                    -   (此處使用 HTML table 呈現 multiMarketStrategy.budget_allocation 的內容)
+                    -   (如果 multiMarketStrategy.budget_allocation 存在，使用 HTML table 呈現；否則提供一般性預算分配建議)
                     -   <h3>預算分配建議</h3>
-                    -   (此處使用 HTML table 呈現 kpiEstimation.budget_allocation 的內容)
+                    -   (如果 kpiEstimation.budget_allocation 存在，使用 HTML table 呈現；否則提供基於預算的一般性分配建議)
                     -   <h3>預期效益 (KPI) 估算</h3>
-                    -   (此處使用 HTML table 呈現 kpiEstimation.kpi_estimations 的內容)
+                    -   (如果 kpiEstimation.kpi_estimations 存在，使用 HTML table 呈現；否則提供基於預算和目標的一般性效益預估)
                     -   <h3>規劃說明</h3>
-                    -   (此處用 <p> 呈現 kpiEstimation.rationale 的內容)
+                    -   (如果 kpiEstimation.rationale 存在，用 <p> 呈現；否則提供基於預算和目標的規劃說明)
                     -   <h3>可行性警告</h3>
-                    -   (此處用 <p> 呈現 kpiEstimation.feasibility_warning 的內容)
+                    -   (如果 kpiEstimation.feasibility_warning 存在，用 <p> 呈現；否則提供基於預算的可行性評估)
                     -   <h3>預算優化建議</h3>
-                    -   (此處用 <ul> 呈現 kpiEstimation.budget_optimization 的內容)
+                    -   (如果 kpiEstimation.budget_optimization 存在，用 <ul> 呈現；否則提供一般性預算優化建議)
                     -   <h3>參考數據</h3>
-                    -   (此處用 <ul> 呈現 kpiEstimation.reference_data 或 forumAnalysis.reference_data)
+                    -   (如果 kpiEstimation.reference_data 或 forumAnalysis.reference_data 存在，用 <ul> 呈現；否則提供產業一般性參考數據)
                     -   <h3>策略建議</h3>
-                    -   (此處用 <ul> 呈現 kpiEstimation.strategic_recommendations)
+                    -   (如果 kpiEstimation.strategic_recommendations 存在，用 <ul> 呈現；否則提供基於預算和目標的策略建議)
                     -   <h3>學習洞察</h3>
-                    -   (此處用 <ul> 呈現 kpiEstimation.learning_insights 或 forumAnalysis.learning_cases)
+                    -   (如果 kpiEstimation.learning_insights 或 forumAnalysis.learning_cases 存在，用 <ul> 呈現；否則提供基於產業經驗的學習洞察)
                 
                 **格式要求:**
                 -   請嚴格使用 <h2> 和 <h3> 作為標題。
                 -   段落使用 <p>，列表使用 <ul> 和 <li>。表格使用 <table>, <th>, <tr>, <td>。
                 -   對於品牌名稱或關鍵字詞，使用 <strong> 標籤強調。
                 -   回應內容**僅包含 HTML**，不要包含 \`\`\`html, \`\`\`, <html>, <body> 等標籤。
+                -   **絕對不要顯示「因資料缺失，此處無法呈現」之類的訊息**，請提供合理的替代內容。
             `;
-             return await callGeminiAPI(prompt, apiKey, false);
+                
+                console.log('開始生成最終報告...');
+                const result = await callGeminiAPI(prompt, apiKey, false);
+                console.log('最終報告生成完成');
+                return result;
+                
+            } catch (error) {
+                console.error('生成最終報告時發生錯誤:', error);
+                
+                // 提供錯誤回退方案
+                return `
+                    <div class="p-6 bg-red-50 border border-red-200 rounded-lg">
+                        <h2 class="text-xl font-bold text-red-800 mb-4">報告生成失敗</h2>
+                        <p class="text-red-700 mb-4">抱歉，在生成最終報告時發生錯誤：${error.message}</p>
+                        <div class="bg-white p-4 rounded border">
+                            <h3 class="font-semibold text-gray-800 mb-2">可用的分析數據：</h3>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 品牌輿情分析：${forumAnalysis ? '✓ 可用' : '✗ 缺失'}</li>
+                                <li>• SEO 與內容策略：${seoAnalysis ? '✓ 可用' : '✗ 缺失'}</li>
+                                <li>• 預算與 KPI 預估：${kpiEstimation ? '✓ 可用' : '✗ 缺失'}</li>
+                                <li>• 產業輿情監測：${industrySentiment ? '✓ 可用' : '✗ 缺失'}</li>
+                                <li>• 預算可行性分析：${budgetFeasibility ? '✓ 可用' : '✗ 缺失'}</li>
+                            </ul>
+                        </div>
+                        <p class="mt-4 text-sm text-red-600">請檢查 API 連接狀態，然後重新生成報告。</p>
+                    </div>
+                `;
+            }
         }
 
         function generatePositioningChart(forumAnalysis, industrySentiment) {
@@ -1783,6 +2008,20 @@
         let currentSlidesData = null;
 
         function generateGoogleSlides(context, forumAnalysis, seoAnalysis, kpiEstimation, industrySentiment, budgetFeasibility, multiMarketStrategy, localizationStrategy, competitorAnalysis, marketingCalendar, creativeStrategy) {
+            // 數據驗證和預設值處理
+            const validatedData = {
+                forumAnalysis: forumAnalysis || {},
+                seoAnalysis: seoAnalysis || {},
+                kpiEstimation: kpiEstimation || {},
+                industrySentiment: industrySentiment || {},
+                budgetFeasibility: budgetFeasibility || {},
+                multiMarketStrategy: multiMarketStrategy || {},
+                localizationStrategy: localizationStrategy || {},
+                competitorAnalysis: competitorAnalysis || {},
+                marketingCalendar: marketingCalendar || {},
+                creativeStrategy: creativeStrategy || {}
+            };
+
             const slides = [];
             
             // 封面頁
@@ -1822,7 +2061,7 @@
                     target: context.target,
                     targetAudience: context.targetAudience,
                     industry: context.industry,
-                    forumAnalysis: forumAnalysis
+                    forumAnalysis: validatedData.forumAnalysis
                 })
             });
 
@@ -1832,7 +2071,7 @@
                 type: 'content',
                 content: createSlideContent('industry_sentiment', {
                     industry: context.industry,
-                    industrySentiment: industrySentiment
+                    industrySentiment: validatedData.industrySentiment
                 })
             });
 
@@ -1844,8 +2083,8 @@
                     content: createSlideContent('multi_market', {
                         targetMarkets: context.targetMarkets,
                         targetLanguages: context.targetLanguages,
-                        multiMarketStrategy: multiMarketStrategy,
-                        localizationStrategy: localizationStrategy
+                        multiMarketStrategy: validatedData.multiMarketStrategy,
+                        localizationStrategy: validatedData.localizationStrategy
                     })
                 });
             }
@@ -1855,9 +2094,9 @@
                 title: '核心洞察與機會點',
                 type: 'content',
                 content: createSlideContent('insights', {
-                    forumAnalysis: forumAnalysis,
-                    seoAnalysis: seoAnalysis,
-                    industrySentiment: industrySentiment
+                    forumAnalysis: validatedData.forumAnalysis,
+                    seoAnalysis: validatedData.seoAnalysis,
+                    industrySentiment: validatedData.industrySentiment
                 })
             });
 
@@ -1867,7 +2106,7 @@
                 type: 'content',
                 content: createSlideContent('budget_feasibility', {
                     budget: context.budget,
-                    budgetFeasibility: budgetFeasibility
+                    budgetFeasibility: validatedData.budgetFeasibility
                 })
             });
 
@@ -1877,8 +2116,8 @@
                 type: 'content',
                 content: createSlideContent('strategy_recommendations', {
                     context: context,
-                    forumAnalysis: forumAnalysis,
-                    seoAnalysis: seoAnalysis
+                    forumAnalysis: validatedData.forumAnalysis,
+                    seoAnalysis: validatedData.seoAnalysis
                 })
             });
 
@@ -1888,8 +2127,8 @@
                 type: 'content',
                 content: createSlideContent('budget_planning', {
                     budget: context.budget,
-                    kpiEstimation: kpiEstimation,
-                    multiMarketStrategy: multiMarketStrategy
+                    kpiEstimation: validatedData.kpiEstimation,
+                    multiMarketStrategy: validatedData.multiMarketStrategy
                 })
             });
 
@@ -2096,8 +2335,69 @@
         }
 
         function downloadSlides() {
-            if (!currentSlidesData) return;
+            if (!currentSlidesData) {
+                alert('請先生成簡報內容');
+                return;
+            }
             
+            // 創建下載選項對話框
+            const downloadDialog = document.createElement('div');
+            downloadDialog.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            downloadDialog.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">選擇下載格式</h3>
+                    <div class="space-y-3">
+                        <button id="downloadJson" class="w-full p-3 text-left border rounded-lg hover:bg-blue-50">
+                            <div class="font-medium text-blue-600">JSON 格式</div>
+                            <div class="text-sm text-gray-600">原始數據，可導入其他工具</div>
+                        </button>
+                        <button id="downloadHtml" class="w-full p-3 text-left border rounded-lg hover:bg-green-50">
+                            <div class="font-medium text-green-600">HTML 格式</div>
+                            <div class="text-sm text-gray-600">可直接在瀏覽器中查看</div>
+                        </button>
+                        <button id="downloadTxt" class="w-full p-3 text-left border rounded-lg hover:bg-purple-50">
+                            <div class="font-medium text-purple-600">純文字格式</div>
+                            <div class="text-sm text-gray-600">簡潔的文字版本</div>
+                        </button>
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-50 rounded-lg">
+                        <h4 class="font-medium text-yellow-800 mb-2">使用說明：</h4>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li>• <strong>JSON 格式：</strong>包含完整數據結構，可用於數據分析或導入其他系統</li>
+                            <li>• <strong>HTML 格式：</strong>可直接在瀏覽器中打開查看，支援列印</li>
+                            <li>• <strong>純文字格式：</strong>簡潔易讀，適合快速瀏覽或複製貼上</li>
+                        </ul>
+                    </div>
+                    <button id="cancelDownload" class="mt-4 w-full p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                        取消
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(downloadDialog);
+            
+            // 綁定事件
+            document.getElementById('downloadJson').addEventListener('click', () => {
+                downloadSlidesAsJson();
+                document.body.removeChild(downloadDialog);
+            });
+            
+            document.getElementById('downloadHtml').addEventListener('click', () => {
+                downloadSlidesAsHtml();
+                document.body.removeChild(downloadDialog);
+            });
+            
+            document.getElementById('downloadTxt').addEventListener('click', () => {
+                downloadSlidesAsText();
+                document.body.removeChild(downloadDialog);
+            });
+            
+            document.getElementById('cancelDownload').addEventListener('click', () => {
+                document.body.removeChild(downloadDialog);
+            });
+        }
+        
+        function downloadSlidesAsJson() {
             const slidesText = JSON.stringify(currentSlidesData, null, 2);
             const blob = new Blob([slidesText], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -2109,6 +2409,190 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            // 顯示使用說明
+            setTimeout(() => {
+                alert('JSON 文件下載完成！\n\n使用方式：\n1. 此文件包含完整的簡報數據結構\n2. 可用於數據分析或導入其他系統\n3. 如需轉換為 Google Slides，請使用 Google Slides API 或手動創建');
+            }, 100);
+        }
+        
+        function downloadSlidesAsHtml() {
+            let htmlContent = `
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${currentSlidesData[0]?.content?.client || 'Mediaplan'} 媒體企劃提案</title>
+    <style>
+        body { font-family: 'Microsoft JhengHei', Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .slide { background: white; margin: 20px 0; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .cover { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+        .ending { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; text-align: center; }
+        h1 { font-size: 2.5em; margin-bottom: 20px; }
+        h2 { font-size: 2em; color: #333; margin-bottom: 15px; }
+        h3 { font-size: 1.5em; color: #555; margin-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .toc-item { background: #f8f9fa; padding: 15px; border-radius: 8px; display: flex; align-items: center; }
+        .toc-number { background: #007bff; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+        ul { padding-left: 20px; }
+        li { margin: 8px 0; }
+        @media print { body { background: white; } .slide { box-shadow: none; margin: 10px 0; } }
+    </style>
+</head>
+<body>
+`;
+            
+            currentSlidesData.forEach((slide, index) => {
+                switch(slide.type) {
+                    case 'cover':
+                        htmlContent += `
+<div class="slide cover">
+    <h1>${slide.title}</h1>
+    <p style="font-size: 1.3em; margin-bottom: 30px;">${slide.subtitle}</p>
+    <div class="grid">
+        <div><strong>客戶：</strong>${slide.content.client}</div>
+        <div><strong>產業：</strong>${slide.content.industry}</div>
+        <div><strong>目標人群：</strong>${slide.content.targetAudience}</div>
+        <div><strong>預算：</strong>${slide.content.budget} 元</div>
+    </div>
+    <div style="margin-top: 30px; opacity: 0.8;">${slide.content.date}</div>
+</div>`;
+                        break;
+                        
+                    case 'toc':
+                        htmlContent += `
+<div class="slide">
+    <h2>${slide.title}</h2>
+    <div>
+        ${slide.content.map((item, i) => 
+            `<div class="toc-item">
+                <div class="toc-number">${i + 1}</div>
+                <span style="font-size: 1.1em;">${item}</span>
+            </div>`
+        ).join('')}
+    </div>
+</div>`;
+                        break;
+                        
+                    case 'content':
+                        htmlContent += `
+<div class="slide">
+    <h2>${slide.title}</h2>
+    <div style="margin-bottom: 20px;">
+        <h3>摘要</h3>
+        <p>${slide.content.summary}</p>
+    </div>
+    <div>
+        <h3>重點</h3>
+        <ul>
+            ${slide.content.keyPoints.map(point => `<li>${point}</li>`).join('')}
+        </ul>
+    </div>
+</div>`;
+                        break;
+                        
+                    case 'ending':
+                        htmlContent += `
+<div class="slide ending">
+    <h1>${slide.title}</h1>
+    <p style="font-size: 1.3em; margin-bottom: 30px;">${slide.subtitle}</p>
+    <div style="margin-bottom: 20px;">
+        <h3>後續步驟</h3>
+        <ul style="list-style: none; padding: 0;">
+            ${slide.content.nextSteps.map(step => 
+                `<li style="margin: 10px 0; display: flex; align-items: center; justify-content: center;">
+                    <span style="margin-right: 10px;">→</span>
+                    <span>${step}</span>
+                </li>`
+            ).join('')}
+        </ul>
+    </div>
+    <div style="opacity: 0.8;">聯絡我們：${slide.content.contact}</div>
+</div>`;
+                        break;
+                }
+            });
+            
+            htmlContent += `
+</body>
+</html>`;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentSlidesData[0]?.content?.client || 'mediaplan'}_slides.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            setTimeout(() => {
+                alert('HTML 文件下載完成！\n\n使用方式：\n1. 雙擊文件可在瀏覽器中打開\n2. 支援列印功能 (Ctrl+P)\n3. 可另存為 PDF 格式');
+            }, 100);
+        }
+        
+        function downloadSlidesAsText() {
+            let textContent = `${currentSlidesData[0]?.content?.client || 'Mediaplan'} 媒體企劃提案\n`;
+            textContent += `生成時間：${new Date().toLocaleString('zh-TW')}\n`;
+            textContent += '='.repeat(50) + '\n\n';
+            
+            currentSlidesData.forEach((slide, index) => {
+                textContent += `【第 ${index + 1} 頁】${slide.title}\n`;
+                textContent += '-'.repeat(30) + '\n';
+                
+                switch(slide.type) {
+                    case 'cover':
+                        textContent += `客戶：${slide.content.client}\n`;
+                        textContent += `產業：${slide.content.industry}\n`;
+                        textContent += `目標人群：${slide.content.targetAudience}\n`;
+                        textContent += `預算：${slide.content.budget} 元\n`;
+                        textContent += `日期：${slide.content.date}\n`;
+                        break;
+                        
+                    case 'toc':
+                        textContent += '報告大綱：\n';
+                        slide.content.forEach((item, i) => {
+                            textContent += `${i + 1}. ${item}\n`;
+                        });
+                        break;
+                        
+                    case 'content':
+                        textContent += `摘要：${slide.content.summary}\n\n`;
+                        textContent += '重點：\n';
+                        slide.content.keyPoints.forEach((point, i) => {
+                            textContent += `${i + 1}. ${point}\n`;
+                        });
+                        break;
+                        
+                    case 'ending':
+                        textContent += '後續步驟：\n';
+                        slide.content.nextSteps.forEach((step, i) => {
+                            textContent += `${i + 1}. ${step}\n`;
+                        });
+                        textContent += `\n聯絡我們：${slide.content.contact}\n`;
+                        break;
+                }
+                
+                textContent += '\n' + '='.repeat(50) + '\n\n';
+            });
+            
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentSlidesData[0]?.content?.client || 'mediaplan'}_slides.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            setTimeout(() => {
+                alert('純文字文件下載完成！\n\n使用方式：\n1. 可用任何文字編輯器打開\n2. 適合快速瀏覽和複製貼上\n3. 檔案大小最小，傳輸方便');
+            }, 100);
         }
 
         function openInGoogleSlides() {
