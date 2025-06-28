@@ -140,7 +140,7 @@
                         <div class="flex items-center">
                             <input type="radio" id="modelDeepResearch" name="modelSelection" value="deepresearch" class="mr-2">
                             <label for="modelDeepResearch" class="text-sm text-green-700">
-                                <span class="font-medium">Gemini 2.5 Pro DeepResearch</span> - 最新深度研究模型，適合複雜分析
+                                <span class="font-medium">Gemini 1.5 Pro</span> - 深度分析模型，適合複雜策略規劃
                             </label>
                         </div>
                         <div class="flex items-center">
@@ -152,12 +152,12 @@
                         <div class="flex items-center">
                             <input type="radio" id="modelPro" name="modelSelection" value="pro" class="mr-2">
                             <label for="modelPro" class="text-sm text-green-700">
-                                <span class="font-medium">Gemini 1.5 Pro</span> - 平衡性能與速度
+                                <span class="font-medium">Gemini 1.5 Pro</span> - 深度分析模型，適合複雜策略規劃
                             </label>
                         </div>
                     </div>
                     <p class="mt-2 text-xs text-green-600">
-                        <strong>DeepResearch 特色：</strong>支援更長的上下文、更深入的推理能力、更好的多語言理解
+                        <strong>Pro 模型特色：</strong>支援更長的上下文、更深入的推理能力、更好的多語言理解
                     </p>
                 </div>
 
@@ -302,6 +302,11 @@
                         <div>
                             <label for="targetAudience" class="block text-sm font-medium text-gray-700">目標人群描述</label>
                             <input type="text" id="targetAudience" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：25-35歲都會女性、科技業採購主管">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="marketingProblems" class="block text-sm font-medium text-gray-700">品牌行銷問題描述 <span class="text-blue-500">💡</span></label>
+                            <textarea id="marketingProblems" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="請描述您目前遇到的行銷問題或挑戰，例如：&#10;• 品牌知名度不足，消費者對我們不熟悉&#10;• 競爭對手廣告投放量大，我們難以突圍&#10;• 目標人群對我們的產品價值認知不清&#10;• 轉換率偏低，廣告點擊多但購買少&#10;• 預算有限，不知道如何最大化效益"></textarea>
+                            <p class="mt-1 text-xs text-gray-500">詳細描述問題將幫助 AI 提供更精準的策略建議</p>
                         </div>
                          <div class="md:col-span-3">
                             <label for="advertisingBudget" class="block text-sm font-medium text-gray-700">預計廣告預算 (台幣)</label>
@@ -667,7 +672,7 @@
                         let modelDisplayName = '';
                         switch(selectedModel.value) {
                             case 'deepresearch':
-                                modelDisplayName = 'Gemini 2.5 Pro DeepResearch';
+                                modelDisplayName = 'Gemini 1.5 Pro';
                                 break;
                             case 'flash':
                                 modelDisplayName = 'Gemini 1.5 Flash';
@@ -743,7 +748,7 @@
             // 根據用戶選擇決定模型列表
             let models = [];
             if (selectedModel === 'deepresearch') {
-                models = ['gemini-2.0-pro-deepresearch'];
+                models = ['gemini-1.5-pro'];  // 使用 1.5 Pro 作為深度研究替代
             } else if (selectedModel === 'flash') {
                 models = ['gemini-1.5-flash'];
             } else if (selectedModel === 'pro') {
@@ -753,8 +758,7 @@
                 models = [
                     'gemini-1.5-flash',             // 快速回應，最穩定
                     'gemini-1.5-pro',               // 平衡性能
-                    'gemini-pro',                   // 備用模型
-                    'gemini-2.0-pro-deepresearch'   // 最新深度研究模型（如果可用）
+                    'gemini-pro'                    // 備用模型
                 ];
             }
             
@@ -779,8 +783,8 @@
                             maxOutputTokens: 8192,
                         };
                         
-                        // DeepResearch 模型特殊配置
-                        if (model === 'gemini-2.0-pro-deepresearch') {
+                        // 深度研究模型特殊配置
+                        if (model === 'gemini-1.5-pro') {
                             generationConfig = {
                                 temperature: 0.6,  // 稍微降低溫度以獲得更穩定的輸出
                                 topK: 50,
@@ -800,8 +804,8 @@
                         
                         console.log('請求內容:', JSON.stringify(requestBody, null, 2));
 
-                        // 增加請求超時設定（DeepResearch 可能需要更長時間）
-                        const timeout = model === 'gemini-2.0-pro-deepresearch' ? 60000 : 30000; // 60秒 vs 30秒
+                        // 增加請求超時設定（Pro 模型可能需要更長時間）
+                        const timeout = model === 'gemini-1.5-pro' ? 60000 : 30000; // 60秒 vs 30秒
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -969,6 +973,7 @@
                 - **核心目標人群:** ${context.targetAudience}
                 - **廣告目標與目的:** ${context.adObjective}
                 - **廣告形式:** ${context.aiRecommendMedia ? 'AI建議' : context.selectedMedia.join(', ')}
+                - **品牌行銷問題:** ${context.marketingProblems}
 
                 **輿情監測範圍：**
                 - 台灣主流論壇：Dcard、PTT、Mobile01、巴哈姆特
@@ -982,6 +987,7 @@
                 - 從品牌定位角度思考：目標品牌在市場中的相對位置、差異化機會
                 - 從未來趨勢角度預測：消費者行為變化、技術發展對產業的影響
                 - 從學習角度總結：類似案例的成功模式、失敗教訓、最佳實踐
+                - **從問題解決角度：針對品牌提出的行銷問題，分析根本原因與解決方向**
 
                 **請特別補充：**
                 - 競爭品牌在媒體上的曝光策略、創意表現、近期話題或市場動態
@@ -989,9 +995,10 @@
                 - 分析競品在不同廣告目標（如品牌知名度、銷售提升等）下的優劣勢
                 - 從策略高度分析：如何建立長期競爭優勢、品牌資產累積
                 - 輿情熱度分析：品牌聲量、情感傾向、話題傳播力
+                - **針對性問題分析：基於品牌描述的行銷問題，提供具體的解決策略與機會點**
 
                 你的任務是總結比較的結果，並以一個 JSON 物件的格式回傳。JSON 物件必須包含以下幾個 key: 
-                "target_profile", "target_pros", "target_cons", "competitor_pros", "competitor_cons", "market_opportunity", "competitor_media_strategy", "market_trend", "reference_data", "strategic_insights", "learning_cases", "sentiment_analysis", "platform_performance", "positioning_analysis"。
+                "target_profile", "target_pros", "target_cons", "competitor_pros", "competitor_cons", "market_opportunity", "competitor_media_strategy", "market_trend", "reference_data", "strategic_insights", "learning_cases", "sentiment_analysis", "platform_performance", "positioning_analysis", "problem_analysis", "solution_strategies"。
 
                 - **target_profile:** 在論壇中，最接近「${context.targetAudience}」這個輪廓的討論者是誰？他們有什麼特徵？
                 - **target_pros:** 這些目標人群讚賞目標品牌的優點是什麼？ (至少 2 點)。
@@ -1012,6 +1019,8 @@
                     - "innovation_position": 創新程度（1=傳統，10=創新）
                     - "target_audience_position": 目標人群定位（1=大眾，10=小眾）
                     - "brand_personality": 品牌個性（1=實用，10=時尚）
+                - **problem_analysis:** 針對品牌描述的行銷問題進行深度分析，找出根本原因
+                - **solution_strategies:** 基於問題分析，提供具體的解決策略與執行建議
 
                 請確保回傳的內容是純粹的 JSON 格式，沒有任何額外的文字或註解。
             `;
@@ -1423,6 +1432,7 @@
                 **客戶資料:**
                 - **目標品牌:** ${context.target}
                 - **核心目標人群:** ${context.targetAudience}
+                - **品牌行銷問題:** ${context.marketingProblems}
                 - **總預算 (TWD):** ${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}
                 - **廣告目標與目的:** ${context.adObjective}
                 - **廣告形式:** ${context.aiRecommendMedia ? 'AI建議' : context.selectedMedia.join(', ')}
@@ -1779,6 +1789,7 @@
             const industryStatus = industryStatusInput.value;
             const businessModel = businessModelInput.value;
             const targetAudience = targetAudienceInput.value.trim() || '未指定';
+            const marketingProblems = document.getElementById('marketingProblems').value.trim() || '未提供';
             const budget = parseInt(advertisingBudgetInput.value, 10) || 0;
             const adObjective = adObjectiveInput.value;
             const aiRecommendMedia = aiRecommendMediaInput.checked;
@@ -1806,6 +1817,7 @@
                 industryStatus: industryStatus,
                 businessModel: businessModel,
                 targetAudience: targetAudience,
+                marketingProblems: marketingProblems,
                 budget: budget,
                 adObjective: adObjective,
                 aiRecommendMedia: aiRecommendMedia,
