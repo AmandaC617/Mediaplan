@@ -564,30 +564,6 @@
                     </select>
                 </div>
 
-                <div class="mb-4">
-                    <label for="apiKey" class="block text-sm font-medium text-gray-700">Google Gemini API 金鑰 <span class="text-red-500">*</span></label>
-                    <input type="password" id="apiKey" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="請輸入您的 Google Gemini API 金鑰">
-                    <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <h4 class="text-sm font-semibold text-blue-800 mb-2">如何取得 API 金鑰：</h4>
-                        <ol class="text-xs text-blue-700 space-y-1 list-decimal list-inside">
-                            <li>前往 <a href="https://makersuite.google.com/app/apikey" target="_blank" class="underline font-medium">Google AI Studio</a></li>
-                            <li>登入您的 Google 帳戶</li>
-                            <li>點擊「Create API Key」建立新的 API 金鑰</li>
-                            <li>複製 API 金鑰並貼上到上方欄位</li>
-                        </ol>
-                        <div class="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
-                            <p class="text-xs text-yellow-800">
-                                <strong>注意：</strong>API 金鑰格式應為類似「AIzaSyC...」的長字串。如果遇到「API key not valid」錯誤，請確認：
-                            </p>
-                            <ul class="text-xs text-yellow-700 mt-1 space-y-1 list-disc list-inside">
-                                <li>API 金鑰是否完整複製（沒有遺漏字符）</li>
-                                <li>是否已啟用 Gemini API 服務</li>
-                                <li>API 金鑰是否有足夠的配額</li>
-                                <li>是否在正確的地區使用（某些地區可能有限制）</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
 
                 <button id="generateBtn" class="btn-primary px-8 py-3 rounded-lg text-lg font-semibold w-full">
                     生成 AI 分析報告
@@ -2225,33 +2201,6 @@
                 generateBtn.innerHTML = `重新生成 AI 分析報告`;
             }
         }
-
-        generateBtn.addEventListener('click', handleGenerateClick);
-
-        // 監聽輸出格式選擇
-        outputFormatInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'slides') {
-                    proposalOutput.classList.add('hidden');
-                    slidesOutput.classList.remove('hidden');
-                    slidesActions.classList.remove('hidden');
-                } else {
-                    proposalOutput.classList.remove('hidden');
-                    slidesOutput.classList.add('hidden');
-                    slidesActions.classList.add('hidden');
-                }
-            });
-        });
-
-        // 下載簡報功能
-        downloadSlidesBtn.addEventListener('click', function() {
-            downloadSlides();
-        });
-
-        // 在 Google Slides 中開啟
-        openSlidesBtn.addEventListener('click', function() {
-            openInGoogleSlides();
-        });
 
         // 監聽 AI 建議媒體選擇
         aiRecommendMediaInput.addEventListener('change', function() {
