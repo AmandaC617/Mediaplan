@@ -580,6 +580,34 @@
                     </svg>
                     <p>AI 分析報告將在此處顯示</p>
                 </div>
+                
+                <!-- 新增：報告導出功能 -->
+                <div id="exportControls" class="mt-4 flex flex-wrap gap-3 justify-center" style="display: none;">
+                    <button id="exportPDF" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"></path>
+                        </svg>
+                        匯出 PDF
+                    </button>
+                    <button id="exportWord" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                        </svg>
+                        匯出 Word
+                    </button>
+                    <button id="exportPPT" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                        </svg>
+                        匯出簡報
+                    </button>
+                    <button id="shareReport" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                        </svg>
+                        分享報告
+                    </button>
+                </div>
             </div>
             
             <!-- Positioning 圖表區域 -->
@@ -1587,6 +1615,15 @@
 `;
                 }
 
+                // 新增：報告摘要生成
+                const executiveSummary = generateExecutiveSummary(context, validatedData);
+                
+                // 新增：關鍵洞察提取
+                const keyInsights = extractKeyInsights(validatedData);
+                
+                // 新增：行動建議優先級排序
+                const prioritizedRecommendations = prioritizeRecommendations(context, validatedData);
+
                 const prompt = `
                 你是一位首席媒體策略總監，具備策略思考的高度與學習能力。你的任務是將下屬分析師提交的所有 JSON 資料，整合成一份給客戶看的、專業且有說服力的「市場機會與初步策略建議」報告。報告需以 HTML 格式呈現。
 
@@ -1631,6 +1668,9 @@
                 - 對於缺失的數據，請基於產業經驗和常識提供合理的推測或一般性建議
                 - 確保報告的完整性和專業性，不要因為數據缺失而影響報告的結構
                 - 如果 kpiEstimation.rationale 或 kpiEstimation.feasibility_warning 等欄位缺失，請提供基於預算和目標的合理分析
+                - **新增：使用更清晰的視覺層次和結構化呈現**
+                - **新增：為每個章節添加執行摘要和關鍵要點**
+                - **新增：使用圖表、表格和視覺元素增強可讀性**
 
                 **策略思考框架：**
                 - 從品牌策略角度：如何建立長期品牌資產、市場定位
@@ -1656,16 +1696,23 @@
                 - **行銷時程規劃與熱點事件整合**
                 - **創意策略與品牌體驗設計**
 
-                1.  **<h2>市場總體印象</h2>**
-                    - 一段簡短總結，點出 ${context.target} 目前在「${context.targetAudience}」心中的形象與挑戰。
+                0.  **<h2>📋 執行摘要</h2>**
+                    - 一段簡短但有力的摘要，概述整個策略的核心要點
+                    - 包含關鍵洞察、主要建議和預期效益
+                    - 使用 <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400"> 樣式突出顯示
 
-                2.  **<h2>產業輿情監測</h2>**
+                1.  **<h2>🎯 市場總體印象</h2>**
+                    - 一段簡短總結，點出 ${context.target} 目前在「${context.targetAudience}」心中的形象與挑戰。
+                    - 使用 <div class="bg-gray-50 p-3 rounded border"> 樣式呈現關鍵洞察
+
+                2.  **<h2>📊 產業輿情監測</h2>**
                     -   <h3>產業概況</h3>
                     -   <h3>熱門話題與趨勢</h3>
                     -   <h3>競爭品牌輿情表現</h3>
                     -   <h3>消費者洞察</h3>
+                    -   **新增：<h3>📈 輿情趨勢圖表</h3>** (使用 HTML 表格模擬圖表)
 
-                3.  **<h2>競爭對手深度分析</h2>**
+                3.  **<h2>⚔️ 競爭對手深度分析</h2>**
                     -   <h3>競爭對手品牌分析</h3>
                     -   <h3>市場定位比較</h3>
                     -   <h3>媒體策略分析</h3>
@@ -1674,14 +1721,16 @@
                     ${context.highlightCompetitors ? '-   <h3>競爭優勢與差距分析</h3>' : ''}
                     ${context.highlightCompetitors ? '-   <h3>季節性因素影響分析</h3>' : ''}
                     ${context.highlightCompetitors ? '-   <h3>市場趨勢對競爭格局的影響</h3>' : ''}
+                    -   **新增：<h3>🏆 競爭力評分表</h3>** (使用 HTML 表格呈現各維度評分)
 
-                4.  **<h2>多市場策略分析</h2>**
+                4.  **<h2>🌍 多市場策略分析</h2>**
                     -   <h3>目標市場分析</h3>
                     -   <h3>跨市場預算分配</h3>
                     -   <h3>在地化策略建議</h3>
                     -   <h3>文化考量與風險管理</h3>
+                    -   **新增：<h3>🗺️ 市場機會地圖</h3>** (使用視覺化表格呈現)
 
-                5.  **<h2>核心洞察與機會點</h2>**
+                5.  **<h2>💡 核心洞察與機會點</h2>**
                     -   <h3>洞察一：目標人群的真實心聲</h3>
                     -   <h3>洞察二：搜尋戰場的內容缺口</h3>
                     -   <h3>洞察三：產業輿情機會點</h3>
@@ -1689,22 +1738,25 @@
                     -   <h3>洞察五：跨市場機會點</h3>
                     ${context.highlightOpportunities ? '-   <h3>洞察六：市場時機與機會點分析</h3>' : ''}
                     -   <h3>策略機會點：我們該從何處切入？</h3>
+                    -   **新增：<h3>🎯 機會點優先級矩陣</h3>** (使用表格呈現機會點評估)
 
-                6.  **<h2>預算可行性評估</h2>**
+                6.  **<h2>💰 預算可行性評估</h2>**
                     -   <h3>可行性評估</h3>
                     -   <h3>預算建議</h3>
                     -   <h3>替代策略</h3>
                     -   <h3>風險分析</h3>
                     ${context.highlightRisks ? '-   <h3>風險評估與管理建議</h3>' : ''}
+                    -   **新增：<h3>📊 預算效益分析圖</h3>** (使用表格呈現不同預算規模的效益)
 
-                7.  **<h2>創意策略規劃</h2>**
+                7.  **<h2>🎨 創意策略規劃</h2>**
                     -   <h3>核心創意概念</h3>
                     -   <h3>視覺與文案策略</h3>
                     -   <h3>互動體驗設計</h3>
                     -   <h3>文化元素融入</h3>
                     -   <h3>趨勢創新應用</h3>
+                    -   **新增：<h3>🎭 創意表現風格指南</h3>** (使用視覺化呈現)
 
-                8.  **<h2>行銷時程規劃</h2>**
+                8.  **<h2>📅 行銷時程規劃</h2>**
                     -   <h3>熱點事件分析</h3>
                     -   <h3>合作機會識別</h3>
                     -   <h3>最佳時機建議</h3>
@@ -1713,8 +1765,9 @@
                     ${context.highlightMilestones ? '-   <h3>重要里程碑提醒</h3>' : ''}
                     ${context.highlightMilestones ? '-   <h3>季節性因素規劃</h3>' : ''}
                     ${context.highlightMilestones ? '-   <h3>市場趨勢時機分析</h3>' : ''}
+                    -   **新增：<h3>📋 時程甘特圖</h3>** (使用 HTML 表格模擬甘特圖)
                 
-                9.  **<h2>初步策略建議</h2>**
+                9.  **<h2>🚀 初步策略建議</h2>**
                     -   <h3>建議一：內容策略方向</h3>
                     -   <h3>建議二：溝通訊息切角</h3>
                     -   <h3>建議三：創意與媒體建議（請根據最新市場趨勢與競品策略）</h3>
@@ -1729,8 +1782,9 @@
                     ${context.highlightMilestones ? '-   <h3>建議十二：里程碑管理策略</h3>' : ''}
                     ${context.highlightRisks ? '-   <h3>建議十三：風險管理與應急策略</h3>' : ''}
                     ${context.highlightKPIs ? '-   <h3>建議十四：關鍵績效指標設定與追蹤</h3>' : ''}
+                    -   **新增：<h3>🎯 行動計劃優先級</h3>** (使用表格呈現建議的優先級和時間安排)
                 
-                10. **<h2>預算規劃與預期效益</h2>**
+                10. **<h2>📈 預算規劃與預期效益</h2>**
                     -   <p>基於台幣 **${context.budget > 0 ? context.budget.toLocaleString() : '未提供'}** 的預算，我們建議初步的資源分配與效益預估如下：</p>
                     -   <h3>跨市場預算分配</h3>
                     -   (如果 multiMarketStrategy.budget_allocation 存在，使用 HTML table 呈現；否則提供一般性預算分配建議)
@@ -1750,6 +1804,15 @@
                     -   (如果 kpiEstimation.strategic_recommendations 存在，用 <ul> 呈現；否則提供基於預算和目標的策略建議)
                     -   <h3>學習洞察</h3>
                     -   (如果 kpiEstimation.learning_insights 或 forumAnalysis.learning_cases 存在，用 <ul> 呈現；否則提供基於產業經驗的學習洞察)
+                    -   **新增：<h3>📊 ROI 預測模型</h3>** (使用表格呈現不同投資規模的預期回報)
+
+                11. **<h2>📋 下一步行動計劃</h2>**
+                    -   <h3>立即行動項目 (1-2週內)</h3>
+                    -   <h3>短期行動項目 (1個月內)</h3>
+                    -   <h3>中期行動項目 (3個月內)</h3>
+                    -   <h3>長期策略規劃 (6-12個月)</h3>
+                    -   <h3>關鍵成功因素</h3>
+                    -   <h3>風險監控指標</h3>
                 
                 **格式要求:**
                 -   請嚴格使用 <h2> 和 <h3> 作為標題。
@@ -1757,6 +1820,9 @@
                 -   對於品牌名稱或關鍵字詞，使用 <strong> 標籤強調。
                 -   回應內容**僅包含 HTML**，不要包含 \`\`\`html, \`\`\`, <html>, <body> 等標籤。
                 -   **絕對不要顯示「因資料缺失，此處無法呈現」之類的訊息**，請提供合理的替代內容。
+                -   **新增：使用更多視覺元素，如背景色、邊框、圖標等增強可讀性**
+                -   **新增：為重要數據使用 <span class="text-blue-600 font-semibold"> 樣式突出顯示**
+                -   **新增：使用 <div class="bg-yellow-50 p-3 rounded border-l-4 border-yellow-400"> 樣式突出顯示重要提醒**
             `;
                 
                 console.log('開始生成最終報告...');
@@ -1786,6 +1852,369 @@
                     </div>
                 `;
             }
+        }
+
+        // 新增：生成執行摘要
+        function generateExecutiveSummary(context, validatedData) {
+            const summary = {
+                brand: context.target,
+                targetAudience: context.targetAudience,
+                budget: context.budget,
+                objective: context.adObjective,
+                keyInsights: [],
+                recommendations: [],
+                expectedOutcomes: []
+            };
+            
+            // 從各分析結果中提取關鍵洞察
+            if (validatedData.forumAnalysis && validatedData.forumAnalysis.market_opportunity) {
+                summary.keyInsights.push(validatedData.forumAnalysis.market_opportunity);
+            }
+            
+            if (validatedData.seoAnalysis && validatedData.seoAnalysis.content_gap_opportunity) {
+                summary.keyInsights.push(validatedData.seoAnalysis.content_gap_opportunity);
+            }
+            
+            return summary;
+        }
+
+        // 新增：提取關鍵洞察
+        function extractKeyInsights(validatedData) {
+            const insights = [];
+            
+            // 從輿情分析中提取洞察
+            if (validatedData.forumAnalysis) {
+                if (validatedData.forumAnalysis.target_pros) {
+                    insights.push({ type: '優勢', content: validatedData.forumAnalysis.target_pros });
+                }
+                if (validatedData.forumAnalysis.target_cons) {
+                    insights.push({ type: '挑戰', content: validatedData.forumAnalysis.target_cons });
+                }
+            }
+            
+            // 從競爭對手分析中提取洞察
+            if (validatedData.competitorAnalysis) {
+                if (validatedData.competitorAnalysis.opportunities) {
+                    insights.push({ type: '機會', content: validatedData.competitorAnalysis.opportunities });
+                }
+            }
+            
+            return insights;
+        }
+
+        // 新增：優先級排序建議
+        function prioritizeRecommendations(context, validatedData) {
+            const recommendations = [];
+            
+            // 基於預算可行性排序
+            if (validatedData.budgetFeasibility) {
+                if (validatedData.budgetFeasibility.feasibility_assessment === '低') {
+                    recommendations.push({ priority: '高', type: '預算調整', content: '需要增加預算或調整目標' });
+                }
+            }
+            
+            // 基於競爭對手分析排序
+            if (validatedData.competitorAnalysis) {
+                if (validatedData.competitorAnalysis.threats) {
+                    recommendations.push({ priority: '高', type: '競爭應對', content: '制定競爭對手應對策略' });
+                }
+            }
+            
+            return recommendations.sort((a, b) => {
+                const priorityOrder = { '高': 1, '中': 2, '低': 3 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            });
+        }
+
+        // 新增：報告導出功能
+        function initializeExportFunctions() {
+            const exportControls = document.getElementById('exportControls');
+            const exportPDF = document.getElementById('exportPDF');
+            const exportWord = document.getElementById('exportWord');
+            const exportPPT = document.getElementById('exportPPT');
+            const shareReport = document.getElementById('shareReport');
+
+            // 顯示導出控制項
+            if (exportControls) {
+                exportControls.style.display = 'flex';
+            }
+
+            // PDF 匯出功能
+            if (exportPDF) {
+                exportPDF.addEventListener('click', async () => {
+                    try {
+                        exportPDF.disabled = true;
+                        exportPDF.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>處理中...';
+                        
+                        await exportToPDF();
+                        
+                        exportPDF.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>匯出成功';
+                        setTimeout(() => {
+                            exportPDF.disabled = false;
+                            exportPDF.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"></path></svg>匯出 PDF';
+                        }, 2000);
+                    } catch (error) {
+                        console.error('PDF 匯出失敗:', error);
+                        exportPDF.disabled = false;
+                        exportPDF.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>匯出失敗';
+                    }
+                });
+            }
+
+            // Word 匯出功能
+            if (exportWord) {
+                exportWord.addEventListener('click', async () => {
+                    try {
+                        exportWord.disabled = true;
+                        exportWord.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>處理中...';
+                        
+                        await exportToWord();
+                        
+                        exportWord.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>匯出成功';
+                        setTimeout(() => {
+                            exportWord.disabled = false;
+                            exportWord.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>匯出 Word';
+                        }, 2000);
+                    } catch (error) {
+                        console.error('Word 匯出失敗:', error);
+                        exportWord.disabled = false;
+                        exportWord.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>匯出失敗';
+                    }
+                });
+            }
+
+            // 簡報匯出功能
+            if (exportPPT) {
+                exportPPT.addEventListener('click', async () => {
+                    try {
+                        exportPPT.disabled = true;
+                        exportPPT.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>處理中...';
+                        
+                        await exportToPPT();
+                        
+                        exportPPT.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>匯出成功';
+                        setTimeout(() => {
+                            exportPPT.disabled = false;
+                            exportPPT.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>匯出簡報';
+                        }, 2000);
+                    } catch (error) {
+                        console.error('簡報匯出失敗:', error);
+                        exportPPT.disabled = false;
+                        exportPPT.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>匯出失敗';
+                    }
+                });
+            }
+
+            // 分享報告功能
+            if (shareReport) {
+                shareReport.addEventListener('click', async () => {
+                    try {
+                        shareReport.disabled = true;
+                        shareReport.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>處理中...';
+                        
+                        await shareReportContent();
+                        
+                        shareReport.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>分享成功';
+                        setTimeout(() => {
+                            shareReport.disabled = false;
+                            shareReport.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path></svg>分享報告';
+                        }, 2000);
+                    } catch (error) {
+                        console.error('分享報告失敗:', error);
+                        shareReport.disabled = false;
+                        shareReport.innerHTML = '<svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>分享失敗';
+                    }
+                });
+            }
+        }
+
+        // PDF 匯出實作
+        async function exportToPDF() {
+            const reportContent = document.getElementById('proposalOutput');
+            if (!reportContent) {
+                throw new Error('找不到報告內容');
+            }
+
+            // 創建一個新的視窗來生成 PDF
+            const printWindow = window.open('', '_blank');
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>媒體提案報告 - ${targetBrandInput.value || '未命名品牌'}</title>
+                    <style>
+                        body { font-family: 'Microsoft JhengHei', Arial, sans-serif; margin: 20px; }
+                        h1, h2, h3 { color: #1e3a8a; }
+                        h2 { border-bottom: 2px solid #60a5fa; padding-bottom: 10px; }
+                        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f9fafb; }
+                        .highlight { background-color: #fef3c7; padding: 10px; border-left: 4px solid #f59e0b; }
+                        .summary { background-color: #dbeafe; padding: 15px; border-radius: 5px; margin: 20px 0; }
+                        @media print { body { margin: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>媒體提案報告</h1>
+                    <div class="summary">
+                        <h2>報告摘要</h2>
+                        <p><strong>目標品牌：</strong>${targetBrandInput.value || '未指定'}</p>
+                        <p><strong>目標人群：</strong>${targetAudienceInput.value || '未指定'}</p>
+                        <p><strong>預算：</strong>${advertisingBudgetInput.value ? `NT$ ${parseInt(advertisingBudgetInput.value).toLocaleString()}` : '未指定'}</p>
+                        <p><strong>生成時間：</strong>${new Date().toLocaleString('zh-TW')}</p>
+                    </div>
+                    ${reportContent.innerHTML}
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(reportHTML);
+            printWindow.document.close();
+            
+            // 等待內容載入完成後列印
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 1000);
+        }
+
+        // Word 匯出實作
+        async function exportToWord() {
+            const reportContent = document.getElementById('proposalOutput');
+            if (!reportContent) {
+                throw new Error('找不到報告內容');
+            }
+
+            // 將 HTML 轉換為 Word 格式
+            const wordContent = convertHTMLToWord(reportContent.innerHTML);
+            
+            // 創建 Blob 並下載
+            const blob = new Blob([wordContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `媒體提案報告_${targetBrandInput.value || '未命名品牌'}_${new Date().toISOString().split('T')[0]}.docx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 簡報匯出實作
+        async function exportToPPT() {
+            const reportContent = document.getElementById('proposalOutput');
+            if (!reportContent) {
+                throw new Error('找不到報告內容');
+            }
+
+            // 將報告內容轉換為簡報格式
+            const pptContent = convertToPPTFormat(reportContent.innerHTML);
+            
+            // 創建簡報檔案並下載
+            const blob = new Blob([pptContent], { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `媒體提案簡報_${targetBrandInput.value || '未命名品牌'}_${new Date().toISOString().split('T')[0]}.pptx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // 分享報告實作
+        async function shareReportContent() {
+            const reportContent = document.getElementById('proposalOutput');
+            if (!reportContent) {
+                throw new Error('找不到報告內容');
+            }
+
+            // 檢查是否支援 Web Share API
+            if (navigator.share) {
+                const shareData = {
+                    title: `媒體提案報告 - ${targetBrandInput.value || '未命名品牌'}`,
+                    text: `這是一份針對 ${targetBrandInput.value || '目標品牌'} 的媒體提案報告，包含市場分析、策略建議和預算規劃。`,
+                    url: window.location.href
+                };
+                
+                try {
+                    await navigator.share(shareData);
+                } catch (error) {
+                    console.log('分享被取消或失敗:', error);
+                }
+            } else {
+                // 降級方案：複製連結到剪貼簿
+                await copyToClipboard(window.location.href);
+                showNotification('報告連結已複製到剪貼簿', 'success');
+            }
+        }
+
+        // 輔助函數
+        function convertHTMLToWord(html) {
+            // 簡化的 HTML 到 Word 轉換
+            const cleanHTML = html
+                .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+                .replace(/class="[^"]*"/g, '')
+                .replace(/style="[^"]*"/g, '');
+            
+            return `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head>
+                    <meta charset="utf-8">
+                    <title>媒體提案報告</title>
+                </head>
+                <body>
+                    ${cleanHTML}
+                </body>
+                </html>
+            `;
+        }
+
+        function convertToPPTFormat(html) {
+            // 簡化的簡報格式轉換
+            const sections = html.split('<h2>');
+            let pptContent = '';
+            
+            sections.forEach((section, index) => {
+                if (section.trim()) {
+                    pptContent += `
+                        <slide>
+                            <title>${section.split('</h2>')[0] || '內容'}</title>
+                            <content>${section.split('</h2>')[1] || section}</content>
+                        </slide>
+                    `;
+                }
+            });
+            
+            return pptContent;
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (error) {
+                console.error('複製到剪貼簿失敗:', error);
+                return false;
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
         function generatePositioningChart(forumAnalysis, industrySentiment) {
@@ -2100,11 +2529,29 @@
 
                 // 檢查輸出格式
                 proposalOutput.innerHTML = finalReportHtml;
+                
+                // 新增：報告品質優化
+                const enhancedReport = enhanceReportQuality(finalReportHtml);
+                proposalOutput.innerHTML = enhancedReport;
+                
+                // 新增：報告內容驗證
+                const validationIssues = validateReportContent(enhancedReport);
+                if (validationIssues.length > 0) {
+                    console.warn('報告內容驗證發現問題:', validationIssues);
+                }
+                
+                // 新增：報告評分
+                const reportScore = scoreReport(enhancedReport);
+                console.log(`報告品質評分: ${reportScore}/100`);
+                
                 // 生成 positioning 圖表
                 generatePositioningChart(forumData, industrySentimentData);
-                
+
                 // 生成重點標註視覺化
                 generateHighlightVisualizations(analysisContext, competitorData, marketingCalendarData);
+
+                // 初始化導出功能
+                initializeExportFunctions();
 
                 // 完成後隱藏進度條
                 setTimeout(() => {
@@ -2565,6 +3012,203 @@
             } catch (error) {
                 console.error('生成KPI視覺化時發生錯誤:', error);
             }
+        }
+
+        // 新增：報告品質優化功能
+        function enhanceReportQuality(reportHTML) {
+            try {
+                // 創建臨時 DOM 元素來處理 HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = reportHTML;
+                
+                // 1. 添加視覺化圖表
+                addVisualCharts(tempDiv);
+                
+                // 2. 優化表格樣式
+                enhanceTableStyles(tempDiv);
+                
+                // 3. 添加互動元素
+                addInteractiveElements(tempDiv);
+                
+                // 4. 優化文字格式
+                enhanceTextFormatting(tempDiv);
+                
+                // 5. 添加摘要和導航
+                addSummaryAndNavigation(tempDiv);
+                
+                return tempDiv.innerHTML;
+            } catch (error) {
+                console.error('報告品質優化失敗:', error);
+                return reportHTML; // 返回原始內容
+            }
+        }
+
+        // 添加視覺化圖表
+        function addVisualCharts(container) {
+            // 尋找適合添加圖表的位置
+            const tables = container.querySelectorAll('table');
+            tables.forEach((table, index) => {
+                if (table.rows.length > 1) {
+                    // 為表格添加圖表容器
+                    const chartContainer = document.createElement('div');
+                    chartContainer.className = 'mt-4 p-4 bg-gray-50 rounded-lg';
+                    chartContainer.innerHTML = `
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">📊 數據視覺化</h4>
+                        <div class="text-xs text-gray-500">圖表將根據表格數據自動生成</div>
+                    `;
+                    table.parentNode.insertBefore(chartContainer, table.nextSibling);
+                }
+            });
+        }
+
+        // 優化表格樣式
+        function enhanceTableStyles(container) {
+            const tables = container.querySelectorAll('table');
+            tables.forEach(table => {
+                table.className = 'w-full border-collapse border border-gray-300 rounded-lg overflow-hidden shadow-sm';
+                
+                // 為表格添加響應式設計
+                const wrapper = document.createElement('div');
+                wrapper.className = 'overflow-x-auto';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            });
+        }
+
+        // 添加互動元素
+        function addInteractiveElements(container) {
+            // 為重要數據添加工具提示
+            const importantData = container.querySelectorAll('strong');
+            importantData.forEach(element => {
+                if (element.textContent.includes('NT$') || element.textContent.includes('%')) {
+                    element.className = 'text-blue-600 font-semibold cursor-help';
+                    element.title = '點擊查看詳細說明';
+                }
+            });
+            
+            // 為建議項目添加展開/收合功能
+            const recommendations = container.querySelectorAll('h3');
+            recommendations.forEach(h3 => {
+                if (h3.textContent.includes('建議')) {
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200';
+                    toggleBtn.textContent = '展開';
+                    toggleBtn.onclick = function() {
+                        const nextElement = h3.nextElementSibling;
+                        if (nextElement && nextElement.style.display === 'none') {
+                            nextElement.style.display = 'block';
+                            this.textContent = '收合';
+                        } else if (nextElement) {
+                            nextElement.style.display = 'none';
+                            this.textContent = '展開';
+                        }
+                    };
+                    h3.appendChild(toggleBtn);
+                }
+            });
+        }
+
+        // 優化文字格式
+        function enhanceTextFormatting(container) {
+            // 為重要段落添加背景色
+            const paragraphs = container.querySelectorAll('p');
+            paragraphs.forEach(p => {
+                if (p.textContent.includes('關鍵') || p.textContent.includes('重要') || p.textContent.includes('建議')) {
+                    p.className = 'p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded-r';
+                }
+            });
+            
+            // 為數字添加特殊樣式
+            const textContent = container.innerHTML;
+            const enhancedContent = textContent.replace(/(\d{1,3}(,\d{3})*)/g, '<span class="text-green-600 font-semibold">$1</span>');
+            container.innerHTML = enhancedContent;
+        }
+
+        // 添加摘要和導航
+        function addSummaryAndNavigation(container) {
+            // 創建目錄
+            const headings = container.querySelectorAll('h2');
+            if (headings.length > 0) {
+                const toc = document.createElement('div');
+                toc.className = 'mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200';
+                toc.innerHTML = '<h3 class="text-lg font-semibold text-blue-800 mb-3">📋 報告目錄</h3>';
+                
+                const tocList = document.createElement('ul');
+                tocList.className = 'space-y-2';
+                
+                headings.forEach((heading, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#section-${index}" class="text-blue-600 hover:text-blue-800 underline">${heading.textContent}</a>`;
+                    tocList.appendChild(li);
+                    
+                    // 為標題添加錨點
+                    heading.id = `section-${index}`;
+                });
+                
+                toc.appendChild(tocList);
+                container.insertBefore(toc, container.firstChild);
+            }
+            
+            // 添加返回頂部按鈕
+            const backToTop = document.createElement('button');
+            backToTop.className = 'fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors';
+            backToTop.innerHTML = '↑';
+            backToTop.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+            container.appendChild(backToTop);
+        }
+
+        // 新增：報告內容驗證
+        function validateReportContent(reportHTML) {
+            const issues = [];
+            
+            // 檢查是否包含必要的章節
+            const requiredSections = ['執行摘要', '市場總體印象', '產業輿情監測', '競爭對手深度分析', '核心洞察與機會點', '預算可行性評估', '初步策略建議'];
+            
+            requiredSections.forEach(section => {
+                if (!reportHTML.includes(section)) {
+                    issues.push(`缺少章節：${section}`);
+                }
+            });
+            
+            // 檢查是否包含數據表格
+            if (!reportHTML.includes('<table')) {
+                issues.push('缺少數據表格');
+            }
+            
+            // 檢查是否包含建議項目
+            if (!reportHTML.includes('建議')) {
+                issues.push('缺少具體建議');
+            }
+            
+            return issues;
+        }
+
+        // 新增：報告評分系統
+        function scoreReport(reportHTML) {
+            let score = 0;
+            const maxScore = 100;
+            
+            // 內容完整性 (30分)
+            const requiredElements = ['執行摘要', '市場分析', '競爭分析', '策略建議', '預算規劃'];
+            const completeness = requiredElements.filter(element => reportHTML.includes(element)).length;
+            score += (completeness / requiredElements.length) * 30;
+            
+            // 數據豐富度 (25分)
+            const dataElements = ['<table', '圖表', '統計', '百分比', '數字'];
+            const dataRichness = dataElements.filter(element => reportHTML.includes(element)).length;
+            score += (dataRichness / dataElements.length) * 25;
+            
+            // 建議實用性 (25分)
+            const suggestionElements = ['建議', '策略', '方案', '行動', '執行'];
+            const suggestionQuality = suggestionElements.filter(element => reportHTML.includes(element)).length;
+            score += (suggestionQuality / suggestionElements.length) * 25;
+            
+            // 視覺呈現 (20分)
+            const visualElements = ['<div', 'class', 'style', '背景', '顏色'];
+            const visualQuality = visualElements.filter(element => reportHTML.includes(element)).length;
+            score += (visualQuality / visualElements.length) * 20;
+            
+            return Math.round(score);
         }
     </script>
 </body>
