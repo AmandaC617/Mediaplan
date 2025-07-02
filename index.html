@@ -3294,24 +3294,7 @@
         proposalOutput.innerHTML = `<div class="text-red-600">產生報告時發生錯誤：${err.message}</div>`;
         console.error(err);
     }
-});
-        let nextElement = h3.nextElementSibling;
-while (nextElement && nextElement.nodeType !== 1) {
-    nextElement = nextElement.nextSibling;
-}
-if (nextElement && nextElement.style) {
-    if (nextElement.style.display === 'none') {
-        nextElement.style.display = 'block';
-        this.textContent = '收合';
-    } else {
-        nextElement.style.display = 'none';
-        this.textContent = '展開';
-    }
-}
-    </script>
-</body>
-});
-      
+});      
     </script>
 </body>
 </html>
