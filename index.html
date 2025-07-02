@@ -3285,6 +3285,19 @@
         console.error(err);
     }
 });
+        let nextElement = h3.nextElementSibling;
+while (nextElement && nextElement.nodeType !== 1) {
+    nextElement = nextElement.nextSibling;
+}
+if (nextElement && nextElement.style) {
+    if (nextElement.style.display === 'none') {
+        nextElement.style.display = 'block';
+        this.textContent = '收合';
+    } else {
+        nextElement.style.display = 'none';
+        this.textContent = '展開';
+    }
+}
     </script>
 </body>
 </html>
