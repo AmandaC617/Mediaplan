@@ -3284,6 +3284,16 @@
         proposalOutput.innerHTML = `<div class="text-red-600">產生報告時發生錯誤：${err.message}</div>`;
         console.error(err);
     }
+                  // 4. 呼叫 Gemini API
+        const result = await callGeminiAPI(prompt, apiKey, false);
+        // 5. 顯示結果
+        proposalOutput.innerHTML = `<div class="prose max-w-none">${result}</div>`;
+        // 6. 顯示匯出等功能
+        document.getElementById('exportControls').style.display = 'flex';
+    } catch (err) {
+        proposalOutput.innerHTML = `<div class="text-red-600">產生報告時發生錯誤：${err.message}</div>`;
+        console.error(err);
+    }
 });
         let nextElement = h3.nextElementSibling;
 while (nextElement && nextElement.nodeType !== 1) {
@@ -3298,6 +3308,10 @@ if (nextElement && nextElement.style) {
         this.textContent = '展開';
     }
 }
+    </script>
+</body>
+});
+      
     </script>
 </body>
 </html>
