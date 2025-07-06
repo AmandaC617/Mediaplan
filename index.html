@@ -2034,10 +2034,18 @@
             if (!reportContent) {
                 throw new Error('找不到報告內容');
             }
+            
+            // 創建一個新的視窗來生成 PDF
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                throw new Error('無法開啟新視窗，請檢查瀏覽器彈出視窗設定');
+            }
+            
             // 預算文字先處理好，避免巢狀模板字串
             const budgetText = advertisingBudgetInput.value
                 ? 'NT$ ' + parseInt(advertisingBudgetInput.value).toLocaleString()
                 : '未指定';
+                
             const reportHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -2069,8 +2077,11 @@
                 </body>
                 </html>
             `;
+            
             printWindow.document.write(reportHTML);
             printWindow.document.close();
+            
+            // 等待內容載入完成後列印
             setTimeout(() => {
                 printWindow.print();
                 printWindow.close();
@@ -3270,51 +3281,15 @@
             
             return Math.round(score);
         }
-        generateBtn.addEventListener('click', async function () {
-    // 1. UI 顯示 loading
-    proposalOutput.innerHTML = `<div class="text-center text-blue-600">報告產生中，請稍候…</div>`;
 
-    // 2. 取得 API 金鑰與表單資料
-    const apiKey = apiKeyInput.value.trim();
-    if (!apiKey) {
-        proposalOutput.innerHTML = `<div class="text-red-600">請輸入 Google Gemini API 金鑰！</div>`;
-        return;
-    }
-
-    // 3. 組合 Prompt（此處僅舉例，可依需求組合更完整）
-    const targetBrand = targetBrandInput.value.trim();
-    const competitorBrand = competitorBrandInput.value.trim();
-    const industry = industryInput.value;
-    const adObjective = adObjectiveInput.value;
-    const prompt = `請針對以下條件產生台灣市場的媒體策略分析報告：
-- 目標品牌/產品: ${targetBrand}
-- 主要競爭對手: ${competitorBrand}
-- 產業類別: ${industry}
-- 廣告目標: ${adObjective}
-請以專業格式產出一份完整建議報告。`;
-
-    try {
-        // 4. 呼叫 Gemini API
-        const result = await callGeminiAPI(prompt, apiKey, false);
-        // 5. 顯示結果
-        proposalOutput.innerHTML = `<div class="prose max-w-none">${result}</div>`;
-        // 6. 顯示匯出等功能
-        document.getElementById('exportControls').style.display = 'flex';
-    } catch (err) {
-        proposalOutput.innerHTML = `<div class="text-red-600">產生報告時發生錯誤：${err.message}</div>`;
-        console.error(err);
-    }
-                  // 4. 呼叫 Gemini API
-        const result = await callGeminiAPI(prompt, apiKey, false);
-        // 5. 顯示結果
-        proposalOutput.innerHTML = `<div class="prose max-w-none">${result}</div>`;
-        // 6. 顯示匯出等功能
-        document.getElementById('exportControls').style.display = 'flex';
-    } catch (err) {
-        proposalOutput.innerHTML = `<div class="text-red-600">產生報告時發生錯誤：${err.message}</div>`;
-        console.error(err);
-    }
-});      
+        // 初始化事件監聽器
+        document.addEventListener('DOMContentLoaded', function() {
+            // 確保所有元素都已載入
+            const generateBtn = document.getElementById('generateBtn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', handleGenerateClick);
+            }
+        });
     </script>
 </body>
 </html>
