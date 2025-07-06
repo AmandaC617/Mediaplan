@@ -2034,9 +2034,10 @@
             if (!reportContent) {
                 throw new Error('找不到報告內容');
             }
-
-            // 創建一個新的視窗來生成 PDF
-            const printWindow = window.open('', '_blank');
+            // 預算文字先處理好，避免巢狀模板字串
+            const budgetText = advertisingBudgetInput.value
+                ? 'NT$ ' + parseInt(advertisingBudgetInput.value).toLocaleString()
+                : '未指定';
             const reportHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -2061,18 +2062,15 @@
                         <h2>報告摘要</h2>
                         <p><strong>目標品牌：</strong>${targetBrandInput.value || '未指定'}</p>
                         <p><strong>目標人群：</strong>${targetAudienceInput.value || '未指定'}</p>
-                        <p><strong>預算：</strong>${advertisingBudgetInput.value ? `NT$ ${parseInt(advertisingBudgetInput.value).toLocaleString()}` : '未指定'}</p>
+                        <p><strong>預算：</strong>${budgetText}</p>
                         <p><strong>生成時間：</strong>${new Date().toLocaleString('zh-TW')}</p>
                     </div>
                     ${reportContent.innerHTML}
                 </body>
                 </html>
             `;
-            
             printWindow.document.write(reportHTML);
             printWindow.document.close();
-            
-            // 等待內容載入完成後列印
             setTimeout(() => {
                 printWindow.print();
                 printWindow.close();
@@ -2085,10 +2083,21 @@
             if (!reportContent) {
                 throw new Error('找不到報告內容');
             }
-
+            // 預算文字先處理好
+            const budgetText = advertisingBudgetInput.value
+                ? 'NT$ ' + parseInt(advertisingBudgetInput.value).toLocaleString()
+                : '未指定';
             // 將 HTML 轉換為 Word 格式
-            const wordContent = convertHTMLToWord(reportContent.innerHTML);
-            
+            const wordContent = convertHTMLToWord(`
+                <div class="summary">
+                    <h2>報告摘要</h2>
+                    <p><strong>目標品牌：</strong>${targetBrandInput.value || '未指定'}</p>
+                    <p><strong>目標人群：</strong>${targetAudienceInput.value || '未指定'}</p>
+                    <p><strong>預算：</strong>${budgetText}</p>
+                    <p><strong>生成時間：</strong>${new Date().toLocaleString('zh-TW')}</p>
+                </div>
+                ${reportContent.innerHTML}
+            `);
             // 創建 Blob 並下載
             const blob = new Blob([wordContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
             const url = URL.createObjectURL(blob);
@@ -2107,10 +2116,21 @@
             if (!reportContent) {
                 throw new Error('找不到報告內容');
             }
-
+            // 預算文字先處理好
+            const budgetText = advertisingBudgetInput.value
+                ? 'NT$ ' + parseInt(advertisingBudgetInput.value).toLocaleString()
+                : '未指定';
             // 將報告內容轉換為簡報格式
-            const pptContent = convertToPPTFormat(reportContent.innerHTML);
-            
+            const pptContent = convertToPPTFormat(`
+                <div class="summary">
+                    <h2>報告摘要</h2>
+                    <p><strong>目標品牌：</strong>${targetBrandInput.value || '未指定'}</p>
+                    <p><strong>目標人群：</strong>${targetAudienceInput.value || '未指定'}</p>
+                    <p><strong>預算：</strong>${budgetText}</p>
+                    <p><strong>生成時間：</strong>${new Date().toLocaleString('zh-TW')}</p>
+                </div>
+                ${reportContent.innerHTML}
+            `);
             // 創建簡報檔案並下載
             const blob = new Blob([pptContent], { type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' });
             const url = URL.createObjectURL(blob);
