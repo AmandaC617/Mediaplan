@@ -495,6 +495,156 @@
                         </div>
                     </div>
 
+                    <!-- 市場變化因素分析 -->
+                    <div class="mt-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                        <h4 class="text-md font-semibold text-orange-800 mb-4 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.71-4.733-.47A7.993 7.993 0 0112 4a7.993 7.993 0 01-.605 2.553z" clip-rule="evenodd"></path>
+                            </svg>
+                            市場變化因素分析 <span class="text-orange-600">📊</span>
+                        </h4>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- 宏觀經濟因素 -->
+                            <div class="space-y-4">
+                                <h5 class="text-sm font-medium text-orange-700">宏觀經濟因素</h5>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label for="economicTrend" class="block text-xs text-gray-600 mb-1">經濟趨勢影響</label>
+                                        <select id="economicTrend" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇經濟趨勢</option>
+                                            <option value="經濟成長期">經濟成長期 - 消費力強，市場活絡</option>
+                                            <option value="經濟穩定期">經濟穩定期 - 市場平穩發展</option>
+                                            <option value="經濟調整期">經濟調整期 - 消費趨於保守</option>
+                                            <option value="通貨膨脹期">通貨膨脹期 - 成本上升，價格敏感</option>
+                                            <option value="經濟衰退期">經濟衰退期 - 消費緊縮，需求下降</option>
+                                            <option value="復甦期">復甦期 - 市場重新活絡</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="interestRate" class="block text-xs text-gray-600 mb-1">利率環境</label>
+                                        <select id="interestRate" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇利率環境</option>
+                                            <option value="低利率環境">低利率環境 - 借貸成本低，投資活絡</option>
+                                            <option value="升息環境">升息環境 - 借貸成本上升，消費趨於保守</option>
+                                            <option value="降息環境">降息環境 - 刺激經濟，消費意願提升</option>
+                                            <option value="利率穩定">利率穩定 - 市場預期穩定</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="currencyTrend" class="block text-xs text-gray-600 mb-1">匯率趨勢</label>
+                                        <select id="currencyTrend" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇匯率趨勢</option>
+                                            <option value="台幣升值">台幣升值 - 進口成本降低</option>
+                                            <option value="台幣貶值">台幣貶值 - 出口競爭力提升</option>
+                                            <option value="匯率穩定">匯率穩定 - 市場預期穩定</option>
+                                            <option value="匯率波動">匯率波動 - 不確定性增加</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 產業變化因素 -->
+                            <div class="space-y-4">
+                                <h5 class="text-sm font-medium text-orange-700">產業變化因素</h5>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label for="technologyDisruption" class="block text-xs text-gray-600 mb-1">技術顛覆</label>
+                                        <select id="technologyDisruption" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇技術顛覆程度</option>
+                                            <option value="高度顛覆">高度顛覆 - AI、自動化等新技術快速發展</option>
+                                            <option value="中度顛覆">中度顛覆 - 技術逐步演進</option>
+                                            <option value="低度顛覆">低度顛覆 - 技術相對穩定</option>
+                                            <option value="無明顯顛覆">無明顯顛覆 - 傳統技術為主</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="regulatoryChanges" class="block text-xs text-gray-600 mb-1">法規變化</label>
+                                        <select id="regulatoryChanges" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇法規變化</option>
+                                            <option value="法規趨嚴">法規趨嚴 - 合規成本上升</option>
+                                            <option value="法規放寬">法規放寬 - 市場進入門檻降低</option>
+                                            <option value="法規穩定">法規穩定 - 政策環境穩定</option>
+                                            <option value="法規不確定">法規不確定 - 政策方向不明</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="supplyChainIssues" class="block text-xs text-gray-600 mb-1">供應鏈狀況</label>
+                                        <select id="supplyChainIssues" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                            <option value="">請選擇供應鏈狀況</option>
+                                            <option value="供應鏈穩定">供應鏈穩定 - 正常運作</option>
+                                            <option value="供應鏈緊張">供應鏈緊張 - 交期延長，成本上升</option>
+                                            <option value="供應鏈重組">供應鏈重組 - 重新布局中</option>
+                                            <option value="供應鏈多元化">供應鏈多元化 - 分散風險</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 消費者行為變化 -->
+                        <div class="mt-6">
+                            <h5 class="text-sm font-medium text-orange-700 mb-3">消費者行為變化</h5>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="consumerConfidence" class="block text-xs text-gray-600 mb-1">消費者信心指數</label>
+                                    <select id="consumerConfidence" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                        <option value="">請選擇消費者信心</option>
+                                        <option value="高度樂觀">高度樂觀 - 消費意願強烈</option>
+                                        <option value="適度樂觀">適度樂觀 - 正常消費行為</option>
+                                        <option value="保守觀望">保守觀望 - 消費趨於謹慎</option>
+                                        <option value="悲觀緊縮">悲觀緊縮 - 消費大幅減少</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="digitalAdoption" class="block text-xs text-gray-600 mb-1">數位化程度</label>
+                                    <select id="digitalAdoption" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                        <option value="">請選擇數位化程度</option>
+                                        <option value="高度數位化">高度數位化 - 線上消費為主</option>
+                                        <option value="中度數位化">中度數位化 - 線上線下並重</option>
+                                        <option value="低度數位化">低度數位化 - 實體消費為主</option>
+                                        <option value="快速轉型中">快速轉型中 - 數位化加速</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="consumerBehaviorChanges" class="block text-xs text-gray-600 mb-1">具體行為變化描述</label>
+                                <textarea id="consumerBehaviorChanges" rows="3" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="請描述目標消費者的具體行為變化，例如：&#10;• 更注重性價比，價格敏感度提升&#10;• 偏好環保、永續的產品&#10;• 線上購物頻率增加&#10;• 更重視品牌價值和社會責任&#10;• 健康意識提升，相關產品需求增加"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 競爭環境變化 -->
+                        <div class="mt-6">
+                            <h5 class="text-sm font-medium text-orange-700 mb-3">競爭環境變化</h5>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="newEntrants" class="block text-xs text-gray-600 mb-1">新進入者威脅</label>
+                                    <select id="newEntrants" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                        <option value="">請選擇新進入者威脅</option>
+                                        <option value="高度威脅">高度威脅 - 大量新競爭者進入</option>
+                                        <option value="中度威脅">中度威脅 - 部分新競爭者進入</option>
+                                        <option value="低度威脅">低度威脅 - 進入門檻高</option>
+                                        <option value="無明顯威脅">無明顯威脅 - 市場相對穩定</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="marketConsolidation" class="block text-xs text-gray-600 mb-1">市場整合程度</label>
+                                    <select id="marketConsolidation" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                        <option value="">請選擇市場整合程度</option>
+                                        <option value="高度整合">高度整合 - 併購頻繁，大者恆大</option>
+                                        <option value="中度整合">中度整合 - 部分整合活動</option>
+                                        <option value="低度整合">低度整合 - 市場分散</option>
+                                        <option value="無明顯整合">無明顯整合 - 市場結構穩定</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="competitiveDynamics" class="block text-xs text-gray-600 mb-1">競爭動態變化</label>
+                                <textarea id="competitiveDynamics" rows="3" class="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="請描述競爭環境的具體變化，例如：&#10;• 主要競爭對手推出新產品或服務&#10;• 價格戰加劇，利潤率下降&#10;• 新技術或商業模式顛覆市場&#10;• 國際品牌進入台灣市場&#10;• 本土品牌國際化擴張"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- 重點標註設定 -->
                     <div class="mt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">重點標註設定 <span class="text-purple-500">📌</span></label>
@@ -1675,6 +1825,12 @@
                 - **市場趨勢:** ${context.marketTrends}
                 - **重點標註設定:** 時間線視覺化(${context.highlightTimeline}), 競爭對手比較(${context.highlightCompetitors}), 市場機會點(${context.highlightOpportunities}), 重要里程碑(${context.highlightMilestones}), 風險評估(${context.highlightRisks}), 關鍵績效指標(${context.highlightKPIs})
 
+                **市場變化因素分析:**
+                - **宏觀經濟因素:** 經濟趨勢(${context.economicTrend}), 利率環境(${context.interestRate}), 匯率趨勢(${context.currencyTrend})
+                - **產業變化因素:** 技術顛覆(${context.technologyDisruption}), 法規變化(${context.regulatoryChanges}), 供應鏈狀況(${context.supplyChainIssues})
+                - **消費者行為變化:** 消費者信心(${context.consumerConfidence}), 數位化程度(${context.digitalAdoption}), 行為變化描述(${context.consumerBehaviorChanges})
+                - **競爭環境變化:** 新進入者威脅(${context.newEntrants}), 市場整合程度(${context.marketConsolidation}), 競爭動態(${context.competitiveDynamics})
+
                 ${dataWarning}
 
                 **分析師提交的資料:**
@@ -1697,6 +1853,7 @@
                 - **新增：使用更清晰的視覺層次和結構化呈現**
                 - **新增：為每個章節添加執行摘要和關鍵要點**
                 - **新增：使用圖表、表格和視覺元素增強可讀性**
+                - **新增：市場變化因素分析章節，包含宏觀經濟、產業變化、消費者行為、競爭環境的影響評估**
 
                 **策略思考框架：**
                 - 從品牌策略角度：如何建立長期品牌資產、市場定位
@@ -2490,6 +2647,20 @@
                 const highlightRisks = highlightRisksInput.checked;
                 const highlightKPIs = highlightKPIsInput.checked;
 
+                // 市場變化因素數據
+                const economicTrend = document.getElementById('economicTrend')?.value || '未指定';
+                const interestRate = document.getElementById('interestRate')?.value || '未指定';
+                const currencyTrend = document.getElementById('currencyTrend')?.value || '未指定';
+                const technologyDisruption = document.getElementById('technologyDisruption')?.value || '未指定';
+                const regulatoryChanges = document.getElementById('regulatoryChanges')?.value || '未指定';
+                const supplyChainIssues = document.getElementById('supplyChainIssues')?.value || '未指定';
+                const consumerConfidence = document.getElementById('consumerConfidence')?.value || '未指定';
+                const digitalAdoption = document.getElementById('digitalAdoption')?.value || '未指定';
+                const consumerBehaviorChanges = document.getElementById('consumerBehaviorChanges')?.value.trim() || '未提供';
+                const newEntrants = document.getElementById('newEntrants')?.value || '未指定';
+                const marketConsolidation = document.getElementById('marketConsolidation')?.value || '未指定';
+                const competitiveDynamics = document.getElementById('competitiveDynamics')?.value.trim() || '未提供';
+
                 // 驗證必填欄位
                 if (!target || !industry || !industryStatus || !businessModel || !targetAudience || !adObjective) {
                     alert('請填寫所有必填欄位');
@@ -2532,7 +2703,20 @@
                     highlightOpportunities: highlightOpportunities,
                     highlightMilestones: highlightMilestones,
                     highlightRisks: highlightRisks,
-                    highlightKPIs: highlightKPIs
+                    highlightKPIs: highlightKPIs,
+                    // 市場變化因素
+                    economicTrend: economicTrend,
+                    interestRate: interestRate,
+                    currencyTrend: currencyTrend,
+                    technologyDisruption: technologyDisruption,
+                    regulatoryChanges: regulatoryChanges,
+                    supplyChainIssues: supplyChainIssues,
+                    consumerConfidence: consumerConfidence,
+                    digitalAdoption: digitalAdoption,
+                    consumerBehaviorChanges: consumerBehaviorChanges,
+                    newEntrants: newEntrants,
+                    marketConsolidation: marketConsolidation,
+                    competitiveDynamics: competitiveDynamics
                 };
 
                 generateBtn.disabled = true;
