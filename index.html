@@ -821,7 +821,7 @@
 
         // 新增進度追蹤變數
         let currentStep = 0;
-        let totalSteps = 10;
+        let totalSteps = 11;
         let apiTestResult = null;
 
         // 新增進度條元素
@@ -2724,83 +2724,126 @@
 
                 try {
                     updateProgress(1, `分析 ${analysisContext.target} 在目標人群中的輿情狀況...`);
-                    const forumData = await analyzeForumSentiment(analysisContext, userApiKey).catch(error => {
+                    let forumData;
+                    try {
+                        forumData = await analyzeForumSentiment(analysisContext, userApiKey);
+                        updateAPIStatus('success', '輿情分析完成');
+                    } catch (error) {
                         console.error('輿情分析失敗:', error);
-                        throw new Error(`輿情分析失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '輿情分析完成');
+                        forumData = { error: `輿情分析失敗: ${error.message}` };
+                        updateAPIStatus('warning', '輿情分析部分失敗');
+                    }
 
                     updateProgress(2, `監測 ${analysisContext.industry} 產業整體輿情...`);
-                    const industrySentimentData = await analyzeIndustrySentiment(analysisContext, userApiKey).catch(error => {
+                    let industrySentimentData;
+                    try {
+                        industrySentimentData = await analyzeIndustrySentiment(analysisContext, userApiKey);
+                        updateAPIStatus('success', '產業輿情監測完成');
+                    } catch (error) {
                         console.error('產業輿情監測失敗:', error);
-                        throw new Error(`產業輿情監測失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '產業輿情監測完成');
+                        industrySentimentData = { error: `產業輿情監測失敗: ${error.message}` };
+                        updateAPIStatus('warning', '產業輿情監測部分失敗');
+                    }
 
                     updateProgress(3, `評估預算可行性與目標匹配度...`);
-                    const budgetFeasibilityData = await analyzeBudgetFeasibility(analysisContext, userApiKey).catch(error => {
+                    let budgetFeasibilityData;
+                    try {
+                        budgetFeasibilityData = await analyzeBudgetFeasibility(analysisContext, userApiKey);
+                        updateAPIStatus('success', '預算可行性評估完成');
+                    } catch (error) {
                         console.error('預算可行性評估失敗:', error);
-                        throw new Error(`預算可行性評估失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '預算可行性評估完成');
+                        budgetFeasibilityData = { error: `預算可行性評估失敗: ${error.message}` };
+                        updateAPIStatus('warning', '預算可行性評估部分失敗');
+                    }
 
                     updateProgress(4, `分析競爭對手策略與市場定位...`);
-                    const competitorData = await analyzeCompetitorInsights(analysisContext, userApiKey).catch(error => {
+                    let competitorData;
+                    try {
+                        competitorData = await analyzeCompetitorInsights(analysisContext, userApiKey);
+                        updateAPIStatus('success', '競爭對手分析完成');
+                    } catch (error) {
                         console.error('競爭對手分析失敗:', error);
-                        throw new Error(`競爭對手分析失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '競爭對手分析完成');
+                        competitorData = { error: `競爭對手分析失敗: ${error.message}` };
+                        updateAPIStatus('warning', '競爭對手分析部分失敗');
+                    }
 
                     updateProgress(5, `規劃行銷時程與熱點事件...`);
-                    const marketingCalendarData = await analyzeMarketingCalendar(analysisContext, userApiKey).catch(error => {
+                    let marketingCalendarData;
+                    try {
+                        marketingCalendarData = await analyzeMarketingCalendar(analysisContext, userApiKey);
+                        updateAPIStatus('success', '行銷時程規劃完成');
+                    } catch (error) {
                         console.error('行銷時程規劃失敗:', error);
-                        throw new Error(`行銷時程規劃失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '行銷時程規劃完成');
+                        marketingCalendarData = { error: `行銷時程規劃失敗: ${error.message}` };
+                        updateAPIStatus('warning', '行銷時程規劃部分失敗');
+                    }
 
                     updateProgress(6, `分析多市場策略與預算分配...`);
-                    const multiMarketData = await analyzeMultiMarketStrategy(analysisContext, userApiKey).catch(error => {
+                    let multiMarketData;
+                    try {
+                        multiMarketData = await analyzeMultiMarketStrategy(analysisContext, userApiKey);
+                        updateAPIStatus('success', '多市場策略分析完成');
+                    } catch (error) {
                         console.error('多市場策略分析失敗:', error);
-                        throw new Error(`多市場策略分析失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '多市場策略分析完成');
+                        multiMarketData = { error: `多市場策略分析失敗: ${error.message}` };
+                        updateAPIStatus('warning', '多市場策略分析部分失敗');
+                    }
 
                     updateProgress(7, `規劃在地化與多語言策略...`);
-                    const localizationData = await analyzeLocalizationStrategy(analysisContext, multiMarketData, userApiKey).catch(error => {
+                    let localizationData;
+                    try {
+                        localizationData = await analyzeLocalizationStrategy(analysisContext, multiMarketData, userApiKey);
+                        updateAPIStatus('success', '在地化策略規劃完成');
+                    } catch (error) {
                         console.error('在地化策略規劃失敗:', error);
-                        throw new Error(`在地化策略規劃失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '在地化策略規劃完成');
+                        localizationData = { error: `在地化策略規劃失敗: ${error.message}` };
+                        updateAPIStatus('warning', '在地化策略規劃部分失敗');
+                    }
 
                     updateProgress(8, `發展創意策略與品牌體驗...`);
-                    const creativeStrategyData = await analyzeCreativeStrategy(analysisContext, userApiKey).catch(error => {
+                    let creativeStrategyData;
+                    try {
+                        creativeStrategyData = await analyzeCreativeStrategy(analysisContext, userApiKey);
+                        updateAPIStatus('success', '創意策略發展完成');
+                    } catch (error) {
                         console.error('創意策略發展失敗:', error);
-                        throw new Error(`創意策略發展失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '創意策略發展完成');
+                        creativeStrategyData = { error: `創意策略發展失敗: ${error.message}` };
+                        updateAPIStatus('warning', '創意策略發展部分失敗');
+                    }
 
                     updateProgress(9, `分析 ${analysisContext.target} 的 SEO 與內容策略...`);
-                    const seoData = await analyzeSeoStrategy(analysisContext, userApiKey).catch(error => {
+                    let seoData;
+                    try {
+                        seoData = await analyzeSeoStrategy(analysisContext, userApiKey);
+                        updateAPIStatus('success', 'SEO策略分析完成');
+                    } catch (error) {
                         console.error('SEO策略分析失敗:', error);
-                        throw new Error(`SEO策略分析失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', 'SEO策略分析完成');
+                        seoData = { error: `SEO策略分析失敗: ${error.message}` };
+                        updateAPIStatus('warning', 'SEO策略分析部分失敗');
+                    }
                     
-                    const opportunity = forumData.market_opportunity || seoData.content_gap_opportunity;
+                    const opportunity = (forumData && forumData.market_opportunity) || (seoData && seoData.content_gap_opportunity) || '未找到明確機會點';
                     
                     updateProgress(10, `進行預算規劃與 KPI 估算...`);
-                    const kpiData = await estimateKpiAndBudget(analysisContext, opportunity, userApiKey).catch(error => {
+                    let kpiData;
+                    try {
+                        kpiData = await estimateKpiAndBudget(analysisContext, opportunity, userApiKey);
+                        updateAPIStatus('success', '預算規劃完成');
+                    } catch (error) {
                         console.error('預算規劃失敗:', error);
-                        throw new Error(`預算規劃失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '預算規劃完成');
+                        kpiData = { error: `預算規劃失敗: ${error.message}` };
+                        updateAPIStatus('warning', '預算規劃部分失敗');
+                    }
 
-                    updateProgress(10, `綜合所有洞察，生成最終報告...`);
-                    const finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, competitorData, marketingCalendarData, creativeStrategyData, userApiKey).catch(error => {
+                    updateProgress(11, `綜合所有洞察，生成最終報告...`);
+                    let finalReportHtml;
+                    try {
+                        finalReportHtml = await synthesizeFinalReport(analysisContext, forumData, seoData, kpiData, industrySentimentData, budgetFeasibilityData, multiMarketData, localizationData, competitorData, marketingCalendarData, creativeStrategyData, userApiKey);
+                        updateAPIStatus('success', '報告生成完成！');
+                    } catch (error) {
                         console.error('報告生成失敗:', error);
                         throw new Error(`報告生成失敗: ${error.message}`);
-                    });
-                    updateAPIStatus('success', '報告生成完成！');
+                    }
 
                     // 檢查輸出格式
                     proposalOutput.innerHTML = finalReportHtml;
