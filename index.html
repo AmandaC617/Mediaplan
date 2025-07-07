@@ -2585,7 +2585,7 @@
         // --- 主執行流程 ---
         async function handleGenerateClick() {
             try {
-                const userApiKey = apiKeyInput.value.trim();
+                const userApiKey = apiKeyInput?.value?.trim() || '';
                 if (!userApiKey) {
                     alert('請輸入您的 Google Gemini API Key');
                     return;
@@ -2614,38 +2614,38 @@
                 }
 
                 // 獲取表單數據
-                const target = targetBrandInput.value.trim();
-                const industry = industryInput.value;
-                const industryStatus = industryStatusInput.value;
-                const businessModel = businessModelInput.value;
-                const targetAudience = targetAudienceInput.value.trim() || '未指定';
-                const marketingProblems = document.getElementById('marketingProblems').value.trim() || '未提供';
-                const budget = parseInt(advertisingBudgetInput.value, 10) || 0;
-                const adObjective = adObjectiveInput.value;
-                const aiRecommendMedia = aiRecommendMediaInput.checked;
-                const selectedMedia = Array.from(mediaSelectionDiv.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-                const competitors = competitorsInput.value;
-                const startDate = startDateInput.value;
-                const endDate = endDateInput.value;
-                const targetMarkets = targetMarketsInput.value;
-                const targetLanguages = targetLanguagesInput.value;
+                const target = targetBrandInput?.value?.trim() || '';
+                const industry = industryInput?.value || '';
+                const industryStatus = industryStatusInput?.value || '';
+                const businessModel = businessModelInput?.value || '';
+                const targetAudience = targetAudienceInput?.value?.trim() || '未指定';
+                const marketingProblems = document.getElementById('marketingProblems')?.value?.trim() || '未提供';
+                const budget = parseInt(advertisingBudgetInput?.value || '0', 10) || 0;
+                const adObjective = adObjectiveInput?.value || '';
+                const aiRecommendMedia = aiRecommendMediaInput?.checked || false;
+                const selectedMedia = mediaSelectionDiv ? Array.from(mediaSelectionDiv.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value) : [];
+                const competitors = competitorsInput?.value || '';
+                const startDate = startDateInput?.value || '';
+                const endDate = endDateInput?.value || '';
+                const targetMarkets = targetMarketsInput?.value || '';
+                const targetLanguages = targetLanguagesInput?.value || '';
 
                 // 重點標註相關數據
-                const campaignStartDate = campaignStartDateInput.value;
-                const campaignEndDate = campaignEndDateInput.value;
-                const campaignDuration = campaignDurationInput.value;
-                const keyMilestones = keyMilestonesInput.value.trim() || '未提供';
-                const competitorTimeline = competitorTimelineInput.value.trim() || '未提供';
-                const competitiveAdvantage = competitiveAdvantageInput.value.trim() || '未提供';
-                const competitiveGaps = competitiveGapsInput.value.trim() || '未提供';
-                const seasonalFactors = seasonalFactorsInput.value;
-                const marketTrends = marketTrendsInput.value.trim() || '未提供';
-                const highlightTimeline = highlightTimelineInput.checked;
-                const highlightCompetitors = highlightCompetitorsInput.checked;
-                const highlightOpportunities = highlightOpportunitiesInput.checked;
-                const highlightMilestones = highlightMilestonesInput.checked;
-                const highlightRisks = highlightRisksInput.checked;
-                const highlightKPIs = highlightKPIsInput.checked;
+                const campaignStartDate = campaignStartDateInput?.value || '';
+                const campaignEndDate = campaignEndDateInput?.value || '';
+                const campaignDuration = campaignDurationInput?.value || '';
+                const keyMilestones = keyMilestonesInput?.value?.trim() || '未提供';
+                const competitorTimeline = competitorTimelineInput?.value?.trim() || '未提供';
+                const competitiveAdvantage = competitiveAdvantageInput?.value?.trim() || '未提供';
+                const competitiveGaps = competitiveGapsInput?.value?.trim() || '未提供';
+                const seasonalFactors = seasonalFactorsInput?.value || '';
+                const marketTrends = marketTrendsInput?.value?.trim() || '未提供';
+                const highlightTimeline = highlightTimelineInput?.checked || false;
+                const highlightCompetitors = highlightCompetitorsInput?.checked || false;
+                const highlightOpportunities = highlightOpportunitiesInput?.checked || false;
+                const highlightMilestones = highlightMilestonesInput?.checked || false;
+                const highlightRisks = highlightRisksInput?.checked || false;
+                const highlightKPIs = highlightKPIsInput?.checked || false;
 
                 // 市場變化因素數據
                 const economicTrend = document.getElementById('economicTrend')?.value || '未指定';
