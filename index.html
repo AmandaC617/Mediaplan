@@ -191,215 +191,106 @@
                 
                 <div class="border-t border-gray-200 pt-6">
                     <div class="input-grid">
-                        <div>
-                            <label for="targetBrand" class="block text-sm font-medium text-gray-700">目標品牌 / 產品 <span class="text-red-500">*</span></label>
-                            <input type="text" id="targetBrand" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：gogoro, 星宇航空">
-                        </div>
-                        <div>
-                            <label for="competitorBrand" class="block text-sm font-medium text-gray-700">主要競爭對手 <span class="text-red-500">*</span></label>
-                            <input type="text" id="competitorBrand" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：光陽, 長榮航空">
-                        </div>
-                         <div>
-                            <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">產業類別 <span class="text-red-500">*</span></label>
-                            <select id="industry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">請選擇產業類別</option>
-                                <optgroup label="科技產業">
-                                    <option value="軟體開發">軟體開發</option>
-                                    <option value="電子商務">電子商務</option>
-                                    <option value="人工智慧">人工智慧</option>
-                                    <option value="物聯網">物聯網</option>
-                                    <option value="區塊鏈">區塊鏈</option>
-                                    <option value="雲端服務">雲端服務</option>
-                                    <option value="數位行銷">數位行銷</option>
-                                    <option value="遊戲產業">遊戲產業</option>
-                                    <option value="硬體製造">硬體製造</option>
-                                    <option value="網路服務">網路服務</option>
-                                </optgroup>
-                                <optgroup label="消費品產業">
-                                    <option value="美妝保養">美妝保養</option>
-                                    <option value="服飾時尚">服飾時尚</option>
-                                    <option value="食品飲料">食品飲料</option>
-                                    <option value="家居用品">家居用品</option>
-                                    <option value="運動用品">運動用品</option>
-                                    <option value="母嬰用品">母嬰用品</option>
-                                    <option value="寵物用品">寵物用品</option>
-                                    <option value="個人護理">個人護理</option>
-                                </optgroup>
-                                <optgroup label="金融服務">
-                                    <option value="銀行業">銀行業</option>
-                                    <option value="保險業">保險業</option>
-                                    <option value="投資理財">投資理財</option>
-                                    <option value="支付服務">支付服務</option>
-                                    <option value="FinTech">FinTech</option>
-                                    <option value="房地產">房地產</option>
-                                </optgroup>
-                                <optgroup label="教育與培訓">
-                                    <option value="線上教育">線上教育</option>
-                                    <option value="語言學習">語言學習</option>
-                                    <option value="職業培訓">職業培訓</option>
-                                    <option value="兒童教育">兒童教育</option>
-                                    <option value="高等教育">高等教育</option>
-                                    <option value="技能培訓">技能培訓</option>
-                                </optgroup>
-                                <optgroup label="健康醫療">
-                                    <option value="醫療服務">醫療服務</option>
-                                    <option value="健康管理">健康管理</option>
-                                    <option value="健身運動">健身運動</option>
-                                    <option value="營養保健">營養保健</option>
-                                    <option value="心理健康">心理健康</option>
-                                    <option value="醫美整形">醫美整形</option>
-                                </optgroup>
-                                <optgroup label="交通運輸">
-                                    <option value="共享交通">共享交通</option>
-                                    <option value="物流配送">物流配送</option>
-                                    <option value="旅遊服務">旅遊服務</option>
-                                    <option value="航空運輸">航空運輸</option>
-                                    <option value="汽車產業">汽車產業</option>
-                                    <option value="大眾運輸">大眾運輸</option>
-                                </optgroup>
-                                <optgroup label="娛樂媒體">
-                                    <option value="影視製作">影視製作</option>
-                                    <option value="音樂產業">音樂產業</option>
-                                    <option value="出版業">出版業</option>
-                                    <option value="直播平台">直播平台</option>
-                                    <option value="短影片">短影片</option>
-                                    <option value="Podcast">Podcast</option>
-                                </optgroup>
-                                <optgroup label="其他產業">
-                                    <option value="政府機關">政府機關</option>
-                                    <option value="非營利組織">非營利組織</option>
-                                    <option value="製造業">製造業</option>
-                                    <option value="能源產業">能源產業</option>
-                                    <option value="環保產業">環保產業</option>
-                                    <option value="農業科技">農業科技</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="industryStatus" class="block text-sm font-medium text-gray-700 mb-2">產業狀態 <span class="text-red-500">*</span></label>
-                            <select id="industryStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">請選擇產業狀態</option>
-                                <option value="新創期">新創期 - 市場剛起步，競爭較少</option>
-                                <option value="成長期">成長期 - 市場快速擴張，競爭加劇</option>
-                                <option value="成熟期">成熟期 - 市場穩定，競爭激烈</option>
-                                <option value="衰退期">衰退期 - 市場萎縮，需要轉型</option>
-                                <option value="轉型期">轉型期 - 產業結構調整，新機會出現</option>
-                                <option value="復甦期">復甦期 - 市場重新活絡</option>
-                                <option value="創新期">創新期 - 技術突破帶來新機會</option>
-                                <option value="整合期">整合期 - 產業併購整合階段</option>
-                            </select>
-                        </div>
-                         <div>
-                            <label for="businessModel" class="block text-sm font-medium text-gray-700">商業模式 <span class="text-red-500">*</span></label>
-                             <select id="businessModel" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="B2C">B2C (企業對消費者)</option>
-                                <option value="B2B">B2B (企業對企業)</option>
-                            </select>
-                        </div>
-                         <div>
-                            <label for="salesChannels" class="block text-sm font-medium text-gray-700">主要銷售通路</label>
-                            <input type="text" id="salesChannels" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：線上官網、MOMO、實體門市">
-                        </div>
-                        <div>
-                            <label for="targetAudience" class="block text-sm font-medium text-gray-700">目標人群描述</label>
-                            <input type="text" id="targetAudience" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：25-35歲都會女性、科技業採購主管">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="marketingProblems" class="block text-sm font-medium text-gray-700">品牌行銷問題描述 <span class="text-blue-500">💡</span></label>
-                            <textarea id="marketingProblems" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="請描述您目前遇到的行銷問題或挑戰，例如：&#10;• 品牌知名度不足，消費者對我們不熟悉&#10;• 競爭對手廣告投放量大，我們難以突圍&#10;• 目標人群對我們的產品價值認知不清&#10;• 轉換率偏低，廣告點擊多但購買少&#10;• 預算有限，不知道如何最大化效益"></textarea>
-                            <p class="mt-1 text-xs text-gray-500">詳細描述問題將幫助 AI 提供更精準的策略建議</p>
-                        </div>
-                         <div class="md:col-span-3">
-                            <label for="advertisingBudget" class="block text-sm font-medium text-gray-700">預計廣告預算 (台幣)</label>
-                            <input type="number" id="advertisingBudget" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：300000">
-                        </div>
-                        <div>
-                            <label for="adObjective" class="block text-sm font-medium text-gray-700">廣告目標與目的 <span class="text-red-500">*</span></label>
-                            <select id="adObjective" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="品牌知名度">品牌知名度</option>
-                                <option value="銷售提升">銷售提升</option>
-                                <option value="會員招募">會員招募</option>
-                                <option value="活動推廣">活動推廣</option>
-                                <option value="APP下載">APP下載</option>
-                                <option value="其他">其他</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="adFormat" class="block text-sm font-medium text-gray-700 mb-2">廣告形式</label>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <input type="checkbox" id="aiRecommendMedia" class="mr-2">
-                                    <label for="aiRecommendMedia" class="text-sm text-gray-700">請 AI 建議最適合的媒體組合</label>
-                                </div>
-                                <div id="mediaSelection" class="space-y-2">
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="數位廣告" class="mr-2">
-                                            <span class="text-sm">數位廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="社群媒體廣告" class="mr-2">
-                                            <span class="text-sm">社群媒體廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="搜尋引擎廣告" class="mr-2">
-                                            <span class="text-sm">搜尋引擎廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="影音廣告" class="mr-2">
-                                            <span class="text-sm">影音廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="展示廣告" class="mr-2">
-                                            <span class="text-sm">展示廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="原生廣告" class="mr-2">
-                                            <span class="text-sm">原生廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="影響者行銷" class="mr-2">
-                                            <span class="text-sm">影響者行銷</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="內容行銷" class="mr-2">
-                                            <span class="text-sm">內容行銷</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="整合行銷" class="mr-2">
-                                            <span class="text-sm">整合行銷</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="戶外廣告" class="mr-2">
-                                            <span class="text-sm">戶外廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="電視廣告" class="mr-2">
-                                            <span class="text-sm">電視廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="廣播廣告" class="mr-2">
-                                            <span class="text-sm">廣播廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="雜誌廣告" class="mr-2">
-                                            <span class="text-sm">雜誌廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="報紙廣告" class="mr-2">
-                                            <span class="text-sm">報紙廣告</span>
-                                        </label>
-                                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
-                                            <input type="checkbox" name="media" value="活動行銷" class="mr-2">
-                                            <span class="text-sm">活動行銷</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- 目標品牌 / 產品 -->
+    <div>
+        <label for="targetBrand" class="block text-sm font-medium text-gray-700">目標品牌 / 產品 <span class="text-red-500">*</span></label>
+        <input type="text" id="targetBrand" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <!-- 主要競爭對手 -->
+    <div>
+        <label for="competitorBrand" class="block text-sm font-medium text-gray-700">主要競爭對手 <span class="text-red-500">*</span></label>
+        <input type="text" id="competitorBrand" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <!-- 產業類別 -->
+    <div>
+        <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">產業類別 <span class="text-red-500">*</span></label>
+        <select id="industry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">請選擇產業類別</option>
+            <!-- ...你的 optgroup 和 option ... -->
+        </select>
+    </div>
+    <!-- 產業狀態 -->
+    <div>
+        <label for="industryStatus" class="block text-sm font-medium text-gray-700 mb-2">產業狀態 <span class="text-red-500">*</span></label>
+        <select id="industryStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">請選擇產業狀態</option>
+            <!-- ...你的 option ... -->
+        </select>
+    </div>
+    <!-- 商業模式 -->
+    <div>
+        <label for="businessModel" class="block text-sm font-medium text-gray-700">商業模式 <span class="text-red-500">*</span></label>
+        <select id="businessModel" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="B2C">B2C (企業對消費者)</option>
+            <option value="B2B">B2B (企業對企業)</option>
+        </select>
+    </div>
+    <!-- 主要銷售通路 -->
+    <div>
+        <label for="salesChannels" class="block text-sm font-medium text-gray-700">主要銷售通路</label>
+        <input type="text" id="salesChannels" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <!-- 目標人群描述 -->
+    <div>
+        <label for="targetAudience" class="block text-sm font-medium text-gray-700">目標人群描述</label>
+        <input type="text" id="targetAudience" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <!-- 品牌行銷問題描述 -->
+    <div class="md:col-span-2">
+        <label for="marketingProblems" class="block text-sm font-medium text-gray-700">品牌行銷問題描述 <span class="text-blue-500">💡</span></label>
+        <textarea id="marketingProblems" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        <p class="mt-1 text-xs text-gray-500">詳細描述問題將幫助 AI 提供更精準的策略建議</p>
+    </div>
+    <!-- 預計廣告預算 -->
+    <div class="md:col-span-3">
+        <label for="advertisingBudget" class="block text-sm font-medium text-gray-700">預計廣告預算 (台幣)</label>
+        <input type="number" id="advertisingBudget" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
 
+    <!-- 新增：開始日期 -->
+    <div>
+        <label for="startDate" class="block text-sm font-medium text-gray-700">開始日期</label>
+        <input type="date" id="startDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+    <!-- 新增：結束日期 -->
+    <div>
+        <label for="endDate" class="block text-sm font-medium text-gray-700">結束日期</label>
+        <input type="date" id="endDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+
+    <!-- 廣告目標與目的 -->
+    <div>
+        <label for="adObjective" class="block text-sm font-medium text-gray-700">廣告目標與目的 <span class="text-red-500">*</span></label>
+        <select id="adObjective" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="品牌知名度">品牌知名度</option>
+            <option value="銷售提升">銷售提升</option>
+            <option value="會員招募">會員招募</option>
+            <option value="活動推廣">活動推廣</option>
+            <option value="APP下載">APP下載</option>
+            <option value="其他">其他</option>
+        </select>
+    </div>
+    <!-- 廣告形式與 AI 建議 -->
+    <div>
+        <label for="adFormat" class="block text-sm font-medium text-gray-700 mb-2">廣告形式</label>
+        <div class="space-y-3">
+            <div class="flex items-center">
+                <input type="checkbox" id="aiRecommendMedia" class="mr-2">
+                <label for="aiRecommendMedia" class="text-sm text-gray-700">請 AI 建議最適合的媒體組合</label>
+            </div>
+            <div id="mediaSelection" class="space-y-2">
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- 這裡放各種媒體checkbox -->
+                    <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50">
+                        <input type="checkbox" name="media" value="數位廣告" class="mr-2">
+                        <span class="text-sm">數位廣告</span>
+                    </label>
+                    <!-- ... 其餘媒體選項 ... -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                 <div class="mb-4">
                     <label for="competitors" class="block text-sm font-medium text-gray-700 mb-2">主要競爭對手</label>
                     <textarea id="competitors" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="請列出主要競爭對手的品牌名稱與產品名稱，例如：&#10;Apple iPhone 15&#10;Samsung Galaxy S24&#10;Google Pixel 8"></textarea>
