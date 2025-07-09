@@ -2584,6 +2584,96 @@
 
         // --- 主執行流程 ---
         async function handleGenerateClick() {
+            // --- 主執行流程 ---
+async function handleGenerateClick() {
+    // 統一取得所有 input 元素
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const targetBrandInput = document.getElementById('targetBrand');
+    const industryInput = document.getElementById('industry');
+    const industryStatusInput = document.getElementById('industryStatus');
+    const businessModelInput = document.getElementById('businessModel');
+    const targetAudienceInput = document.getElementById('targetAudience');
+    const advertisingBudgetInput = document.getElementById('advertisingBudget');
+    const adObjectiveInput = document.getElementById('adObjective');
+    const aiRecommendMediaInput = document.getElementById('aiRecommendMedia');
+    const mediaSelectionDiv = document.getElementById('mediaSelection');
+    const competitorsInput = document.getElementById('competitors');
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const targetMarketsInput = document.getElementById('targetMarkets');
+    const targetLanguagesInput = document.getElementById('targetLanguages');
+    const campaignStartDateInput = document.getElementById('campaignStartDate');
+    const campaignEndDateInput = document.getElementById('campaignEndDate');
+    const campaignDurationInput = document.getElementById('campaignDuration');
+    const keyMilestonesInput = document.getElementById('keyMilestones');
+    const competitorTimelineInput = document.getElementById('competitorTimeline');
+    const competitiveAdvantageInput = document.getElementById('competitiveAdvantage');
+    const competitiveGapsInput = document.getElementById('competitiveGaps');
+    const seasonalFactorsInput = document.getElementById('seasonalFactors');
+    const marketTrendsInput = document.getElementById('marketTrends');
+    const highlightTimelineInput = document.getElementById('highlightTimeline');
+    const highlightCompetitorsInput = document.getElementById('highlightCompetitors');
+    const highlightOpportunitiesInput = document.getElementById('highlightOpportunities');
+    const highlightMilestonesInput = document.getElementById('highlightMilestones');
+    const highlightRisksInput = document.getElementById('highlightRisks');
+    const highlightKPIsInput = document.getElementById('highlightKPIs');
+    const proposalOutput = document.getElementById('proposalOutput');
+    const generateBtn = document.getElementById('generateBtn');
+
+    // 統一檢查
+    const mustInputs = [
+        [apiKeyInput, 'apiKeyInput'],
+        [targetBrandInput, 'targetBrand'],
+        [industryInput, 'industry'],
+        [industryStatusInput, 'industryStatus'],
+        [businessModelInput, 'businessModel'],
+        [targetAudienceInput, 'targetAudience'],
+        [advertisingBudgetInput, 'advertisingBudget'],
+        [adObjectiveInput, 'adObjective'],
+        [aiRecommendMediaInput, 'aiRecommendMedia'],
+        [mediaSelectionDiv, 'mediaSelection'],
+        [competitorsInput, 'competitors'],
+        [startDateInput, 'startDate'],
+        [endDateInput, 'endDate'],
+        [targetMarketsInput, 'targetMarkets'],
+        [targetLanguagesInput, 'targetLanguages'],
+        [campaignStartDateInput, 'campaignStartDate'],
+        [campaignEndDateInput, 'campaignEndDate'],
+        [campaignDurationInput, 'campaignDuration'],
+        [keyMilestonesInput, 'keyMilestones'],
+        [competitorTimelineInput, 'competitorTimeline'],
+        [competitiveAdvantageInput, 'competitiveAdvantage'],
+        [competitiveGapsInput, 'competitiveGaps'],
+        [seasonalFactorsInput, 'seasonalFactors'],
+        [marketTrendsInput, 'marketTrends'],
+        [highlightTimelineInput, 'highlightTimeline'],
+        [highlightCompetitorsInput, 'highlightCompetitors'],
+        [highlightOpportunitiesInput, 'highlightOpportunities'],
+        [highlightMilestonesInput, 'highlightMilestones'],
+        [highlightRisksInput, 'highlightRisks'],
+        [highlightKPIsInput, 'highlightKPIs'],
+        [proposalOutput, 'proposalOutput'],
+        [generateBtn, 'generateBtn'],
+    ];
+    // 你也可以只檢查你用到 .value, .checked, .innerHTML 的input
+    const missing = mustInputs.filter(([el]) => !el);
+    if (missing.length > 0) {
+        alert('欄位找不到：' + missing.map(([,id])=>id).join(', ') + '\n請檢查HTML的id設置！');
+        return;
+    }
+
+    try {
+        const userApiKey = apiKeyInput.value.trim();
+        if (!userApiKey) {
+            alert('請輸入您的 Google Gemini API Key');
+            return;
+        }
+
+        // ...（後續邏輯同你原本的 handleGenerateClick）
+    } catch (error) {
+        // ...（同你原本的錯誤處理）
+    }
+}
             try {
                 const userApiKey = apiKeyInput.value.trim();
                 if (!userApiKey) {
